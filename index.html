@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#10243B">
+<meta name="theme-color" content="#14306B">
 <title>Calculadora de Preço · MRS Resinas</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -12,1080 +12,1597 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Preço MRS">
-<meta name="description" content="Calculadora de precificação para peças de resina epóxi · MRS Resinas">
+<meta name="description" content="Descubra quanto realmente custa a sua peça de resina epóxi e a que preço vender.">
 <style>
 :root{
-  --ink:#10243B; --ink2:#2C4A6B;
-  --paper:#EDF1F5; --surface:#FFFFFF; --line:#D2DAE2; --mut:#5F7185;
-  --material:#1F6F6B; --indireto:#5A7391; --trabalho:#C08A2E;
-  --fixo:#7A5C8A; --lucro:#10243B;
-  --alerta:#A63D3D; --ok:#1F6F45;
-  --r:12px;
-  --pad:20px;--pad:clamp(16px,4.5vw,26px);
-  --barra:calc(66px + env(safe-area-inset-bottom));
+  --ink:#14306B; --ink2:#2F55A8;
+  --paper:#EEF2FA; --surface:#FFFFFF; --line:#D5DEEE; --line2:#E8EDF7; --mut:#6478A0;
+  --material:#2A5FD0; --material-cl:#E7EFFC;
+  --rosa:#E24E93; --rosa-cl:#FCE9F2; --rosa-esc:#B93571;
+  --indireto:#93A9CC; --trabalho:#E24E93; --trabalho-cl:#FCE9F2;
+  --fixo:#F2A2C8; --lucro:#14306B;
+  --alerta:#C43D2E; --alerta-cl:#FBEDEB; --ok:#1F7A5A; --ok-cl:#E8F5F0;
+  --r:12px; --pad:16px; --pad:clamp(16px,4.5vw,24px);
+  --tab:calc(62px + env(safe-area-inset-bottom));
   --txt:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
   --tit:-apple-system,BlinkMacSystemFont,"Segoe UI Semibold","Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 [hidden]{display:none!important}
 html{-webkit-text-size-adjust:100%}
-body{
-  font-family:var(--txt);
-  background:var(--paper); color:var(--ink);
-  font-size:16px; line-height:1.55;
-  padding-bottom:calc(var(--barra) + 16px);
-}
+body{font-family:var(--txt);background:var(--paper);color:var(--ink);
+  font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;
+  padding-bottom:calc(var(--tab) + 74px)}
 .wrap{max-width:660px;margin:0 auto;padding:0 var(--pad)}
 
-header{background:var(--ink);color:#fff;padding:calc(18px + env(safe-area-inset-top)) 0 20px}
-.eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8FA8C4;font-weight:600}
-h1{font-family:var(--tit);font-weight:800;
-  font-size:28px;font-size:clamp(22px,6vw,30px);line-height:1.12;letter-spacing:-.02em;margin-top:6px}
-h1 em{font-style:normal;color:#7FB3AE}
-
-/* selos de status no topo */
-.selos{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
-.selo{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;
-  padding:5px 10px;border-radius:99px;background:rgba(255,255,255,.10);color:#C3D2E2}
-.selo.on{background:rgba(127,179,174,.22);color:#9FD8D2}
+/* ---------- cabeçalho ---------- */
+header{background:linear-gradient(120deg,#14306B 0%,#2A5FD0 100%);color:#fff;padding:calc(14px + env(safe-area-inset-top)) 0 14px;
+  position:sticky;top:0;z-index:40}
+.topo{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.eyebrow{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#B9CDF2;font-weight:700}
+.tela-nome{font-family:var(--tit);font-size:20px;font-weight:800;letter-spacing:-.02em;margin-top:2px}
+.btn-baixar{flex:none;display:inline-flex;align-items:center;gap:6px;min-height:38px;
+  padding:0 14px;border:none;border-radius:99px;cursor:pointer;background:#F7A8CF;
+  color:#5B1338;font:800 13px var(--tit);letter-spacing:-.01em}
+.btn-baixar:active{transform:scale(.97)}
+.selos{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.selo{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;
+  padding:4px 9px;border-radius:99px;background:rgba(255,255,255,.12);color:#D3E0F8}
+.selo.on{background:rgba(247,168,207,.24);color:#FBD2E6}
 .selo.off{background:rgba(200,120,120,.22);color:#F0B9B9}
 .selo b{color:#fff;font-weight:700}
-.selo .pt{width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
+.selo .pt{width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
 
-/* convite de instalação */
-#instala{display:none;gap:13px;align-items:flex-start;background:var(--surface);
-  border:1.5px solid var(--material);border-radius:var(--r);padding:15px;margin-bottom:14px}
-#instala.on{display:flex}
-#instala .ic{flex:none;width:38px;height:38px;border-radius:10px;background:var(--material);
-  color:#fff;display:flex;align-items:center;justify-content:center;font-size:19px}
-#instala .tx{flex:1;min-width:0}
-#instala h3{font-family:var(--tit);font-size:15.5px;font-weight:800;letter-spacing:-.01em}
-#instala p{font-size:13.5px;color:var(--mut);margin-top:3px;line-height:1.45}
-#instala .acao{display:flex;gap:8px;align-items:center;margin-top:11px;flex-wrap:wrap}
-#instala .bi{min-height:44px;padding:0 18px;border-radius:9px;border:none;
-  background:var(--material);color:#fff;font:700 14.5px var(--txt);cursor:pointer}
-#instala .fechar{background:none;border:none;color:var(--mut);font-size:22px;
-  width:38px;height:38px;border-radius:9px;cursor:pointer;flex:none;line-height:1}
-.passos-ios{margin-top:10px;font-size:13.5px;line-height:1.6;color:var(--ink)}
-.passos-ios b{color:var(--material)}
+/* ---------- abas ---------- */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--surface);
+  border-top:1px solid var(--line);display:flex;
+  padding-bottom:env(safe-area-inset-bottom)}
+.tabbar button{flex:1;border:none;background:none;cursor:pointer;padding:8px 1px 7px;min-width:0;
+  display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--mut);
+  font:600 9.5px var(--txt);min-height:62px;justify-content:center;text-align:center;line-height:1.15}
+.tabbar button .ic{font-size:19px;line-height:1}
+.tabbar button.on{color:var(--rosa)}
+.tabbar button.on .ic{transform:scale(1.06)}
 
-.trilha{display:flex;gap:4px;margin-top:16px}
-.tr{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.22);transition:background .3s}
-.tr.on{background:#7FB3AE}
-.tr.done{background:rgba(127,179,174,.55)}
-.passo-lab{margin-top:9px;font-size:12px;color:#B9CBDE;font-weight:500}
+/* ---------- painéis ---------- */
+.painel{display:none;padding-top:16px}
+.painel.on{display:block;animation:sobe .22s ease}
+@keyframes sobe{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
-main{margin-top:calc(var(--pad) * -0.6)}
-.step{display:none;background:var(--surface);border:1px solid var(--line);
-  border-radius:var(--r);padding:var(--pad);margin-bottom:14px}
-.step.on{display:block;animation:sobe .28s ease}
-@keyframes sobe{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.step h2{font-family:var(--tit);font-size:22px;font-size:clamp(19px,5vw,23px);
-  font-weight:800;letter-spacing:-.02em;line-height:1.2}
-.intro{color:var(--mut);font-size:14.5px;margin-top:7px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
+  padding:var(--pad);margin-bottom:13px}
+.card h2{font-family:var(--tit);font-size:17.5px;font-weight:800;letter-spacing:-.015em}
+.card .hint{color:var(--mut);font-size:13.5px;margin-top:6px}
 
-.licao{margin-top:16px;background:var(--paper);border-left:3px solid var(--material);
-  border-radius:8px;padding:13px 15px;font-size:14px;line-height:1.5}
+.licao{margin-top:14px;background:var(--paper);border-left:3px solid var(--material);
+  border-radius:8px;padding:12px 14px;font-size:13.5px;line-height:1.5}
 .licao b{color:var(--material)}
-.licao.aten{border-color:var(--trabalho)}
-.licao.aten b{color:#8A6216}
+.licao.aten{border-color:var(--rosa);background:var(--rosa-cl)}
+.licao.aten b{color:var(--rosa-esc)}
 
-.campo{margin-top:18px}
-label{display:block;font-size:14px;font-weight:600;margin-bottom:6px}
-.sub{display:block;font-weight:400;color:var(--mut);font-size:13px;margin-top:2px}
-input[type=text]{
-  width:100%;font:400 16px/1.4 var(--txt);color:var(--ink);
-  min-height:50px;padding:12px 14px;border:1.5px solid var(--line);
-  border-radius:9px;background:#fff}
-input:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--material);outline-offset:1px}
-.pre{position:relative}
-.pre input{padding-left:40px}
-.pre::before{content:'R$';position:absolute;left:14px;top:50%;transform:translateY(-50%);
-  font-size:14px;color:var(--mut);pointer-events:none}
-.suf{position:relative}
-.suf input{padding-right:42px}
-.suf::after{content:'g';position:absolute;right:15px;top:50%;transform:translateY(-50%);
-  font-size:14px;color:var(--mut);pointer-events:none}
-.dupla{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.tripla{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label{display:block;font-size:13.5px;font-weight:600;margin-bottom:5px}
+.sub{display:block;font-weight:400;color:var(--mut);font-size:12.5px;margin-top:2px}
+input[type=text],select{width:100%;font:400 16px/1.4 var(--txt);color:var(--ink);
+  min-height:48px;padding:11px 13px;border:1.5px solid var(--line);border-radius:9px;
+  background:#fff;appearance:none}
+select{background-image:linear-gradient(45deg,transparent 50%,var(--mut) 50%),linear-gradient(135deg,var(--mut) 50%,transparent 50%);
+  background-position:calc(100% - 18px) 21px,calc(100% - 13px) 21px;
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:38px}
+input:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid var(--material);outline-offset:1px}
+.campo{margin-top:15px}
+.pre{position:relative}.pre input{padding-left:38px}
+.pre::before{content:'R$';position:absolute;left:13px;top:50%;transform:translateY(-50%);
+  font-size:13.5px;color:var(--mut);pointer-events:none}
+.suf{position:relative}.suf input{padding-right:46px}
+.suf::after{content:attr(data-un);position:absolute;right:13px;top:50%;transform:translateY(-50%);
+  font-size:13px;color:var(--mut);pointer-events:none}
+.dupla{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.tripla{display:grid;grid-template-columns:1fr 1fr;gap:11px}
 @media(min-width:520px){.tripla{grid-template-columns:1fr 1fr 1fr}}
+.saida{margin-top:7px;font-size:13px;color:var(--mut);text-align:right}
+.saida b{color:var(--ink);font-weight:700}
 
-.calc-out{margin-top:8px;font-size:13.5px;color:var(--mut);text-align:right}
-.calc-out b{color:var(--ink);font-weight:600}
+/* ---------- listas ---------- */
+.item{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line2)}
+.item:last-child{border-bottom:none}
+.item .info{flex:1;min-width:0}
+.item .nome{font-weight:700;font-size:14.5px}
+.item .det{font-size:12.5px;color:var(--mut);margin-top:2px}
+.item .val{font-weight:700;font-size:14.5px;white-space:nowrap}
+.mini{border:none;background:none;color:var(--mut);cursor:pointer;font-size:19px;
+  width:36px;height:36px;border-radius:8px;flex:none}
+.mini:active{background:var(--paper)}
+.vazio{text-align:center;padding:26px 10px;color:var(--mut);font-size:14px}
+.vazio .ic{font-size:34px;display:block;margin-bottom:10px;opacity:.4}
 
-.mat{border:1px solid var(--line);border-radius:10px;padding:13px;margin-top:12px;position:relative}
-.mat .del{position:absolute;top:8px;right:8px;width:36px;height:36px;border:none;
-  background:none;color:var(--mut);font-size:22px;line-height:1;border-radius:8px;cursor:pointer}
-.mat .del:active{background:#F6E9E9;color:var(--alerta)}
-.mat .lin{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.mat .tot{margin-top:9px;text-align:right;font-size:13.5px;color:var(--mut)}
-.mat .tot b{color:var(--ink)}
-.add{width:100%;min-height:50px;margin-top:12px;border:1.5px dashed var(--line);
-  background:none;color:var(--ink2);font:600 15px var(--txt);border-radius:9px;cursor:pointer}
+/* estoque */
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 8px;border-radius:99px;
+  background:var(--material-cl);color:var(--material);margin-top:4px}
+.tag.baixo{background:var(--rosa-cl);color:var(--rosa-esc)}
+.tag.zero{background:var(--alerta-cl);color:var(--alerta)}
+.repor{border:1.5px solid var(--line);background:none;color:var(--ink2);cursor:pointer;
+  font:700 12px var(--txt);border-radius:8px;padding:6px 11px;margin-top:6px}
+
+/* foto */
+.foto-area{margin-top:14px;display:flex;gap:13px;align-items:center}
+.foto-mini{width:74px;height:74px;flex:none;border-radius:10px;object-fit:cover;
+  background:var(--paper);border:1px solid var(--line)}
+.foto-vazia{width:74px;height:74px;flex:none;border-radius:10px;background:var(--paper);
+  border:1.5px dashed var(--line);display:flex;align-items:center;justify-content:center;
+  font-size:26px;color:var(--mut)}
+.item .thumb{width:52px;height:52px;flex:none;border-radius:9px;object-fit:cover;
+  background:var(--paper);border:1px solid var(--line)}
+
+/* contatos */
+.wa{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;
+  color:var(--material);text-decoration:none;margin-top:4px}
+.chk{display:flex;gap:10px;align-items:flex-start;margin-top:14px;background:var(--paper);
+  border-radius:9px;padding:12px}
+.chk input{width:21px;height:21px;flex:none;margin-top:1px;accent-color:var(--material)}
+.chk label{font-size:13px;font-weight:400;line-height:1.45;margin:0}
+
+/* ajuda */
+.video{width:100%;aspect-ratio:16/9;border:0;border-radius:10px;display:block;background:var(--paper)}
+.video-vazio{width:100%;aspect-ratio:16/9;border-radius:10px;background:var(--paper);
+  border:1.5px dashed var(--line);display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:8px;color:var(--mut);font-size:13.5px;text-align:center;padding:16px}
+.video-vazio .ic{font-size:34px;opacity:.5}
+.passo{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line2)}
+.passo:last-child{border-bottom:none}
+.passo-n{flex:none;width:30px;height:30px;border-radius:50%;background:var(--rosa);
+  color:#fff;font:800 14px var(--tit);display:flex;align-items:center;justify-content:center}
+.passo-c{flex:1;min-width:0}
+.passo-t{font-weight:800;font-size:15.5px;color:var(--ink)}
+.passo-d{font-size:14px;color:var(--mut);margin-top:4px;line-height:1.5}
+.passo-d b{color:var(--ink)}
+.faq{border-bottom:1px solid var(--line2);padding:14px 0}
+.faq:last-child{border-bottom:none}
+.faq-p{font-weight:700;font-size:14.5px}
+.faq-r{font-size:13.5px;color:var(--mut);margin-top:5px;line-height:1.5}
+
+.add{width:100%;min-height:48px;margin-top:12px;border:1.5px dashed var(--line);
+  background:none;color:var(--ink2);font:700 14.5px var(--txt);border-radius:9px;cursor:pointer}
 .add:active{border-color:var(--material);color:var(--material)}
+.btn{width:100%;min-height:50px;border-radius:10px;font:800 15.5px var(--txt);cursor:pointer;
+  border:1.5px solid var(--ink);background:var(--ink);color:#fff}
+.btn.sec{background:transparent;color:var(--ink)}
+.btn.ok{background:var(--material);border-color:var(--material)}
+.btn:active{transform:scale(.99)}
+.linha-btn{display:flex;gap:9px;margin-top:12px}
+.linha-btn .btn{font-size:14px;min-height:46px}
 
-summary{cursor:pointer;font-size:14px;font-weight:600;color:var(--ink2);
-  padding:12px 0;list-style:none;min-height:44px;display:flex;align-items:center}
-summary::-webkit-details-marker{display:none}
-summary::before{content:'\25B8\00a0';color:var(--mut)}
-details[open] summary::before{content:'\25BE\00a0'}
-
-input[type=range]{width:100%;accent-color:var(--material);height:38px}
-.mkbox{text-align:center;margin:10px 0 4px}
-.mkval{font-family:var(--tit);font-size:38px;font-weight:800;color:var(--material)}
-.escala{display:flex;justify-content:space-between;font-size:11.5px;color:var(--mut)}
-
-.hero{background:var(--ink);color:#fff;border-radius:var(--r);padding:22px;text-align:center;margin-bottom:14px}
-.hero .lab{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#8FA8C4;font-weight:600}
-.hero .val{font-family:var(--tit);font-weight:800;
-  font-size:46px;font-size:clamp(40px,12vw,56px);line-height:1.04;letter-spacing:-.03em;margin:6px 0 2px}
-.hero .sub2{font-size:13.5px;color:#B9CBDE}
-
-.punch{background:#FFF6E8;border:1.5px solid #E8C88A;border-radius:var(--r);
-  padding:18px;margin-bottom:14px}
-.punch h3{font-family:var(--tit);font-size:17px;font-weight:700;color:#8A6216}
-.punch p{font-size:14.5px;margin-top:8px;line-height:1.5}
-.punch .num{font-family:var(--tit);font-size:30px;font-weight:800;
-  color:#8A6216;display:block;margin:10px 0 2px;line-height:1.15}
-
-.bloco{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
-  padding:var(--pad);margin-bottom:14px}
-.bloco h3{font-family:var(--tit);font-size:17px;font-weight:700;margin-bottom:4px}
-.bloco .hint{color:var(--mut);font-size:13.5px;margin-bottom:14px}
-
-.pilha-wrap{display:flex;gap:14px;align-items:flex-start}
-.pilha{width:56px;flex:none;height:206px;display:flex;flex-direction:column-reverse;
-  border-radius:6px;overflow:hidden;background:var(--paper);border:1px solid var(--line)}
-.camada{flex-basis:0;flex-shrink:0;min-height:0;transition:flex-grow .5s cubic-bezier(.4,0,.2,1)}
-.legenda{flex:1;height:206px;display:flex;flex-direction:column-reverse;
-  justify-content:space-between;gap:2px}
-.leg{display:flex;align-items:center;gap:9px;font-size:13.5px}
-.dot{width:11px;height:11px;border-radius:3px;flex:none}
-.leg-nome{flex:1}
-.leg-val{font-weight:600;font-size:13px;color:var(--mut)}
-.leg.zero{opacity:.32}
+/* ---------- destaque ---------- */
+.hero{background:linear-gradient(120deg,#14306B 0%,#2A5FD0 100%);color:#fff;border-radius:var(--r);padding:20px;text-align:center;margin-bottom:13px}
+.hero .lab{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#B9CDF2;font-weight:700}
+.hero .val{font-family:var(--tit);font-weight:800;font-size:42px;font-size:clamp(34px,10vw,48px);
+  line-height:1.05;letter-spacing:-.03em;margin:5px 0 2px}
+.hero .sub2{font-size:13px;color:#CFDDF7}
+.hero.verde{background:linear-gradient(120deg,#E24E93 0%,#B93571 100%)}
+.hero.verde .lab{color:#FBD9E9} .hero.verde .sub2{color:#FBD9E9}
 
 .linha{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
-  padding:11px 0;border-bottom:1px solid var(--line);font-size:14.5px}
+  padding:10px 0;border-bottom:1px solid var(--line2);font-size:14px}
 .linha:last-child{border-bottom:none}
-.linha b{font-weight:600;white-space:nowrap}
-.linha.forte{font-weight:700}
-.linha.forte b{font-size:17px}
-.linha small{display:block;color:var(--mut);font-size:12.5px;font-weight:400;margin-top:1px}
+.linha b{font-weight:700;white-space:nowrap}
+.linha.forte{font-weight:800}.linha.forte b{font-size:16px}
+.linha small{display:block;color:var(--mut);font-size:12px;font-weight:400;margin-top:1px}
 
-.aviso{font-size:14px;line-height:1.5;padding:13px 15px;border-radius:9px;
-  border-left:3px solid;margin-bottom:9px}
-.aviso.warn{border-color:var(--alerta);background:#FAEDED;color:#6E2020}
+.aviso{font-size:13.5px;line-height:1.5;padding:12px 14px;border-radius:9px;
+  border-left:3px solid;margin-top:10px}
+.aviso.warn{border-color:var(--alerta);background:var(--alerta-cl);color:#6E2020}
 .aviso.info{border-color:var(--indireto);background:var(--paper)}
-.aviso.good{border-color:var(--ok);background:#EBF3EE;color:#164F32}
+.aviso.good{border-color:var(--ok);background:var(--ok-cl);color:#164F32}
 
-.meta{background:var(--material);color:#fff;border-radius:var(--r);padding:18px;margin-bottom:14px}
-.meta .mlab{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#CDE6E4;font-weight:600}
-.meta .n{font-family:var(--tit);font-weight:800;font-size:34px;line-height:1.1;margin-top:4px}
-.meta p{font-size:13.5px;color:#CDE6E4;margin-top:6px}
+/* pilha de camadas */
+.pilha-wrap{display:flex;gap:13px;align-items:flex-start;margin-top:14px}
+.pilha{width:52px;flex:none;height:196px;display:flex;flex-direction:column-reverse;
+  border-radius:6px;overflow:hidden;background:var(--paper);border:1px solid var(--line)}
+.camada{flex-basis:0;flex-shrink:0;min-height:0;transition:flex-grow .5s cubic-bezier(.4,0,.2,1)}
+.legenda{flex:1;height:196px;display:flex;flex-direction:column-reverse;justify-content:space-between;gap:2px}
+.leg{display:flex;align-items:center;gap:8px;font-size:13px}
+.dot{width:10px;height:10px;border-radius:3px;flex:none}
+.leg-nome{flex:1}.leg-val{font-weight:700;font-size:12.5px;color:var(--mut)}
+.leg.zero{opacity:.32}
 
-.editar{background:none;border:none;color:var(--material);font:600 13.5px var(--txt);
-  cursor:pointer;padding:2px 4px;text-decoration:underline}
+input[type=range]{width:100%;accent-color:var(--material);height:36px}
+.mkbox{text-align:center;margin:8px 0 2px}
+.mkval{font-family:var(--tit);font-size:34px;font-weight:800;color:var(--material)}
+.escala{display:flex;justify-content:space-between;font-size:11px;color:var(--mut)}
 
-.nav{display:flex;gap:10px;margin-bottom:20px}
-.btn{flex:1;min-height:52px;border-radius:10px;font:700 16px var(--txt);
-  cursor:pointer;border:1.5px solid var(--ink);background:var(--ink);color:#fff}
-.btn.sec{background:transparent;color:var(--ink)}
-.nav .btn.sec{flex:0 0 34%}
-.btn:active{transform:scale(.99)}
-.btn[disabled]{opacity:.35;pointer-events:none}
-.acoes{display:flex;flex-wrap:wrap;gap:9px}
-.acoes .btn{flex:1 1 46%;min-height:48px;font-size:14.5px}
+/* ---------- resumo fixo ---------- */
+.resumo{position:fixed;left:0;right:0;bottom:var(--tab);z-index:45;background:linear-gradient(120deg,#14306B 0%,#2A5FD0 100%);
+  color:#fff;padding:9px var(--pad);display:flex;justify-content:space-between;
+  align-items:center;gap:12px}
+.resumo .l{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#B9CDF2;font-weight:700}
+.resumo .v{font-family:var(--tit);font-size:21px;font-weight:800;line-height:1.15}
+.resumo .r{text-align:right;font-size:12px;color:#CFDDF7;max-width:50%}
 
-.salvo{display:flex;justify-content:space-between;align-items:center;gap:10px;
-  padding:11px 0;border-bottom:1px solid var(--line);font-size:14.5px}
-.salvo:last-child{border-bottom:none}
-.salvo .del{border:none;background:none;color:var(--mut);font-size:20px;
-  width:34px;height:34px;border-radius:8px;cursor:pointer}
-.vazio{color:var(--mut);font-size:14px}
-
-.barra{position:fixed;left:0;right:0;bottom:0;background:var(--ink);color:#fff;
-  padding:11px var(--pad) calc(11px + env(safe-area-inset-bottom));
-  display:flex;justify-content:space-between;align-items:center;gap:14px;z-index:50}
-.barra .l{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:#8FA8C4;font-weight:600}
-.barra .v{font-family:var(--tit);font-size:23px;font-weight:800;line-height:1.15}
-.barra .r{text-align:right;font-size:12.5px;color:#B9CBDE;max-width:50%}
-
-footer{text-align:center;color:var(--mut);font-size:12.5px;padding:8px 0 26px}
+/* ---------- folha ---------- */
+#modal{position:fixed;inset:0;z-index:300;background:rgba(12,32,51,.6);
+  display:none;align-items:flex-end;justify-content:center}
+#modal.on{display:flex}
+.sheet{background:var(--surface);width:100%;max-width:520px;border-radius:18px 18px 0 0;
+  padding:22px var(--pad) calc(22px + env(safe-area-inset-bottom));
+  max-height:88vh;overflow-y:auto;animation:sobe .25s ease}
+@media(min-width:600px){#modal{align-items:center;padding:20px}
+  .sheet{border-radius:18px;padding-bottom:22px}}
+.sheet h3{font-family:var(--tit);font-size:19px;font-weight:800;letter-spacing:-.02em}
+.sheet p{font-size:14px;color:var(--mut);margin-top:7px;line-height:1.5}
+.sheet ol{margin:14px 0 0;padding-left:19px}
+.sheet ol li{margin-bottom:9px;font-size:14px;line-height:1.5}
+.sheet ol li b{color:var(--material)}
 
 /* ---------- porta de entrada ---------- */
-#porta{position:fixed;inset:0;background:var(--paper);z-index:200;overflow-y:auto;
-  -webkit-overflow-scrolling:touch}
+#porta{position:fixed;inset:0;background:var(--paper);z-index:200;overflow-y:auto}
 #porta.off{display:none}
-body.gated .barra,body.gated .nav{display:none!important}
+body.gated .tabbar,body.gated .resumo{display:none!important}
 body.gated{padding-bottom:0}
-.pcapa{background:var(--ink);color:#fff;padding:calc(30px + env(safe-area-inset-top)) 0 30px}
-.pcapa h1{font-size:26px;font-size:clamp(23px,6.5vw,32px);margin-top:8px}
-.pcapa p{margin-top:12px;color:#C3D2E2;font-size:15px;max-width:34ch}
-.vant{margin-top:20px;display:flex;flex-direction:column;gap:11px}
-.vitem{display:flex;gap:11px;align-items:flex-start;font-size:14.5px;color:#D6E2EE}
-.vnum{flex:none;width:24px;height:24px;border-radius:7px;background:var(--material);
-  color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center}
+.pcapa{background:linear-gradient(150deg,#14306B 0%,#2A5FD0 62%,#B93571 100%);color:#fff;padding:calc(28px + env(safe-area-inset-top)) 0 28px}
+.pcapa h1{font-family:var(--tit);font-size:26px;font-size:clamp(23px,6.5vw,32px);
+  font-weight:800;line-height:1.1;letter-spacing:-.025em;margin-top:8px}
+.pcapa h1 em{font-style:normal;color:#F7A8CF}
+.pcapa p{margin-top:11px;color:#D3E0F8;font-size:15px;max-width:34ch}
+.vant{margin-top:18px;display:flex;flex-direction:column;gap:10px}
+.vitem{display:flex;gap:10px;align-items:flex-start;font-size:14px;color:#DCE6F8}
+.vnum{flex:none;width:23px;height:23px;border-radius:7px;background:var(--rosa);
+  color:#fff;font-weight:800;font-size:12.5px;display:flex;align-items:center;justify-content:center}
 .pform{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);
-  padding:var(--pad);margin:18px 0}
-.pform h2{font-family:var(--tit);font-size:19px;font-weight:800;letter-spacing:-.02em}
-.pform .hint{color:var(--mut);font-size:13.5px;margin:6px 0 4px}
-.lgpd{display:flex;gap:11px;align-items:flex-start;margin-top:18px;
-  background:var(--paper);border-radius:9px;padding:13px}
-.lgpd input[type=checkbox]{width:22px;height:22px;flex:none;margin-top:1px;accent-color:var(--material)}
-.lgpd label{font-size:13px;font-weight:400;line-height:1.45;margin:0}
-.erro{color:var(--alerta);font-size:13px;margin-top:6px;font-weight:600;display:none}
+  padding:var(--pad);margin:16px 0}
+.pform h2{font-family:var(--tit);font-size:18.5px;font-weight:800;letter-spacing:-.02em}
+.lgpd{display:flex;gap:10px;align-items:flex-start;margin-top:16px;background:var(--paper);
+  border-radius:9px;padding:12px}
+.lgpd input[type=checkbox]{width:21px;height:21px;flex:none;margin-top:1px;accent-color:var(--material)}
+.lgpd label{font-size:12.5px;font-weight:400;line-height:1.45;margin:0}
+.erro{color:var(--alerta);font-size:12.5px;margin-top:5px;font-weight:700;display:none}
 .erro.on{display:block}
 input.ruim{border-color:var(--alerta)}
-.ppe{text-align:center;font-size:12.5px;color:var(--mut);padding:0 0 30px}
+.ppe{text-align:center;font-size:12px;color:var(--mut);padding:0 0 28px}
 
 @media print{
+  header,.tabbar,.resumo,.add,.mini,#modal,#porta,input[type=range],.escala{display:none!important}
   body{background:#fff;padding:0}
-  header{background:#fff;color:var(--ink)}
-  .eyebrow{color:var(--mut)} h1 em{color:var(--ink)}
-  .trilha,.passo-lab,.nav,.barra,.acoes,.add,.del,.editar,input[type=range],.escala{display:none!important}
-  .step{display:block!important;break-inside:avoid;border:1px solid #ccc;margin-bottom:10px}
-  details{display:block}
-  .hero,.meta,.punch{-webkit-print-color-adjust:exact;print-color-adjust:exact;break-inside:avoid}
+  .painel{display:block!important}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
 
+<!-- ================= PORTA ================= -->
 <div id="porta">
   <div class="pcapa">
     <div class="wrap">
-      <div class="eyebrow">MRS RESINAS</div>
+      <div class="topo">
+        <div class="eyebrow">MRS RESINAS</div>
+        <button class="btn-baixar" id="btnPorta" type="button" hidden>
+          <span>&#8681;</span> Baixar app
+        </button>
+      </div>
       <h1>Descubra quanto <em>realmente</em> custa a sua peça</h1>
-      <p>A maior parte das artesãs cobra barato porque calcula só o material. Em seis perguntas você descobre o preço certo da sua peça.</p>
+      <p>A maior parte das artesãs cobra barato porque calcula só o material. Aqui você
+        cadastra uma vez e precifica quantas peças quiser.</p>
       <div class="vant">
-        <div class="vitem"><span class="vnum">1</span><span>Responde seis perguntas simples, uma por tela</span></div>
-        <div class="vitem"><span class="vnum">2</span><span>Vê para onde vai cada real do seu preço</span></div>
-        <div class="vitem"><span class="vnum">3</span><span>Sai com o preço de varejo, de revenda e de encomenda</span></div>
+        <div class="vitem"><span class="vnum">1</span><span>Cadastra os seus materiais uma única vez</span></div>
+        <div class="vitem"><span class="vnum">2</span><span>Descobre quanto vale a sua hora de trabalho</span></div>
+        <div class="vitem"><span class="vnum">3</span><span>Precifica cada peça em três perguntas</span></div>
       </div>
     </div>
   </div>
-
   <div class="wrap">
     <div class="pform">
       <h2>Criar meu acesso</h2>
       <p class="hint">É rápido e só precisa ser feito uma vez neste aparelho.</p>
-
-      <!-- ============================================================
-           RD STATION · o formulário abaixo é capturado pelo RD Station.
-           Leia o arquivo LEIAME.md antes de publicar.
-           ============================================================ -->
+      <!-- RD STATION: cole o código de monitoramento antes de </body>. Ver LEIAME.md -->
       <form id="cad" novalidate>
         <div class="campo">
           <label for="cNome">Seu nome completo</label>
-          <input type="text" id="cNome" name="name" autocomplete="name" placeholder="Maria Silva">
+          <input type="text" id="cNome" name="name" autocomplete="name" placeholder="PREENCHER">
           <div class="erro" id="eNome">Escreva seu nome e sobrenome.</div>
         </div>
         <div class="campo">
           <label for="cEmail">Seu e-mail</label>
-          <input type="text" id="cEmail" name="email" inputmode="email" autocomplete="email" placeholder="maria@email.com.br">
+          <input type="text" id="cEmail" name="email" inputmode="email" autocomplete="email" placeholder="PREENCHER">
           <div class="erro" id="eEmail">Confira o e-mail: parece que falta alguma coisa.</div>
         </div>
         <div class="campo">
           <label for="cTel">Seu WhatsApp com DDD</label>
-          <input type="text" id="cTel" name="personal_phone" inputmode="tel" autocomplete="tel" placeholder="(31) 90000-0000" maxlength="16">
-          <div class="erro" id="eTel">Digite o DDD e o número, só números.</div>
+          <input type="text" id="cTel" name="personal_phone" inputmode="tel" autocomplete="tel" placeholder="PREENCHER" maxlength="16">
+          <div class="erro" id="eTel">Digite o DDD e o número.</div>
         </div>
-
         <div class="lgpd">
           <input type="checkbox" id="cOk" name="aceite">
-          <label for="cOk">Autorizo a MRS Resinas a guardar meus dados e me enviar conteúdos e ofertas sobre resina epóxi. Posso pedir para sair a qualquer momento.</label>
+          <label for="cOk">Autorizo a MRS Resinas a guardar meus dados e me enviar conteúdos e
+            ofertas sobre resina epóxi. Posso pedir para sair a qualquer momento.</label>
         </div>
-        <div class="erro" id="eOk" style="margin-left:2px">Precisamos da sua autorização para continuar.</div>
-
-        <button class="btn" type="submit" style="width:100%;margin-top:18px">Começar a calcular</button>
+        <div class="erro" id="eOk">Precisamos da sua autorização para continuar.</div>
+        <button class="btn" type="submit" style="margin-top:16px">Começar</button>
       </form>
     </div>
     <p class="ppe">Seus dados ficam com a MRS Resinas e não são vendidos a ninguém.</p>
   </div>
 </div>
 
+<!-- ================= CABEÇALHO ================= -->
 <header>
   <div class="wrap">
-    <div class="eyebrow">MRS Resinas · Módulo 8</div>
-    <h1>Quanto <em>realmente</em> custa a sua peça</h1>
+    <div class="topo">
+      <div>
+        <div class="eyebrow">MRS Resinas</div>
+        <div class="tela-nome" id="telaNome">Como usar</div>
+      </div>
+      <button class="btn-baixar" id="btnTopo" type="button" hidden>
+        <span>&#8681;</span> Baixar app
+      </button>
+    </div>
     <div class="selos">
       <span class="selo on" id="sNet"><span class="pt"></span>Online</span>
       <span class="selo" id="sNome" hidden></span>
       <span class="selo" id="sFila" hidden>Cadastro na fila</span>
     </div>
-    <div class="trilha" id="trilha"></div>
-    <div class="passo-lab" id="passoLab"></div>
   </div>
 </header>
 
 <main class="wrap">
 
-<div id="instala">
-  <div class="ic">&#8681;</div>
-  <div class="tx">
-    <h3>Instalar no celular</h3>
-    <p id="iTexto">Assim a calculadora abre como aplicativo e funciona mesmo sem internet.</p>
-    <div class="passos-ios" id="iIOS" hidden>
-      Toque em <b>Compartilhar</b> na barra do Safari e escolha
-      <b>Adicionar à Tela de Início</b>.
-    </div>
-    <div class="acao" id="iAcao">
-      <button class="bi" id="iBtn" type="button">Instalar</button>
-    </div>
-  </div>
-  <button class="fechar" id="iX" type="button" aria-label="Fechar">&times;</button>
-</div>
-
-<section class="step" data-t="A peça">
-  <h2>1. Qual peça você vai calcular</h2>
-  <p class="intro">Vamos por partes. São seis perguntas e no fim você tem o preço.</p>
-  <div class="licao">
-    <b>Trabalhe por lote.</b> Se você faz 10 chaveiros de uma vez, informe 10 aqui.
-    Tudo que vier depois é do lote inteiro — a conta divide por peça no final.
-  </div>
-  <div class="campo">
-    <label for="pnome">Nome da peça</label>
-    <input type="text" id="pnome" value="Chaveiro de letra" autocomplete="off">
-  </div>
-  <div class="campo">
-    <label for="pqtd">Quantas peças saem deste lote</label>
-    <input type="text" inputmode="decimal" id="pqtd" value="10">
-  </div>
-</section>
-
-<section class="step" data-t="Resina">
-  <h2>2. Resina e pigmento</h2>
-  <p class="intro">Estes dois se compram por peso, então a conta é por grama.</p>
-  <div class="licao">
-    <b>Pense no quilo, gaste em gramas.</b> Se você paga R$ 160 no quilo e usou 100 g,
-    gastou R$ 16 — não importa quantas peças saíram daquilo.
-  </div>
-
-  <div class="campo">
-    <label>Resina + endurecedor <span class="sub">Some os dois componentes: é o peso total despejado</span></label>
-    <div class="dupla">
-      <div class="pre"><input type="text" inputmode="decimal" id="rKg" value="160" aria-label="Preço do quilo da resina"></div>
-      <div class="suf"><input type="text" inputmode="decimal" id="rG" value="100" aria-label="Gramas de resina no lote"></div>
-    </div>
-    <div class="calc-out" id="rOut"></div>
-  </div>
-
-  <div class="campo">
-    <label>Pigmento <span class="sub">Preço do quilo e gramas usadas no lote</span></label>
-    <div class="dupla">
-      <div class="pre"><input type="text" inputmode="decimal" id="gKg" value="750" aria-label="Preço do quilo do pigmento"></div>
-      <div class="suf"><input type="text" inputmode="decimal" id="gG" value="4" aria-label="Gramas de pigmento no lote"></div>
-    </div>
-    <div class="calc-out" id="gOut"></div>
-  </div>
-
-  <div id="pigAviso"></div>
-
-  <details>
-    <summary>Comprei em pote pequeno. Como acho o preço do quilo?</summary>
-    <div class="licao" style="border-color:var(--indireto);margin-top:0">
-      <div class="dupla">
-        <div><label for="hPreco" style="font-size:13px">Quanto pagou</label>
-          <div class="pre"><input type="text" inputmode="decimal" id="hPreco" placeholder="30"></div></div>
-        <div><label for="hPeso" style="font-size:13px">Peso em gramas</label>
-          <div class="suf"><input type="text" inputmode="decimal" id="hPeso" placeholder="50"></div></div>
-      </div>
-      <div style="margin-top:12px;font-size:14px">O quilo sai por <b id="hOut" style="font-size:19px">—</b></div>
-      <div class="acoes" style="margin-top:10px">
-        <button class="btn sec" id="hResina" type="button">Usar na resina</button>
-        <button class="btn sec" id="hPig" type="button">Usar no pigmento</button>
+<!-- ============ COMO USAR ============ -->
+<section class="painel on" id="pn-ajuda">
+  <div class="card">
+    <h2>Como usar, em 5 minutos</h2>
+    <p class="hint">Assista ao vídeo ou siga o passo a passo abaixo. Dá para fazer tudo pelo celular.</p>
+    <div style="margin-top:14px">
+      <iframe class="video" id="video" hidden allowfullscreen
+        title="Vídeo ensinando a usar a calculadora"
+        allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture"></iframe>
+      <div class="video-vazio" id="videoVazio">
+        <span class="ic">&#127909;</span>
+        <span>O vídeo de instruções entra aqui em breve.<br>Por enquanto, siga o passo a passo abaixo.</span>
       </div>
     </div>
-  </details>
+  </div>
+
+  <div class="card">
+    <h2>Antes de calcular a primeira peça</h2>
+    <p class="hint">Isso você faz uma vez só. Depois é só usar.</p>
+    <div class="passo"><div class="passo-n">1</div><div class="passo-c">
+      <div class="passo-t">Cadastre os seus materiais</div>
+      <div class="passo-d">Vá em <b>Materiais</b> e coloque tudo que você compra: resina,
+        pigmento, argola, embalagem. Informe <b>quanto pagou</b> e <b>quanto veio</b> — o
+        app descobre sozinho quanto custa cada grama ou cada unidade.</div></div></div>
+    <div class="passo"><div class="passo-n">2</div><div class="passo-c">
+      <div class="passo-t">Diga quanto você quer ganhar</div>
+      <div class="passo-d">Em <b>Custos</b>, coloque quanto quer tirar por mês e quantas
+        horas consegue trabalhar. Some também as contas do mês: luz, água, internet. O app
+        calcula quanto vale a sua hora.</div></div></div>
+    <div class="passo"><div class="passo-n">3</div><div class="passo-c">
+      <div class="passo-t">Informe seus impostos, se tiver</div>
+      <div class="passo-d">Ainda em <b>Custos</b>. Se você não paga imposto e só recebe no
+        Pix ou em dinheiro, deixe tudo em branco — não tem problema nenhum.</div></div></div>
+  </div>
+
+  <div class="card">
+    <h2>Toda vez que for calcular uma peça</h2>
+    <div class="passo"><div class="passo-n">4</div><div class="passo-c">
+      <div class="passo-t">Escolha os materiais e diga o tempo</div>
+      <div class="passo-d">Em <b>Precificar</b>, dê um nome à peça e diga quantas saem de uma
+        vez. Escolha os materiais da sua lista e informe quanto usou. Depois, o tempo de cada
+        etapa em minutos — <b>inclusive o de lixar</b>, que é o que mais gente esquece.</div></div></div>
+    <div class="passo"><div class="passo-n">5</div><div class="passo-c">
+      <div class="passo-t">Escolha quanto quer que sobre</div>
+      <div class="passo-d">Arraste a barrinha. Ela responde: de cada R$ 100 que o cliente
+        pagar, quanto fica com você depois de pagar material, seu tempo e as taxas. O preço
+        aparece na hora.</div></div></div>
+    <div class="passo"><div class="passo-n">6</div><div class="passo-c">
+      <div class="passo-t">Salve a peça</div>
+      <div class="passo-d">Ela vai para <b>Peças</b> e vira a sua tabela de preços. Da
+        próxima vez que alguém perguntar quanto custa, a resposta já está pronta.</div></div></div>
+  </div>
+
+  <div class="card">
+    <h2>Dúvidas comuns</h2>
+    <div class="faq"><div class="faq-p">Preciso preencher tudo?</div>
+      <div class="faq-r">Não. Materiais e o valor da sua hora são o mínimo. Impostos, foto e
+        estoque são extras — deixe em branco se não usar.</div></div>
+    <div class="faq"><div class="faq-p">O que é "lote"?</div>
+      <div class="faq-r">É quanto você faz de uma vez. Se despeja 10 chaveiros numa tacada,
+        o lote é 10. Aí você informa o material e o tempo do lote inteiro, e o app divide
+        por peça sozinho.</div></div>
+    <div class="faq"><div class="faq-p">Por que ele pede o tempo de lixar?</div>
+      <div class="faq-r">Porque é quase sempre a etapa mais longa. Quem não conta o
+        acabamento cobra menos da metade do que deveria — e trabalha de graça sem perceber.</div></div>
+    <div class="faq"><div class="faq-p">Não sei quanto vale a minha hora</div>
+      <div class="faq-r">Pense em quanto você quer ganhar por mês e em quantas horas
+        consegue trabalhar. O app faz a divisão. Se não souber, comece com um número e
+        ajuste depois.</div></div>
+    <div class="faq"><div class="faq-p">O preço deu muito alto, e agora?</div>
+      <div class="faq-r">Antes de baixar, confira: o tempo está certo? A sua hora não ficou
+        alta demais? Se estiver tudo certo, o preço é esse mesmo. Cobrar menos que isso é
+        tirar do seu próprio bolso.</div></div>
+    <div class="faq"><div class="faq-p">Se eu trocar de celular, perco tudo?</div>
+      <div class="faq-r">Sim, porque fica guardado no aparelho. Use <b>Baixar cópia</b> na
+        aba Peças de vez em quando e guarde o arquivo. No celular novo, use Abrir arquivo.</div></div>
+  </div>
+
+  <button class="btn ok" id="irMat" type="button">Começar: cadastrar meu primeiro material</button>
 </section>
 
-<section class="step" data-t="Materiais">
-  <h2>3. O que mais vai na peça</h2>
-  <p class="intro">Itens contados por unidade, nas quantidades do lote inteiro.</p>
-  <div class="licao aten">
-    <b>Não esqueça a embalagem.</b> É o item que mais some da conta. Se você entrega numa
-    caixinha com etiqueta e cartão de cuidados, isso faz parte do custo da peça.
-  </div>
-  <div id="mats"></div>
-  <button class="add" id="addMat" type="button">+ Adicionar item</button>
+<!-- ============ PRECIFICAR ============ -->
+<section class="painel" id="pn-preco">
+  <div id="alertaSetup"></div>
 
-  <details>
-    <summary>E o molde e as ferramentas?</summary>
-    <div class="licao" style="border-color:var(--indireto);margin-top:0">
-      Um molde de R$ 40 que produz 100 peças custa R$ 0,40 em cada uma. Parece pouco,
-      mas um dia ele precisa ser reposto.
-      <div class="dupla" style="margin-top:12px">
-        <div><label for="moldeC" style="font-size:13px">Custo do molde</label>
-          <div class="pre"><input type="text" inputmode="decimal" id="moldeC" value="40"></div></div>
-        <div><label for="moldeV" style="font-size:13px">Peças até gastar</label>
-          <input type="text" inputmode="decimal" id="moldeV" value="100"></div>
+  <div class="card">
+    <h2>Qual peça você vai calcular</h2>
+    <div class="campo">
+      <label for="pNome">Nome da peça</label>
+      <input type="text" id="pNome" placeholder="PREENCHER" autocomplete="off">
+    </div>
+    <div class="campo">
+      <label for="pQtd">Quantas peças saem deste lote</label>
+      <input type="text" inputmode="decimal" id="pQtd" placeholder="PREENCHER">
+    </div>
+    <div class="licao">
+      <b>Trabalhe por lote.</b> Se você faz 10 chaveiros de uma vez, informe 10. Tudo o que
+      vier depois é do lote inteiro — a conta divide por peça no final.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Materiais usados</h2>
+    <p class="hint">Escolha da sua lista e diga quanto gastou de cada um.</p>
+    <div id="usados"></div>
+    <button class="add" id="addUso" type="button">+ Adicionar material</button>
+    <div class="saida" id="usoTotal"></div>
+    <div id="avisoPig"></div>
+  </div>
+
+  <div class="card">
+    <h2>Quanto tempo levou</h2>
+    <p class="hint">Todos os campos são <b>em minutos</b> e valem para o lote inteiro.</p>
+    <div class="licao aten">
+      <b>Conte a lixa.</b> É quase sempre a etapa mais longa e a que mais gente esquece.
+      É por isso que tanta peça de resina é vendida barato demais.
+    </div>
+    <div class="campo">
+      <div class="tripla">
+        <div><label for="t1">Preparo</label><div class="suf" data-un="min"><input type="text" inputmode="decimal" id="t1" placeholder="PREENCHER"></div></div>
+        <div><label for="t2">Despejo</label><div class="suf" data-un="min"><input type="text" inputmode="decimal" id="t2" placeholder="PREENCHER"></div></div>
+        <div><label for="t3">Desmolde</label><div class="suf" data-un="min"><input type="text" inputmode="decimal" id="t3" placeholder="PREENCHER"></div></div>
       </div>
-      <div class="campo" style="margin-top:12px">
-        <label for="consumo" style="font-size:13px">Consumíveis por peça
-          <span class="sub">Luva, copo, palito, lixa, álcool</span></label>
-        <div class="pre"><input type="text" inputmode="decimal" id="consumo" value="0,40"></div>
+    </div>
+    <div class="campo">
+      <div class="tripla">
+        <div><label for="t4">Lixa e acabamento</label><div class="suf" data-un="min"><input type="text" inputmode="decimal" id="t4" placeholder="PREENCHER"></div></div>
+        <div><label for="t5">Montagem</label><div class="suf" data-un="min"><input type="text" inputmode="decimal" id="t5" placeholder="PREENCHER"></div></div>
+        <div><label for="t6">Embalagem</label><div class="suf" data-un="min"><input type="text" inputmode="decimal" id="t6" placeholder="PREENCHER"></div></div>
       </div>
-      <div class="calc-out" id="indOut"></div>
+      <div class="saida" id="tOut"></div>
     </div>
-  </details>
-</section>
-
-<section class="step" data-t="Tempo">
-  <h2>4. Quanto tempo levou</h2>
-  <p class="intro">Em minutos, para o lote inteiro.</p>
-  <div class="licao aten">
-    <b>Conte a lixa.</b> É quase sempre a etapa mais longa e é a que mais gente esquece.
-    Uma caneta pode ter 35 minutos de acabamento — mais custo de mão de obra do que de material.
-    É por isso que tanta peça de resina é vendida barato demais.
+    <div id="avisoTempo"></div>
   </div>
-  <div class="campo">
-    <div class="tripla">
-      <div><label for="t1">Preparo</label><input type="text" inputmode="decimal" id="t1" value="12"></div>
-      <div><label for="t2">Despejo</label><input type="text" inputmode="decimal" id="t2" value="10"></div>
-      <div><label for="t3">Desmolde</label><input type="text" inputmode="decimal" id="t3" value="8"></div>
+
+  <div class="card">
+    <h2>Quanto você quer ganhar</h2>
+    <p class="hint">De cada R$ 100 que o cliente pagar, quanto você quer que sobre para você?</p>
+    <div class="licao">
+      <b>O resto não some, ele tem dono.</b> Parte paga o material, parte paga o seu tempo e
+      parte vai em imposto e taxa da maquininha. O que você escolher aqui é o que fica com
+      você de verdade, depois de tudo pago.
     </div>
+    <div class="mkbox"><div class="mkval" id="mkVal">30%</div></div>
+    <input type="range" id="mk" min="10" max="70" step="1" value="30" aria-label="Quanto quer que sobre">
+    <div class="escala"><span>10% apertado</span><span>30% bom</span><span>70% premium</span></div>
+    <div id="avisoMk"></div>
   </div>
-  <div class="campo">
-    <div class="tripla">
-      <div><label for="t4">Lixa e acabamento</label><input type="text" inputmode="decimal" id="t4" value="40"></div>
-      <div><label for="t5">Montagem</label><input type="text" inputmode="decimal" id="t5" value="15"></div>
-      <div><label for="t6">Embalagem</label><input type="text" inputmode="decimal" id="t6" value="15"></div>
-    </div>
-    <div class="calc-out" id="tOut"></div>
-  </div>
-  <div id="tAviso"></div>
-</section>
 
-<section class="step" data-t="Sua hora">
-  <h2>5. Quanto vale a sua hora</h2>
-  <p class="intro">Seu tempo não é de graça só porque é seu.</p>
-  <div class="licao">
-    <b>Seja realista com as horas.</b> Trabalhando 5 dias por semana, 5 horas por dia,
-    você chega perto de 100 horas por mês. Se colocar 200, sua hora fica barata
-    e o preço da peça desce junto.
-  </div>
-  <div class="campo">
-    <div class="dupla">
-      <div><label for="meta">Quanto quer ganhar por mês</label>
-        <div class="pre"><input type="text" inputmode="decimal" id="meta" value="3000"></div></div>
-      <div><label for="hmes">Horas por mês</label>
-        <input type="text" inputmode="decimal" id="hmes" value="100"></div>
-    </div>
-    <div class="calc-out" id="horaOut"></div>
-  </div>
-  <div id="hAviso"></div>
-
-  <div class="licao" style="border-color:var(--fixo);margin-top:22px">
-    <b style="color:#5E4370">Custos do mês.</b> Energia, internet, taxa de maquininha, imposto,
-    frete das suas compras. Some tudo e divida pelas peças que você produz no mês.
-  </div>
-  <div class="campo">
-    <div class="dupla">
-      <div><label for="fixo">Custos fixos do mês</label>
-        <div class="pre"><input type="text" inputmode="decimal" id="fixo" value="300"></div></div>
-      <div><label for="pmes">Peças no mês</label>
-        <input type="text" inputmode="decimal" id="pmes" value="250"></div>
-    </div>
-    <div class="calc-out" id="fixoOut"></div>
-  </div>
-</section>
-
-<section class="step" data-t="Margem">
-  <h2>6. Sua margem</h2>
-  <p class="intro">O markup multiplica o custo para chegar ao preço de venda.</p>
-  <div class="licao aten">
-    <b>Markup não é lucro.</b> Dentro dele estão as peças que dão errado, o atendimento
-    que não virou venda, o tempo gasto comprando material e o dinheiro para repor estoque.
-    Abaixo de 2× o negócio raramente se paga.
-  </div>
-  <div class="mkbox"><div class="mkval" id="mkVal">3,0×</div></div>
-  <input type="range" id="mk" min="1.5" max="5" step="0.1" value="3" aria-label="Markup">
-  <div class="escala"><span>1,5× apertado</span><span>3,0× saudável</span><span>5,0× premium</span></div>
-  <div id="mkAviso" style="margin-top:16px"></div>
-</section>
-
-<section class="step" data-t="Resultado">
   <div class="hero">
-    <div class="lab">Preço de venda no varejo</div>
+    <div class="lab">Quanto cobrar por peça</div>
     <div class="val" id="pv">R$ 0,00</div>
     <div class="sub2" id="pvSub">por peça</div>
   </div>
 
-  <div class="punch">
-    <h3>Se você contasse só o material…</h3>
-    <p>…cobraria <b id="pNaive">—</b> por esta peça. O preço certo é <b id="pReal">—</b>.
-      A diferença é o seu trabalho, o molde e os custos do mês: tudo que existe
-      e não aparece na nota do material.</p>
-    <span class="num" id="pDif">—</span>
-    <p style="margin-top:0" id="pDifTxt"></p>
-  </div>
-
-  <div class="bloco">
-    <h3>Onde vai o seu dinheiro</h3>
-    <p class="hint">Cada camada é uma parte do preço, empilhada como uma peça em corte.</p>
+  <div class="card">
+    <h2>Para onde vai cada real</h2>
+    <p class="hint">Cada faixa é um pedaço do preço, empilhado como uma peça cortada ao meio.</p>
     <div class="pilha-wrap">
-      <div class="pilha" role="img" aria-label="Composição do preço em camadas">
+      <div class="pilha" role="img" aria-label="Composição do preço">
         <div class="camada" id="c-mat" style="background:var(--material)"></div>
-        <div class="camada" id="c-ind" style="background:var(--indireto)"></div>
         <div class="camada" id="c-tra" style="background:var(--trabalho)"></div>
         <div class="camada" id="c-fix" style="background:var(--fixo)"></div>
+        <div class="camada" id="c-tax" style="background:var(--indireto)"></div>
         <div class="camada" id="c-luc" style="background:var(--lucro)"></div>
       </div>
       <div class="legenda">
         <div class="leg" id="l-mat"><span class="dot" style="background:var(--material)"></span><span class="leg-nome">Material</span><span class="leg-val"></span></div>
-        <div class="leg" id="l-ind"><span class="dot" style="background:var(--indireto)"></span><span class="leg-nome">Molde e consumíveis</span><span class="leg-val"></span></div>
         <div class="leg" id="l-tra"><span class="dot" style="background:var(--trabalho)"></span><span class="leg-nome">Seu trabalho</span><span class="leg-val"></span></div>
-        <div class="leg" id="l-fix"><span class="dot" style="background:var(--fixo)"></span><span class="leg-nome">Custos do mês</span><span class="leg-val"></span></div>
-        <div class="leg" id="l-luc"><span class="dot" style="background:var(--lucro)"></span><span class="leg-nome">Sua margem</span><span class="leg-val"></span></div>
+        <div class="leg" id="l-fix"><span class="dot" style="background:var(--fixo)"></span><span class="leg-nome">Contas do mês</span><span class="leg-val"></span></div>
+        <div class="leg" id="l-tax"><span class="dot" style="background:var(--indireto)"></span><span class="leg-nome">Imposto e maquininha</span><span class="leg-val"></span></div>
+        <div class="leg" id="l-luc"><span class="dot" style="background:var(--lucro)"></span><span class="leg-nome">Fica com você</span><span class="leg-val"></span></div>
       </div>
     </div>
   </div>
 
-  <div class="bloco">
-    <h3>A conta completa</h3>
-    <div class="linha"><span>Material <button class="editar" data-ir="1">editar</button></span><b id="v-mat"></b></div>
-    <div class="linha"><span>Molde e consumíveis <button class="editar" data-ir="2">editar</button></span><b id="v-ind"></b></div>
-    <div class="linha"><span>Seu trabalho <button class="editar" data-ir="3">editar</button><small id="v-tramin"></small></span><b id="v-tra"></b></div>
-    <div class="linha"><span>Custos do mês rateados <button class="editar" data-ir="4">editar</button></span><b id="v-fix"></b></div>
+  <div class="card">
+    <h2>A conta, passo a passo</h2>
+    <div class="linha"><span>Material por peça</span><b id="v-mat"></b></div>
+    <div class="linha"><span>Seu trabalho <small id="v-tramin"></small></span><b id="v-tra"></b></div>
+    <div class="linha"><span>Contas do mês <small>já dentro da sua hora</small></span><b id="v-fix"></b></div>
     <div class="linha forte"><span>Custo por peça</span><b id="v-custo"></b></div>
-    <div class="linha forte"><span>Lucro por peça <small id="v-margem"></small></span><b id="v-lucro"></b></div>
+    <div class="linha"><span>O que fica com você <small id="v-lucropct"></small></span><b id="v-semtax"></b></div>
+    <div class="linha"><span>Impostos e taxas <small id="v-taxpct"></small></span><b id="v-tax"></b></div>
+    <div class="linha forte"><span>Preço de venda</span><b id="v-lucro"></b></div>
   </div>
 
-  <div class="bloco">
-    <h3>Outros preços desta peça</h3>
-    <div class="linha"><span>Revenda <small>quando a loja compra para revender</small></span><b id="v-rev"></b></div>
-    <div class="linha"><span>Encomenda personalizada <small>varejo + 30%</small></span><b id="v-enc"></b></div>
-    <div class="linha"><span>Preço mínimo <small>abaixo disto você paga para trabalhar</small></span><b id="v-min"></b></div>
+  <div class="card">
+    <h2>Outros preços que você pode usar</h2>
+    <div class="linha"><span>Para loja revender <small>quando alguém compra para vender de novo</small></span><b id="v-rev"></b></div>
+    <div class="linha"><span>Encomenda com nome ou data <small>dá mais trabalho, cobre 30% a mais</small></span><b id="v-enc"></b></div>
+    <div class="linha"><span>Nunca cobre menos que <small>abaixo disso você está pagando para trabalhar</small></span><b id="v-min"></b></div>
   </div>
 
   <div id="avisos"></div>
 
-  <div class="meta">
-    <div class="mlab">Para bater sua meta do mês</div>
-    <div class="n" id="metaQtd">—</div>
-    <p id="metaTxt"></p>
+  <div class="hero verde" style="text-align:left">
+    <div class="lab">Para tirar o que você quer por mês</div>
+    <div class="val" id="metaQtd" style="font-size:30px">—</div>
+    <div class="sub2" id="metaTxt"></div>
   </div>
 
-  <div class="bloco">
-    <h3>Sua tabela de preços</h3>
-    <p class="hint">As peças que você salvar ficam guardadas neste aparelho. Baixe o arquivo de vez em quando como cópia de segurança.</p>
-    <div id="lista"><p class="vazio">Nenhuma peça salva ainda.</p></div>
-    <div class="acoes" style="margin-top:16px">
-      <button class="btn" id="salvar" type="button">Salvar peça</button>
-      <button class="btn sec" id="nova" type="button">Calcular outra</button>
-      <button class="btn sec" id="baixar" type="button">Baixar tabela</button>
-      <button class="btn sec" id="carregar" type="button">Abrir arquivo</button>
-      <button class="btn sec" id="imprimir" type="button">Imprimir</button>
+  <div class="card">
+    <h2>Foto da peça</h2>
+    <p class="hint">Opcional. Ajuda a reconhecer a peça na sua tabela de preços.</p>
+    <div class="foto-area">
+      <div class="foto-vazia" id="fotoVazia">&#128247;</div>
+      <img class="foto-mini" id="fotoMini" alt="Foto da peça" hidden>
+      <div style="flex:1">
+        <button class="add" id="btnFoto" type="button" style="margin-top:0">Escolher foto</button>
+        <button class="repor" id="btnFotoX" type="button" hidden>Remover foto</button>
+      </div>
     </div>
-    <input type="file" id="arquivo" accept="application/json" hidden>
+    <input type="file" id="inpFoto" accept="image/*" hidden>
+    <div class="chk">
+      <input type="checkbox" id="baixaEst">
+      <label for="baixaEst">Descontar do que tenho guardado o que usei nesta produção</label>
+    </div>
+  </div>
+
+  <button class="btn ok" id="salvar" type="button">Salvar esta peça</button>
+  <div class="linha-btn">
+    <button class="btn sec" id="limpar" type="button">Limpar</button>
+    <button class="btn sec" id="imprimir" type="button">Imprimir</button>
   </div>
 </section>
 
-<div class="nav">
-  <button class="btn sec" id="voltar" type="button">Voltar</button>
-  <button class="btn" id="avancar" type="button">Continuar</button>
-</div>
+<!-- ============ MATERIAIS ============ -->
+<section class="painel" id="pn-mat">
+  <div class="card">
+    <h2>Meus materiais</h2>
+    <p class="hint">Cadastre uma vez e reutilize em todas as peças. Se o preço mudar,
+      você corrige aqui e todas as próximas peças já saem certas.</p>
+    <div class="licao">
+      <b>Informe como você compra.</b> Se a resina vem em quilo, coloque o preço do quilo e
+      quantos quilos vieram. O app calcula sozinho quanto custa cada grama.
+    </div>
+  </div>
+
+  <div class="card">
+    <div id="listaMat"></div>
+    <button class="add" id="addMat" type="button">+ Novo material</button>
+  </div>
+
+  <div class="card" id="formMat" hidden>
+    <h2 id="formMatTit">Novo material</h2>
+    <div class="campo">
+      <label for="mNome">Nome do material</label>
+      <input type="text" id="mNome" placeholder="PREENCHER" autocomplete="off">
+    </div>
+    <div class="campo">
+      <label for="mUn">Como você compra</label>
+      <select id="mUn">
+        <option value="kg">Por quilo — uso em gramas</option>
+        <option value="un">Por unidade — uso em unidades</option>
+        <option value="m">Por metro — uso em centímetros</option>
+        <option value="L">Por litro — uso em mililitros</option>
+      </select>
+    </div>
+    <div class="campo">
+      <div class="dupla">
+        <div>
+          <label for="mPreco">Quanto você pagou</label>
+          <div class="pre"><input type="text" inputmode="decimal" id="mPreco" placeholder="PREENCHER"></div>
+        </div>
+        <div>
+          <label for="mQtd" id="mQtdLab">Quantos quilos vieram</label>
+          <div class="suf" id="mQtdSuf" data-un="kg"><input type="text" inputmode="decimal" id="mQtd" placeholder="PREENCHER"></div>
+        </div>
+      </div>
+      <div class="saida" id="mOut"></div>
+    </div>
+    <div class="campo">
+      <label for="mEst">Quanto você tem guardado hoje <span class="sub" id="mEstSub">Na unidade em que você usa</span></label>
+      <div class="suf" id="mEstSuf" data-un="g"><input type="text" inputmode="decimal" id="mEst" placeholder="PREENCHER"></div>
+      <div class="saida" id="mEstOut"></div>
+    </div>
+    <div class="linha-btn">
+      <button class="btn sec" id="mCancel" type="button">Cancelar</button>
+      <button class="btn ok" id="mSalvar" type="button">Salvar material</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MEUS CUSTOS ============ -->
+<section class="painel" id="pn-custos">
+  <div class="hero verde">
+    <div class="lab">A sua hora de trabalho custa</div>
+    <div class="val" id="horaHero">R$ 0,00</div>
+    <div class="sub2" id="horaSub">Preencha os campos abaixo</div>
+  </div>
+
+  <div class="card">
+    <h2>Quanto você quer ganhar</h2>
+    <p class="hint">O quanto você quer tirar por mês para você, como um salário.</p>
+    <div class="licao">
+      <b>Seja realista com as horas.</b> Trabalhando 5 dias por semana, 5 horas por dia,
+      você chega perto de 100 horas por mês. Se colocar 200, sua hora fica barata e o preço
+      da peça desce junto.
+    </div>
+    <div class="campo">
+      <div class="dupla">
+        <div><label for="cMeta">Quanto quer ganhar por mês</label>
+          <div class="pre"><input type="text" inputmode="decimal" id="cMeta" placeholder="PREENCHER"></div></div>
+        <div><label for="cHoras">Horas que você trabalha por mês</label>
+          <input type="text" inputmode="decimal" id="cHoras" placeholder="PREENCHER"></div>
+      </div>
+    </div>
+    <div id="avisoHoras"></div>
+  </div>
+
+  <div class="card">
+    <h2>As contas do mês</h2>
+    <p class="hint">O que você paga todo mês e não é material de nenhuma peça.</p>
+    <div class="licao" style="border-color:var(--rosa)">
+      <b style="color:var(--rosa-esc)">Estas contas entram na sua hora.</b> Assim, peça que dá mais
+      trabalho paga mais dessas contas — que é o justo. E você não precisa adivinhar quantas
+      peças faz por mês.
+    </div>
+    <div class="campo">
+      <div class="dupla">
+        <div><label for="kEnergia">Energia</label>
+          <div class="pre"><input type="text" inputmode="decimal" id="kEnergia" placeholder="PREENCHER"></div></div>
+        <div><label for="kAgua">Água</label>
+          <div class="pre"><input type="text" inputmode="decimal" id="kAgua" placeholder="PREENCHER"></div></div>
+      </div>
+    </div>
+    <div class="campo">
+      <div class="dupla">
+        <div><label for="kInternet">Internet e telefone</label>
+          <div class="pre"><input type="text" inputmode="decimal" id="kInternet" placeholder="PREENCHER"></div></div>
+        <div><label for="kAluguel">Aluguel do espaço</label>
+          <div class="pre"><input type="text" inputmode="decimal" id="kAluguel" placeholder="PREENCHER"></div></div>
+      </div>
+    </div>
+    <div class="campo">
+      <div class="dupla">
+        <div><label for="kDeprec">Guardar para trocar equipamento <span class="sub">Um pouco por mês para quando quebrar</span></label>
+          <div class="pre"><input type="text" inputmode="decimal" id="kDeprec" placeholder="PREENCHER"></div></div>
+        <div><label for="kManut">Manutenção</label>
+          <div class="pre"><input type="text" inputmode="decimal" id="kManut" placeholder="PREENCHER"></div></div>
+      </div>
+    </div>
+    <div class="campo">
+      <div class="dupla">
+        <div><label for="kFerias">Férias <span class="sub">Guarde um mês do seu salário dividido em 12</span></label>
+          <div class="pre"><input type="text" inputmode="decimal" id="kFerias" placeholder="PREENCHER"></div></div>
+        <div><label for="kDecimo">13º <span class="sub">Mesma coisa: um mês dividido em 12</span></label>
+          <div class="pre"><input type="text" inputmode="decimal" id="kDecimo" placeholder="PREENCHER"></div></div>
+      </div>
+    </div>
+    <div class="campo">
+      <label for="kOutros">Outras contas do mês</label>
+      <div class="pre"><input type="text" inputmode="decimal" id="kOutros" placeholder="PREENCHER"></div>
+      <div class="saida" id="custoOut"></div>
+    </div>
+    <button class="repor" id="btnFerias" type="button" style="margin-top:10px">Calcular férias e 13º para mim</button>
+  </div>
+
+  <div class="card">
+    <h2>Impostos e taxa da maquininha</h2>
+    <p class="hint">O que sai do seu bolso depois que o cliente paga.</p>
+    <div class="licao aten">
+      <b>A conta é sobre o que o cliente paga.</b> Se você cobra R$ 100 e o imposto é 12%,
+      saem R$ 12,00 — e não 12% do que a peça custou para fazer. Se você não paga imposto
+      nem vende no cartão, é só deixar em branco.
+    </div>
+    <div class="campo">
+      <div class="tripla">
+        <div><label for="cImp">Imposto</label>
+          <div class="suf" data-un="%"><input type="text" inputmode="decimal" id="cImp" placeholder="PREENCHER"></div></div>
+        <div><label for="cCartao">Maquininha</label>
+          <div class="suf" data-un="%"><input type="text" inputmode="decimal" id="cCartao" placeholder="PREENCHER"></div></div>
+        <div><label for="cComis">Comissão</label>
+          <div class="suf" data-un="%"><input type="text" inputmode="decimal" id="cComis" placeholder="PREENCHER"></div></div>
+      </div>
+      <div class="saida" id="taxaOut"></div>
+    </div>
+    <div id="avisoTaxa"></div>
+  </div>
+
+  <div class="card">
+    <h2>Guardar</h2>
+    <p class="hint">Estes números valem para todas as peças. Salve e não precisa preencher de novo.</p>
+    <button class="btn ok" id="cSalvar" type="button" style="margin-top:12px">Salvar meus custos</button>
+  </div>
+</section>
+
+<!-- ============ MINHAS PEÇAS ============ -->
+<section class="painel" id="pn-pecas">
+  <div class="card">
+    <h2>Minhas peças</h2>
+    <p class="hint">A sua tabela de preços. Fica guardada neste aparelho — baixe o arquivo
+      de vez em quando como cópia de segurança.</p>
+  </div>
+  <div class="card">
+    <div id="listaPecas"></div>
+  </div>
+  <div class="linha-btn">
+    <button class="btn sec" id="baixar" type="button">Baixar cópia</button>
+    <button class="btn sec" id="carregar" type="button">Abrir arquivo</button>
+  </div>
+  <input type="file" id="arquivo" accept="application/json" hidden>
+</section>
+
+<!-- ============ CONTATOS ============ -->
+<section class="painel" id="pn-contatos">
+  <div class="card">
+    <h2>Meus contatos</h2>
+    <p class="hint">Quem já comprou de você, quem pediu orçamento e quem pode virar cliente.</p>
+    <div class="licao">
+      <b>Cliente que já comprou é o mais barato de vender de novo.</b> Anote quem comprou o
+      quê: na próxima data comemorativa, você tem para quem oferecer sem gastar com anúncio.
+    </div>
+  </div>
+
+  <div class="card">
+    <div id="listaCon"></div>
+    <button class="add" id="addCon" type="button">+ Novo contato</button>
+  </div>
+
+  <div class="card" id="formCon" hidden>
+    <h2 id="formConTit">Novo contato</h2>
+    <div class="campo">
+      <label for="oNome">Nome</label>
+      <input type="text" id="oNome" placeholder="PREENCHER" autocomplete="off">
+    </div>
+    <div class="campo">
+      <label for="oTel">WhatsApp com DDD</label>
+      <input type="text" id="oTel" inputmode="tel" placeholder="PREENCHER" maxlength="16">
+    </div>
+    <div class="campo">
+      <label for="oCidade">Cidade</label>
+      <input type="text" id="oCidade" placeholder="PREENCHER" autocomplete="off">
+    </div>
+    <div class="campo">
+      <label for="oObs">Anotações <span class="sub">O que comprou, do que gostou, datas importantes</span></label>
+      <input type="text" id="oObs" placeholder="PREENCHER" autocomplete="off">
+    </div>
+    <div class="linha-btn">
+      <button class="btn sec" id="oCancel" type="button">Cancelar</button>
+      <button class="btn ok" id="oSalvar" type="button">Salvar contato</button>
+    </div>
+  </div>
+</section>
 
 </main>
 
-<footer>MRS Resinas · Master Resinas e Sistemas</footer>
-
-<div class="barra">
-  <div><span class="l" id="barLab">Custo por peça</span><div class="v" id="barVal">R$ 0,00</div></div>
-  <div class="r" id="barTxt">O preço aparece no passo 6</div>
+<div class="resumo" id="resumo" hidden>
+  <div><span class="l" id="resLab">Custo por peça</span><div class="v" id="resVal">R$ 0,00</div></div>
+  <div class="r" id="resTxt">Preencha os campos</div>
 </div>
+
+<nav class="tabbar">
+  <button type="button" data-tab="ajuda" class="on"><span class="ic">&#128161;</span>Como usar</button>
+  <button type="button" data-tab="preco"><span class="ic">&#128200;</span>Precificar</button>
+  <button type="button" data-tab="mat"><span class="ic">&#129517;</span>Materiais</button>
+  <button type="button" data-tab="custos"><span class="ic">&#9201;</span>Custos</button>
+  <button type="button" data-tab="pecas"><span class="ic">&#128278;</span>Peças</button>
+  <button type="button" data-tab="contatos"><span class="ic">&#128100;</span>Contatos</button>
+</nav>
+
+<div id="modal"><div class="sheet" id="sheet"></div></div>
 
 <script>
 (function(){
   "use strict";
   var $ = function(id){ return document.getElementById(id); };
 
-  var CHAVE = 'mrs_cadastro_v1';
-  var CHAVE_PECAS = 'mrs_pecas_v1';
-  var CHAVE_INST = 'mrs_instala_dispensado';
+  var K_CAD='mrs_cadastro_v1', K_MAT='mrs_materiais_v1',
+      K_CUS='mrs_custos_v1', K_PEC='mrs_pecas_v2', K_CON='mrs_contatos_v1',
+      K_INST='mrs_instala_dispensado';
 
-  function guardar(k, v){
-    try { localStorage.setItem(k, JSON.stringify(v)); return true; } catch(e){ return false; }
-  }
-  function ler(k){
-    try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch(e){ return null; }
-  }
+  function guardar(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); return true; }catch(e){ return false; } }
+  function ler(k){ try{ var v=localStorage.getItem(k); return v?JSON.parse(v):null; }catch(e){ return null; } }
 
   function parse(v){
-    v = String(v == null ? '' : v).trim();
-    if(!v) return 0;
-    if(v.indexOf(',') > -1){ v = v.replace(/\./g,'').replace(',','.'); }
-    else if(/^\d{1,3}(\.\d{3})+$/.test(v)){ v = v.replace(/\./g,''); }
-    var f = parseFloat(v);
-    return isFinite(f) ? f : 0;
+    v=String(v==null?'':v).trim(); if(!v) return 0;
+    if(v.indexOf(',')>-1){ v=v.replace(/\./g,'').replace(',','.'); }
+    else if(/^\d{1,3}(\.\d{3})+$/.test(v)){ v=v.replace(/\./g,''); }
+    var f=parseFloat(v); return isFinite(f)?f:0;
   }
-  function n(id){ var el = $(id); return el ? parse(el.value) : 0; }
+  function n(id){ var e=$(id); return e?parse(e.value):0; }
   function manual(v){
-    var neg = v < 0; v = Math.abs(v);
-    var p = v.toFixed(2).split('.');
-    var i = p[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    return (neg ? '-R$ ' : 'R$ ') + i + ',' + p[1];
+    var neg=v<0; v=Math.abs(v);
+    var p=v.toFixed(2).split('.');
+    return (neg?'-R$ ':'R$ ')+p[0].replace(/\B(?=(\d{3})+(?!\d))/g,'.')+','+p[1];
   }
   function brl(v){
-    if(!isFinite(v)) v = 0;
-    try {
-      var t = v.toLocaleString('pt-BR', { style:'currency', currency:'BRL' });
-      /* alguns navegadores ignoram o locale e devolvem "10.5" sem lançar erro */
-      if(t.indexOf('R$') === -1 || t.indexOf(',') === -1) return manual(v);
-      return t.replace(/\u00a0/g, ' ');
-    } catch(e){ return manual(v); }
+    if(!isFinite(v)) v=0;
+    try{ var t=v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+      if(t.indexOf('R$')===-1||t.indexOf(',')===-1) return manual(v);
+      return t.replace(/\u00a0/g,' ');
+    }catch(e){ return manual(v); }
   }
-  function vg(v, d){ return v.toFixed(d === undefined ? 1 : d).replace('.',','); }
-  function av(t, s){ return '<div class="aviso ' + t + '">' + s + '</div>'; }
+  function vg(v,d){ return v.toFixed(d===undefined?1:d).replace('.',','); }
+  function av(t,s){ return '<div class="aviso '+t+'">'+s+'</div>'; }
+  function esc(t){ return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-  var steps = Array.prototype.slice.call(document.querySelectorAll('.step'));
-  var total = steps.length, atualPasso = 0;
-  var trilha = $('trilha');
-  steps.forEach(function(){ var d = document.createElement('div'); d.className='tr'; trilha.appendChild(d); });
-  var tracos = Array.prototype.slice.call(trilha.children);
+  /* unidades: [rótulo da compra, unidade de compra, unidade de uso, fator] */
+  var UNID = {
+    kg:['Quantos quilos vieram','kg','g',1000],
+    un:['Quantas unidades vieram','un','un',1],
+    m :['Quantos metros vieram','m','cm',100],
+    L :['Quantos litros vieram','L','mL',1000]
+  };
+  function custoUso(m){
+    var f=UNID[m.unid]?UNID[m.unid][3]:1;
+    var q=parse(m.qtdCompra)*f;
+    return q>0 ? parse(m.precoCompra)/q : 0;
+  }
+  function unUso(m){ return UNID[m.unid]?UNID[m.unid][2]:'un'; }
 
-  function mostra(i, quieto){
-    atualPasso = Math.max(0, Math.min(total - 1, i));
-    steps.forEach(function(s,k){ s.classList.toggle('on', k === atualPasso); });
-    tracos.forEach(function(t,k){
-      t.classList.toggle('on', k === atualPasso);
-      t.classList.toggle('done', k < atualPasso);
+  /* ---------- estado ---------- */
+  var materiais = ler(K_MAT) || [];
+  var custos    = ler(K_CUS) || {};
+  var pecas     = ler(K_PEC) || [];
+  var contatos  = ler(K_CON) || [];
+  var usados    = [];
+  var fotoAtual = null;
+  var editandoCon = null;
+  var editandoMat = null;
+
+  /* ================= ABAS ================= */
+  var NOMES={preco:'Precificar',mat:'Materiais',custos:'Meus custos',pecas:'Minhas peças',
+             contatos:'Contatos',ajuda:'Como usar'};
+
+  /* ---------------------------------------------------------------
+     VÍDEO DE INSTRUÇÕES
+     Cole aqui o código do vídeo do YouTube e ele aparece na aba
+     "Como usar". O código é o que vem depois de v= no endereço:
+     youtube.com/watch?v=ABCDEFGHIJK  ->  'ABCDEFGHIJK'
+     --------------------------------------------------------------- */
+  var VIDEO_YOUTUBE = '';
+  function abre(t){
+    ['preco','mat','custos','pecas','contatos','ajuda'].forEach(function(x){
+      $('pn-'+x).classList.toggle('on', x===t);
     });
-    $('passoLab').textContent = 'Passo ' + (atualPasso+1) + ' de ' + total +
-      ' \u00b7 ' + steps[atualPasso].getAttribute('data-t');
-    $('voltar').disabled = atualPasso === 0;
-    $('avancar').textContent = atualPasso === total - 2 ? 'Ver o pre\u00e7o'
-      : (atualPasso === total - 1 ? 'Recome\u00e7ar' : 'Continuar');
-    if(!quieto) window.scrollTo({ top: 0, behavior: 'smooth' });
+    Array.prototype.forEach.call(document.querySelectorAll('.tabbar button'),function(b){
+      b.classList.toggle('on', b.getAttribute('data-tab')===t);
+    });
+    $('telaNome').textContent = NOMES[t];
+    $('resumo').hidden = (t!=='preco');
+    window.scrollTo({top:0,behavior:'smooth'});
+    if(t==='mat') renderMat();
+    if(t==='pecas') renderPecas();
+    if(t==='custos') preencheCustos();
+    if(t==='contatos') renderCon();
     calc();
   }
-  $('voltar').addEventListener('click', function(){ mostra(atualPasso - 1); });
-  $('avancar').addEventListener('click', function(){
-    mostra(atualPasso === total - 1 ? 0 : atualPasso + 1);
-  });
-  document.addEventListener('click', function(e){
-    var b = e.target.closest ? e.target.closest('.editar') : null;
-    if(b) mostra(parseInt(b.getAttribute('data-ir'), 10));
+  Array.prototype.forEach.call(document.querySelectorAll('.tabbar button'),function(b){
+    b.addEventListener('click',function(){ abre(b.getAttribute('data-tab')); });
   });
 
-  var matsEl = $('mats');
-  function novaLinha(nome, qtd, custo){
-    var d = document.createElement('div');
-    d.className = 'mat';
-    d.innerHTML =
-      '<button class="del" type="button" aria-label="Remover item">&times;</button>' +
-      '<label style="font-size:13px">Item</label>' +
-      '<input type="text" class="mn" placeholder="Argola e pit\u00e3o" autocomplete="off">' +
-      '<div class="lin">' +
-        '<div><label style="font-size:13px">Quantidade</label>' +
-          '<input type="text" inputmode="decimal" class="mq"></div>' +
-        '<div><label style="font-size:13px">Custo de cada</label>' +
-          '<div class="pre"><input type="text" inputmode="decimal" class="mc"></div></div>' +
-      '</div>' +
-      '<div class="tot">Total no lote: <b>R$ 0,00</b></div>';
-    d.querySelector('.mn').value = nome || '';
-    d.querySelector('.mq').value = (qtd === undefined ? 1 : qtd);
-    d.querySelector('.mc').value = (custo === undefined ? 0 : custo);
-    d.querySelector('.del').addEventListener('click', function(){
-      if(matsEl.children.length > 1){ d.remove(); }
-      else { d.querySelector('.mn').value=''; d.querySelector('.mq').value='1'; d.querySelector('.mc').value='0'; }
-      calc();
-    });
-    matsEl.appendChild(d);
-    return d;
-  }
-  [['Argola e pit\u00e3o', '10', '0,40'], ['Embalagem e etiqueta', '10', '1,20']]
-    .forEach(function(r){ novaLinha(r[0], r[1], r[2]); });
-  $('addMat').addEventListener('click', function(){
-    var l = novaLinha('', '1', '0');
-    l.querySelector('.mn').focus();
-    calc();
-  });
-
-  function porKg(){
-    var p = n('hPreco'), w = n('hPeso');
-    return (p > 0 && w > 0) ? (p / w) * 1000 : 0;
-  }
-  $('hResina').addEventListener('click', function(){
-    var v = porKg(); if(v > 0){ $('rKg').value = v.toFixed(2).replace('.',','); calc(); }
-  });
-  $('hPig').addEventListener('click', function(){
-    var v = porKg(); if(v > 0){ $('gKg').value = v.toFixed(2).replace('.',','); calc(); }
-  });
-
-  var atual = null;
-
-  function calc(){
-    var v = porKg();
-    $('hOut').textContent = v > 0 ? brl(v) : '\u2014';
-
-    var qtd = Math.max(1, n('pqtd'));
-    var rKg = n('rKg'), rG = n('rG'), gKg = n('gKg'), gG = n('gG');
-    var rC = (rG/1000)*rKg, gC = (gG/1000)*gKg;
-    $('rOut').innerHTML = rKg > 0
-      ? 'Resina no lote: <b>' + brl(rC) + '</b> \u00b7 ' + vg(rG/qtd) + ' g por pe\u00e7a' : '';
-    $('gOut').innerHTML = gKg > 0
-      ? 'Pigmento no lote: <b>' + brl(gC) + '</b> \u00b7 ' + vg(gG/qtd, 2) + ' g por pe\u00e7a' : '';
-
-    var pa = $('pigAviso');
-    if(rG > 0 && gG > 0){
-      var pct = (gG/rG)*100;
-      pa.innerHTML = pct > 5
-        ? av('warn','O pigmento est\u00e1 em <b>' + vg(pct) + '%</b> do peso da resina. Acima de 5% o excesso pode atrapalhar a cura e deixar a pe\u00e7a mole.')
-        : av('good','Pigmento em <b>' + vg(pct) + '%</b> do peso da resina. Dentro da faixa segura.');
-    } else pa.innerHTML = '';
-
-    var matLote = rC + gC;
-    Array.prototype.forEach.call(matsEl.children, function(row){
-      var q = parse(row.querySelector('.mq').value);
-      var c = parse(row.querySelector('.mc').value);
-      var t = q * c;
-      matLote += t;
-      row.querySelector('.tot b').textContent = brl(t);
-    });
-    var mat = matLote / qtd;
-
-    var molde = n('moldeC') / Math.max(1, n('moldeV'));
-    var ind = molde + n('consumo');
-    $('indOut').innerHTML = 'Molde e consum\u00edveis por pe\u00e7a: <b>' + brl(ind) + '</b>';
-
-    var minLote = n('t1')+n('t2')+n('t3')+n('t4')+n('t5')+n('t6');
-    var minPeca = minLote / qtd;
-    var hora = n('meta') / Math.max(1, n('hmes'));
-    var tra = (minPeca/60) * hora;
-    $('tOut').innerHTML = 'Total do lote: <b>' + minLote.toFixed(0) + ' min</b> \u00b7 ' +
-      vg(minPeca) + ' min por pe\u00e7a';
-    $('horaOut').innerHTML = 'Sua hora vale <b>' + brl(hora) + '</b>';
-    $('tAviso').innerHTML = n('t4') === 0
-      ? av('warn','Voc\u00ea deixou a lixa em zero. Se a pe\u00e7a precisa de acabamento, esse tempo existe \u2014 e ignor\u00e1-lo \u00e9 o motivo n\u00famero um de pe\u00e7a de resina vendida barato demais.') : '';
-    $('hAviso').innerHTML = n('hmes') > 160
-      ? av('warn','Mais de 160 horas por m\u00eas s\u00e3o cerca de 8 horas por dia, todo dia \u00fatil, s\u00f3 produzindo. Se for otimista demais, sua hora fica barata e o pre\u00e7o todo desce junto.') : '';
-
-    var fix = n('fixo') / Math.max(1, n('pmes'));
-    $('fixoOut').innerHTML = 'Cada pe\u00e7a carrega <b>' + brl(fix) + '</b> de custo fixo';
-
-    var custo = mat + ind + tra + fix;
-    var mk = n('mk');
-    var preco = custo * mk;
-    var lucro = preco - custo;
-    var margem = preco > 0 ? (lucro/preco)*100 : 0;
-
-    $('mkVal').textContent = vg(mk) + '\u00d7';
-    $('mkAviso').innerHTML = mk < 2
-      ? av('warn','Markup abaixo de 2\u00d7 raramente se sustenta. Ele precisa cobrir tamb\u00e9m as pe\u00e7as que d\u00e3o errado e o atendimento que n\u00e3o vira venda.')
-      : (mk >= 2.5 ? av('good','Faixa saud\u00e1vel. Esse markup sustenta o neg\u00f3cio e ainda deixa espa\u00e7o para desconto em pedido grande.') : '');
-
-    $('pv').textContent = brl(preco);
-    $('pvSub').textContent = qtd > 1 ? ('por pe\u00e7a \u00b7 lote de ' + qtd.toFixed(0)) : 'por pe\u00e7a';
-    $('v-mat').textContent = brl(mat);
-    $('v-ind').textContent = brl(ind);
-    $('v-tra').textContent = brl(tra);
-    $('v-tramin').textContent = vg(minPeca) + ' min por pe\u00e7a \u00b7 hora a ' + brl(hora);
-    $('v-fix').textContent = brl(fix);
-    $('v-custo').textContent = brl(custo);
-    $('v-lucro').textContent = brl(lucro);
-    $('v-margem').textContent = 'margem de ' + margem.toFixed(0) + '% sobre o pre\u00e7o';
-    $('v-rev').textContent = brl(custo * 2);
-    $('v-enc').textContent = brl(preco * 1.3);
-    $('v-min').textContent = brl(custo);
-
-    var naive = mat * mk, dif = preco - naive;
-    $('pNaive').textContent = brl(naive);
-    $('pReal').textContent = brl(preco);
-    $('pDif').textContent = dif > 0 ? (brl(dif) + ' a mais por pe\u00e7a') : '\u2014';
-    $('pDifTxt').textContent = dif > 0
-      ? ('Vendendo 50 pe\u00e7as por m\u00eas, s\u00e3o ' + brl(dif*50) + ' que voc\u00ea estaria deixando na mesa.') : '';
-
-    [['c-mat','l-mat',mat],['c-ind','l-ind',ind],['c-tra','l-tra',tra],
-     ['c-fix','l-fix',fix],['c-luc','l-luc',lucro]].forEach(function(p){
-      var pc = preco > 0 ? (p[2]/preco)*100 : 0;
-      $(p[0]).style.flexGrow = String(Math.max(0, pc));
-      var l = $(p[1]);
-      l.querySelector('.leg-val').textContent = pc.toFixed(0) + '%';
-      l.classList.toggle('zero', pc < 1);
-    });
-
-    var a = '';
-    if(tra > 0 && mat > 0 && tra > mat*2)
-      a += av('info','Seu trabalho custa mais que o dobro do material nesta pe\u00e7a. \u00c9 o normal em resina \u2014 e \u00e9 exatamente por isso que calcular s\u00f3 o material leva a cobrar barato.');
-    if(preco > 0 && preco < 15)
-      a += av('info','Pre\u00e7o muito baixo costuma atrair o cliente que s\u00f3 quer pre\u00e7o baixo, e ele n\u00e3o aceita aumento depois. Vale conferir se algum custo ficou de fora.');
-    $('avisos').innerHTML = a;
-
-    if(lucro > 0.009){
-      var q = Math.ceil(n('meta') / lucro);
-      $('metaQtd').textContent = q + (q === 1 ? ' pe\u00e7a' : ' pe\u00e7as');
-      $('metaTxt').textContent = '\u00c9 quanto voc\u00ea precisa vender desta pe\u00e7a por m\u00eas para tirar ' +
-        brl(n('meta')) + '. Se o n\u00famero parecer imposs\u00edvel, o pre\u00e7o est\u00e1 baixo \u2014 n\u00e3o a meta.';
-    } else {
-      $('metaQtd').textContent = '\u2014';
-      $('metaTxt').textContent = 'Com este pre\u00e7o n\u00e3o sobra lucro. Ajuste o markup ou revise os custos.';
+  /* ================= MATERIAIS ================= */
+  function renderMat(){
+    var el=$('listaMat');
+    if(!materiais.length){
+      el.innerHTML='<div class="vazio"><span class="ic">&#129517;</span>'+
+        'Você ainda não cadastrou nenhum material.<br>Comece pela resina que você usa.</div>';
+      return;
     }
-
-    if(atualPasso >= total - 2){
-      $('barLab').textContent = 'Pre\u00e7o no varejo';
-      $('barVal').textContent = brl(preco);
-      $('barTxt').textContent = 'Custo ' + brl(custo) + ' \u00b7 lucro ' + brl(lucro);
-    } else {
-      $('barLab').textContent = 'Custo por pe\u00e7a at\u00e9 aqui';
-      $('barVal').textContent = brl(custo);
-      $('barTxt').textContent = 'O pre\u00e7o aparece no passo 6';
-    }
-
-    atual = { nome: $('pnome').value || 'Pe\u00e7a sem nome', custo: custo, preco: preco,
-              lucro: lucro, margem: margem, min: minPeca, markup: mk };
-  }
-
-  var salvas = ler(CHAVE_PECAS) || [];
-  function render(){
-    var el = $('lista');
-    if(!salvas.length){ el.innerHTML = '<p class="vazio">Nenhuma pe\u00e7a salva ainda.</p>'; return; }
-    el.innerHTML = salvas.map(function(p, i){
-      return '<div class="salvo"><span>' + p.nome +
-        '<small style="display:block;color:var(--mut);font-size:12.5px">custo ' + brl(p.custo) +
-        ' \u00b7 margem ' + p.margem.toFixed(0) + '%</small></span>' +
-        '<span><b>' + brl(p.preco) + '</b> <button class="del" data-i="' + i +
-        '" type="button" aria-label="Remover">&times;</button></span></div>';
+    var total=0;
+    el.innerHTML = materiais.map(function(m,i){
+      var cu=custoUso(m), est=parse(m.estoque);
+      total += est*cu;
+      var cls = est<=0 ? 'zero' : (est*cu<20 ? 'baixo' : '');
+      var txtEst = est<=0 ? 'Acabou'
+        : ('Tem '+vg(est,est<10?2:0)+' '+unUso(m)+' &middot; '+brl(est*cu));
+      return '<div class="item"><div class="info"><div class="nome">'+esc(m.nome)+'</div>'+
+        '<div class="det">'+brl(cu)+' por '+unUso(m)+' &middot; comprou '+
+        vg(parse(m.qtdCompra),2)+' '+(UNID[m.unid]?UNID[m.unid][1]:'')+' por '+brl(parse(m.precoCompra))+'</div>'+
+        '<span class="tag '+cls+'">'+txtEst+'</span><br>'+
+        '<button class="repor" data-rep="'+i+'">Comprei mais</button></div>'+
+        '<button class="mini" data-edit="'+i+'" aria-label="Editar">&#9998;</button>'+
+        '<button class="mini" data-del="'+i+'" aria-label="Remover">&times;</button></div>';
     }).join('');
-    Array.prototype.forEach.call(el.querySelectorAll('.del'), function(b){
-      b.addEventListener('click', function(){
-        salvas.splice(parseInt(b.getAttribute('data-i'), 10), 1); guardar(CHAVE_PECAS, salvas); render();
+    el.insertAdjacentHTML('beforeend',
+      '<div class="linha forte" style="margin-top:10px"><span>Total guardado</span><b>'+brl(total)+'</b></div>');
+    Array.prototype.forEach.call(el.querySelectorAll('[data-rep]'),function(b){
+      b.addEventListener('click',function(){
+        var i=parseInt(b.getAttribute('data-rep'),10), m=materiais[i];
+        var q=prompt('Quanto você comprou de "'+m.nome+'"?\n\nInforme em '+unUso(m)+'.');
+        if(q===null) return;
+        var add=parse(q);
+        if(add<=0){ alert('Informe um número maior que zero.'); return; }
+        m.estoque=String(parse(m.estoque)+add);
+        guardar(K_MAT,materiais); renderMat(); calc();
+      });
+    });
+    Array.prototype.forEach.call(el.querySelectorAll('[data-edit]'),function(b){
+      b.addEventListener('click',function(){ editaMat(parseInt(b.getAttribute('data-edit'),10)); });
+    });
+    Array.prototype.forEach.call(el.querySelectorAll('[data-del]'),function(b){
+      b.addEventListener('click',function(){
+        var i=parseInt(b.getAttribute('data-del'),10);
+        if(confirm('Remover "'+materiais[i].nome+'"? As peças já salvas não mudam.')){
+          materiais.splice(i,1); guardar(K_MAT,materiais);
+          usados=usados.filter(function(u){ return u.id!==i; });
+          renderMat(); renderUsados(); calc();
+        }
       });
     });
   }
-  $('salvar').addEventListener('click', function(){
-    if(!atual || !(atual.preco > 0)) return;
-    salvas.push(JSON.parse(JSON.stringify(atual))); guardar(CHAVE_PECAS, salvas); render();
-    var b = $('salvar'), t = b.textContent;
-    b.textContent = 'Pe\u00e7a salva'; setTimeout(function(){ b.textContent = t; }, 1400);
-  });
-  $('nova').addEventListener('click', function(){ mostra(0); $('pnome').select(); });
-  $('baixar').addEventListener('click', function(){
-    if(!salvas.length){ alert('Salve pelo menos uma pe\u00e7a antes de baixar.'); return; }
-    var bl = new Blob([JSON.stringify({ tabela: salvas }, null, 2)], { type:'application/json' });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(bl); a.download = 'minha-tabela-de-precos.json'; a.click();
-    setTimeout(function(){ URL.revokeObjectURL(a.href); }, 1000);
-  });
-  $('carregar').addEventListener('click', function(){ $('arquivo').click(); });
-  $('arquivo').addEventListener('change', function(e){
-    var f = e.target.files && e.target.files[0]; if(!f) return;
-    var r = new FileReader();
-    r.onload = function(){
-      try {
-        var d = JSON.parse(r.result);
-        if(d && Object.prototype.toString.call(d.tabela) === '[object Array]'){ salvas = d.tabela; guardar(CHAVE_PECAS, salvas); render(); }
-        else alert('Este arquivo n\u00e3o parece ser uma tabela salva aqui.');
-      } catch(err){ alert('N\u00e3o consegui ler este arquivo. Ele precisa ser o .json baixado desta p\u00e1gina.'); }
-    };
-    r.readAsText(f); e.target.value = '';
-  });
-  $('imprimir').addEventListener('click', function(){ window.print(); });
 
+  function attFormUn(){
+    var u=$('mUn').value, d=UNID[u]||UNID.un;
+    $('mQtdLab').textContent=d[0];
+    $('mQtdSuf').setAttribute('data-un',d[1]);
+    $('mEstSuf').setAttribute('data-un',d[2]);
+    $('mEstSub').textContent='Em '+d[2]+', a unidade em que você usa';
+    attMOut();
+  }
+  function attMOut(){
+    var f=(UNID[$('mUn').value]||UNID.un)[3];
+    var q=n('mQtd')*f, p=n('mPreco');
+    var uu=(UNID[$('mUn').value]||UNID.un)[2];
+    $('mOut').innerHTML = (q>0&&p>0) ? 'Cada '+uu+' custa <b>'+brl(p/q)+'</b>' : '';
+    var est=n('mEst');
+    $('mEstOut').innerHTML = (est>0&&q>0&&p>0)
+      ? 'Valor em estoque: <b>'+brl(est*(p/q))+'</b>' : '';
+  }
+  $('mUn').addEventListener('change',attFormUn);
+  ['mPreco','mQtd','mEst'].forEach(function(id){ $(id).addEventListener('input',attMOut); });
 
-  /* ============================================================
-     PORTA DE ENTRADA · cadastro e envio para o RD Station
-     ============================================================ */
-  function soDigitos(t){ return String(t).replace(/\D/g,''); }
+  function abreFormMat(){
+    $('formMat').hidden=false;
+    $('formMat').scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  $('addMat').addEventListener('click',function(){
+    editandoMat=null; $('formMatTit').textContent='Novo material';
+    $('mNome').value=''; $('mUn').value='kg'; $('mPreco').value=''; $('mQtd').value=''; $('mEst').value='';
+    attFormUn(); abreFormMat(); $('mNome').focus();
+  });
+  function editaMat(i){
+    editandoMat=i; var m=materiais[i];
+    $('formMatTit').textContent='Editar material';
+    $('mNome').value=m.nome; $('mUn').value=m.unid;
+    $('mPreco').value=m.precoCompra; $('mQtd').value=m.qtdCompra; $('mEst').value=m.estoque||'';
+    attFormUn(); abreFormMat();
+  }
+  $('mCancel').addEventListener('click',function(){ $('formMat').hidden=true; });
+  $('mSalvar').addEventListener('click',function(){
+    var nome=$('mNome').value.trim();
+    if(!nome){ alert('Dê um nome ao material.'); $('mNome').focus(); return; }
+    if(n('mPreco')<=0||n('mQtd')<=0){ alert('Preencha quanto você pagou e quanto veio.'); return; }
+    var m={nome:nome,unid:$('mUn').value,precoCompra:$('mPreco').value,
+            qtdCompra:$('mQtd').value,estoque:$('mEst').value};
+    if(editandoMat===null) materiais.push(m); else materiais[editandoMat]=m;
+    guardar(K_MAT,materiais);
+    $('formMat').hidden=true; renderMat(); renderUsados(); calc();
+  });
 
-  function mascaraTel(t){
-    var d = soDigitos(t).slice(0,11);
-    if(d.length <= 2) return d.length ? '(' + d : '';
-    if(d.length <= 6) return '(' + d.slice(0,2) + ') ' + d.slice(2);
-    if(d.length <= 10) return '(' + d.slice(0,2) + ') ' + d.slice(2,6) + '-' + d.slice(6);
-    return '(' + d.slice(0,2) + ') ' + d.slice(2,7) + '-' + d.slice(7);
+  /* ================= MATERIAIS USADOS NA PEÇA ================= */
+  function renderUsados(){
+    var el=$('usados');
+    if(!materiais.length){
+      el.innerHTML='<div class="vazio"><span class="ic">&#129517;</span>'+
+        'Cadastre os seus materiais primeiro, na aba <b>Materiais</b>.</div>';
+      $('addUso').hidden=true; return;
+    }
+    $('addUso').hidden=false;
+    if(!usados.length){ el.innerHTML='<div class="vazio">Nenhum material adicionado ainda.</div>'; return; }
+    el.innerHTML = usados.map(function(u,k){
+      var m=materiais[u.id]; if(!m) return '';
+      var cu=custoUso(m), tot=cu*parse(u.qtd);
+      return '<div class="item"><div class="info"><div class="nome">'+esc(m.nome)+'</div>'+
+        '<div class="det">'+brl(cu)+' por '+unUso(m)+'</div>'+
+        '<div class="suf" data-un="'+unUso(m)+'" style="margin-top:7px">'+
+        '<input type="text" inputmode="decimal" data-qtd="'+k+'" value="'+esc(u.qtd)+'" placeholder="PREENCHER"></div></div>'+
+        '<div style="text-align:right"><div class="val">'+brl(tot)+'</div>'+
+        '<button class="mini" data-rm="'+k+'" aria-label="Remover">&times;</button></div></div>';
+    }).join('');
+    Array.prototype.forEach.call(el.querySelectorAll('[data-qtd]'),function(inp){
+      inp.addEventListener('input',function(){
+        usados[parseInt(inp.getAttribute('data-qtd'),10)].qtd=inp.value; calc();
+      });
+    });
+    Array.prototype.forEach.call(el.querySelectorAll('[data-rm]'),function(b){
+      b.addEventListener('click',function(){
+        usados.splice(parseInt(b.getAttribute('data-rm'),10),1); renderUsados(); calc();
+      });
+    });
+  }
+  $('addUso').addEventListener('click',function(){
+    if(!materiais.length) return;
+    var h='<h3>Qual material você usou?</h3><p>Toque no material e depois diga quanto usou no lote.</p><div style="margin-top:14px">';
+    h+=materiais.map(function(m,i){
+      return '<div class="item"><div class="info"><div class="nome">'+esc(m.nome)+'</div>'+
+        '<div class="det">'+brl(custoUso(m))+' por '+unUso(m)+'</div></div>'+
+        '<button class="btn ok" data-pick="'+i+'" style="width:auto;padding:0 16px;min-height:42px;font-size:14px">Usar</button></div>';
+    }).join('');
+    h+='</div><button class="btn sec" data-fechar style="margin-top:14px">Fechar</button>';
+    $('sheet').innerHTML=h; $('modal').classList.add('on');
+  });
+
+  /* ================= MEUS CUSTOS ================= */
+  var CAMPOS_CUSTO = ['kEnergia','kAgua','kInternet','kAluguel','kDeprec','kManut','kFerias','kDecimo','kOutros'];
+
+  function somaCustos(){
+    var t=0; CAMPOS_CUSTO.forEach(function(id){ t+=n(id); }); return t;
+  }
+  function horaVale(){
+    var h=parse(custos.horas);
+    if(h<=0) return 0;
+    var mensais=0;
+    CAMPOS_CUSTO.forEach(function(id){ mensais+=parse(custos[id]); });
+    return (parse(custos.meta)+mensais)/h;
   }
 
-  var tel = $('cTel');
-  tel.addEventListener('input', function(){
-    var p = tel.selectionStart, antes = tel.value.length;
-    tel.value = mascaraTel(tel.value);
-    if(p < antes) tel.setSelectionRange(p, p);
+  function preencheCustos(){
+    $('cMeta').value  = custos.meta  || '';
+    $('cHoras').value = custos.horas || '';
+    CAMPOS_CUSTO.forEach(function(id){ $(id).value = custos[id] || ''; });
+    $('cImp').value   = custos.imposto || '';
+    $('cCartao').value= custos.cartao  || '';
+    $('cComis').value = custos.comissao|| '';
+    attCustos();
+  }
+
+  function attCustos(){
+    var mensais=somaCustos(), h=n('cHoras'), sal=n('cMeta');
+    var total=sal+mensais, hora = h>0 ? total/h : 0;
+    $('horaHero').textContent = brl(hora);
+    $('horaSub').textContent = hora>0
+      ? 'Contas do mês somam '+brl(total)+' em '+vg(h,0)+' horas por mês'
+      : 'Preencha os campos abaixo';
+    $('custoOut').innerHTML = mensais>0
+      ? 'As contas do mês somam <b>'+brl(mensais)+'</b>' : '';
+
+    var tx=n('cImp')+n('cCartao')+n('cComis');
+    $('taxaOut').innerHTML = tx>0
+      ? 'De cada R$ 100 vendidos saem <b>'+brl(tx)+'</b> em taxas' : '';
+    $('avisoTaxa').innerHTML = tx>=40
+      ? av('warn','Suas taxas somam <b>'+vg(tx)+'%</b> do preço. Confira: acima de 40% é bem incomum e costuma ser erro de digitação.')
+      : (tx>=95 ? av('warn','Taxas de 95% ou mais deixam o preço impossível de calcular.') : '');
+    $('avisoHoras').innerHTML = n('cHoras')>160
+      ? av('warn','Mais de 160 horas por mês são cerca de 8 horas por dia, todo dia útil, só produzindo. Se for otimista demais, sua hora fica barata e o preço todo desce junto.') : '';
+  }
+
+  ['cMeta','cHoras','cImp','cCartao','cComis'].concat(CAMPOS_CUSTO).forEach(function(id){
+    $(id).addEventListener('input',attCustos);
   });
 
-  function marca(id, campo, ruim){
-    $(id).classList.toggle('on', ruim);
-    if(campo) $(campo).classList.toggle('ruim', ruim);
+  $('btnFerias').addEventListener('click',function(){
+    var sal=n('cMeta');
+    if(sal<=0){ alert('Preencha primeiro o seu salário por mês.'); $('cMeta').focus(); return; }
+    var um=sal/12;
+    $('kFerias').value=um.toFixed(2).replace('.',',');
+    $('kDecimo').value=um.toFixed(2).replace('.',',');
+    attCustos();
+  });
+
+  $('cSalvar').addEventListener('click',function(){
+    custos={meta:$('cMeta').value,horas:$('cHoras').value,
+            imposto:$('cImp').value,cartao:$('cCartao').value,comissao:$('cComis').value};
+    CAMPOS_CUSTO.forEach(function(id){ custos[id]=$(id).value; });
+    guardar(K_CUS,custos);
+    var b=$('cSalvar'), t=b.textContent;
+    b.textContent='Salvo!'; setTimeout(function(){ b.textContent=t; },1400);
+    calc();
+  });
+
+  /* ================= CÁLCULO ================= */
+  var atual=null;
+  function calc(){
+    var qtd=Math.max(1,n('pQtd'));
+
+    var matLote=0, temResina=0, temPig=0;
+    usados.forEach(function(u){
+      var m=materiais[u.id]; if(!m) return;
+      var v=custoUso(m)*parse(u.qtd);
+      matLote+=v;
+      var nm=m.nome.toLowerCase();
+      if(m.unid==='kg'&&nm.indexOf('resina')>-1) temResina+=parse(u.qtd);
+      if(m.unid==='kg'&&nm.indexOf('pigmento')>-1) temPig+=parse(u.qtd);
+    });
+    var mat=matLote/qtd;
+    $('usoTotal').innerHTML = matLote>0
+      ? 'Material do lote: <b>'+brl(matLote)+'</b> &middot; '+brl(mat)+' por peça' : '';
+
+    $('avisoPig').innerHTML='';
+    if(temResina>0&&temPig>0){
+      var pct=(temPig/temResina)*100;
+      $('avisoPig').innerHTML = pct>5
+        ? av('warn','O pigmento está em <b>'+vg(pct)+'%</b> do peso da resina. Acima de 5% o excesso pode atrapalhar a cura e deixar a peça mole.')
+        : av('good','Pigmento em <b>'+vg(pct)+'%</b> do peso da resina. Dentro da faixa segura.');
+    }
+
+    var minLote=n('t1')+n('t2')+n('t3')+n('t4')+n('t5')+n('t6');
+    var minPeca=minLote/qtd;
+    var hora = horaVale();
+    var horasMes = parse(custos.horas);
+    var mensais=0; CAMPOS_CUSTO.forEach(function(id){ mensais+=parse(custos[id]); });
+    var horaSal = horasMes>0 ? parse(custos.meta)/horasMes : 0;
+    var horaCus = horasMes>0 ? mensais/horasMes : 0;
+    var tra=(minPeca/60)*hora;
+    var traSal=(minPeca/60)*horaSal, traCus=(minPeca/60)*horaCus;
+    $('tOut').innerHTML = minLote>0
+      ? 'Total do lote: <b>'+minLote.toFixed(0)+' min</b> &middot; '+vg(minPeca)+' min por peça' : '';
+    $('avisoTempo').innerHTML = (minLote>0&&n('t4')===0)
+      ? av('warn','Você deixou a lixa em zero. Se a peça precisa de acabamento, esse tempo existe — e ignorá-lo é o motivo número um de peça vendida barato demais.') : '';
+
+    var custo=mat+tra;
+    var pctLucro=n('mk')/100;
+    var pctTax=(parse(custos.imposto)+parse(custos.cartao)+parse(custos.comissao))/100;
+    if(pctTax>0.85) pctTax=0.85;
+    var div=1-pctLucro-pctTax;
+    if(div<0.05) div=0.05;
+    var preco=custo/div;
+    var taxas=preco*pctTax, lucro=preco*pctLucro;
+    var margem=pctLucro*100;
+
+    $('mkVal').textContent=n('mk').toFixed(0)+'%';
+    var lp=n('mk');
+    $('avisoMk').innerHTML = lp<20
+      ? av('warn','Deixar menos de 20% para você é apertado. Peça que dá errado, cliente que some e material que sobe de preço saem daí — e desse tanto não sobra folga para nada disso.')
+      : (lp>=30?av('good','Boa faixa. Sobra o suficiente para cobrir imprevisto e ainda dar desconto em pedido grande sem sair no prejuízo.'):'');
+    if(pctLucro+pctTax>=0.9)
+      $('avisoMk').innerHTML += av('warn','O que você quer que sobre mais as taxas passam de 90% do preço. Não sobra espaço para o custo da peça — o preço fica altíssimo. Baixe um dos dois.');
+
+    /* falta configurar? */
+    var faltas=[];
+    if(!materiais.length) faltas.push('cadastrar os seus materiais');
+    if(hora<=0) faltas.push('preencher o seu salário e as suas horas em Meus custos');
+    $('alertaSetup').innerHTML = faltas.length
+      ? av('warn','Antes de precificar, falta '+faltas.join(' e ')+'. Use as abas <b>Materiais</b> e <b>Meus custos</b> — é uma vez só.') : '';
+
+    $('pv').textContent=brl(preco);
+    $('pvSub').textContent = qtd>1 ? ('por peça · lote de '+qtd.toFixed(0)) : 'por peça';
+    $('v-mat').textContent=brl(mat);
+    $('v-tra').textContent=brl(traSal);
+    $('v-tramin').textContent = vg(minPeca)+' min por peça · hora a '+brl(hora);
+    $('v-fix').textContent=brl(traCus);
+    $('v-custo').textContent=brl(custo);
+    $('v-semtax').textContent=brl(lucro);
+    $('v-lucropct').textContent=n('mk').toFixed(0)+'% do preço, como você escolheu';
+    $('v-tax').textContent=brl(taxas);
+    $('v-taxpct').textContent = pctTax>0 ? (vg(pctTax*100)+'% do preço de venda') : 'nenhuma taxa informada';
+    $('v-lucro').textContent=brl(preco);
+
+    $('v-rev').textContent=brl(custo*2);
+    $('v-enc').textContent=brl(preco*1.3);
+    $('v-min').textContent=brl(custo);
+
+    [['c-mat','l-mat',mat],['c-tra','l-tra',traSal],['c-fix','l-fix',traCus],
+     ['c-tax','l-tax',taxas],['c-luc','l-luc',Math.max(0,lucro)]]
+      .forEach(function(p){
+        var pc=preco>0?(p[2]/preco)*100:0;
+        $(p[0]).style.flexGrow=String(Math.max(0,pc));
+        var l=$(p[1]);
+        l.querySelector('.leg-val').textContent=pc.toFixed(0)+'%';
+        l.classList.toggle('zero',pc<1);
+      });
+
+    var a='';
+    if(tra>0&&mat>0&&tra>mat*2)
+      a+=av('info','Seu trabalho custa mais que o dobro do material nesta peça. É o normal em resina — e é exatamente por isso que calcular só o material leva a cobrar barato.');
+    if(preco>0&&preco<15)
+      a+=av('info','Preço muito baixo costuma atrair o cliente que só quer preço baixo, e ele não aceita aumento depois. Vale conferir se algum custo ficou de fora.');
+    if(pctTax>0&&preco>0&&lucro>0&&taxas>lucro)
+      a+=av('info','As taxas levam mais do que sobra para você: '+brl(taxas)+' contra '+brl(lucro)+' de lucro. Vale rever a forma de recebimento — Pix não tem taxa de cartão.');
+    $('avisos').innerHTML=a;
+
+    if(lucro>0.009){
+      var q=Math.ceil(parse(custos.meta)/lucro);
+      $('metaQtd').textContent=q+(q===1?' peça':' peças');
+      $('metaTxt').textContent='É quanto você precisa vender desta peça por mês para tirar '+
+        brl(parse(custos.meta))+'. Se o número parecer impossível, o preço está baixo — não a meta.';
+    } else {
+      $('metaQtd').textContent='—';
+      $('metaTxt').textContent = custo<=0
+        ? 'Preencha os campos acima para saber quantas peças você precisa vender.'
+        : 'Ainda não dá para calcular. Confira os materiais e o tempo da peça.';
+    }
+
+    if(custo>0){
+      $('resLab').textContent='Preço no varejo';
+      $('resVal').textContent=brl(preco);
+      $('resTxt').textContent='Custo '+brl(custo)+' · lucro '+brl(lucro);
+    } else {
+      $('resLab').textContent='Custo por peça';
+      $('resVal').textContent=brl(0);
+      $('resTxt').textContent='Preencha os campos';
+    }
+
+    atual={nome:$('pNome').value||'Peça sem nome',qtd:qtd,custo:custo,preco:preco,taxas:taxas,foto:fotoAtual,
+           lucro:lucro,margem:margem,min:minPeca,lucroPct:n('mk'),
+           itens:JSON.parse(JSON.stringify(usados)),
+           tempos:{t1:$('t1').value,t2:$('t2').value,t3:$('t3').value,
+                   t4:$('t4').value,t5:$('t5').value,t6:$('t6').value},
+           data:new Date().toISOString()};
+  }
+
+  /* ================= MINHAS PEÇAS ================= */
+  function renderPecas(){
+    var el=$('listaPecas');
+    if(!pecas.length){
+      el.innerHTML='<div class="vazio"><span class="ic">&#128278;</span>'+
+        'Nenhuma peça salva ainda.<br>Calcule uma na aba <b>Precificar</b> e toque em Salvar.</div>';
+      return;
+    }
+    el.innerHTML=pecas.map(function(p,i){
+      var th = p.foto ? '<img class="thumb" src="'+p.foto+'" alt="">' : '';
+      return '<div class="item">'+th+'<div class="info"><div class="nome">'+esc(p.nome)+'</div>'+
+        '<div class="det">custo '+brl(p.custo)+' &middot; margem '+p.margem.toFixed(0)+'%'+
+        (p.min?' &middot; '+vg(p.min)+' min':'')+'</div></div>'+
+        '<div class="val">'+brl(p.preco)+'</div>'+
+        '<button class="mini" data-delp="'+i+'" aria-label="Remover">&times;</button></div>';
+    }).join('');
+    Array.prototype.forEach.call(el.querySelectorAll('[data-delp]'),function(b){
+      b.addEventListener('click',function(){
+        var i=parseInt(b.getAttribute('data-delp'),10);
+        if(confirm('Remover "'+pecas[i].nome+'" da sua tabela?')){
+          pecas.splice(i,1); guardar(K_PEC,pecas); renderPecas();
+        }
+      });
+    });
+  }
+  $('salvar').addEventListener('click',function(){
+    if(!atual||!(atual.preco>0)){ alert('Preencha a peça antes de salvar.'); return; }
+    pecas.push(JSON.parse(JSON.stringify(atual)));
+    if(!guardar(K_PEC,pecas)){
+      pecas.pop();
+      alert('Não consegui salvar: o espaço deste aparelho acabou.\n\nApague algumas peças antigas ou salve sem foto — as fotos ocupam quase todo o espaço.');
+      return;
+    }
+    if($('baixaEst').checked) darBaixa();
+    var b=$('salvar'), t=b.textContent;
+    b.textContent='Peça salva!'; setTimeout(function(){ b.textContent=t; },1500);
+    renderPecas();
+  });
+  $('limpar').addEventListener('click',function(){
+    if(!confirm('Limpar os campos desta peça? Os materiais e os seus custos continuam salvos.')) return;
+    $('pNome').value=''; $('pQtd').value='';
+    ['t1','t2','t3','t4','t5','t6'].forEach(function(id){ $(id).value=''; });
+    $('mk').value=3; usados=[]; fotoAtual=null; pintaFoto();
+    $('baixaEst').checked=false; renderUsados(); calc();
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+  $('imprimir').addEventListener('click',function(){ window.print(); });
+
+  $('baixar').addEventListener('click',function(){
+    var d={materiais:materiais,custos:custos,pecas:pecas,contatos:contatos};
+    var bl=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});
+    var a=document.createElement('a');
+    a.href=URL.createObjectURL(bl); a.download='minha-calculadora-mrs.json'; a.click();
+    setTimeout(function(){ URL.revokeObjectURL(a.href); },1000);
+  });
+  $('carregar').addEventListener('click',function(){ $('arquivo').click(); });
+  $('arquivo').addEventListener('change',function(e){
+    var f=e.target.files&&e.target.files[0]; if(!f) return;
+    var r=new FileReader();
+    r.onload=function(){
+      try{
+        var d=JSON.parse(r.result);
+        if(d&&(d.materiais||d.pecas)){
+          if(d.materiais){ materiais=d.materiais; guardar(K_MAT,materiais); }
+          if(d.custos){ custos=d.custos; guardar(K_CUS,custos); }
+          if(d.pecas){ pecas=d.pecas; guardar(K_PEC,pecas); }
+          if(d.contatos){ contatos=d.contatos; guardar(K_CON,contatos); }
+          renderMat(); renderPecas(); renderCon(); preencheCustos(); renderUsados(); calc();
+          alert('Tudo certo! Seus materiais e peças foram restaurados.');
+        } else alert('Este arquivo não parece ser uma cópia feita aqui.');
+      }catch(err){ alert('Não consegui ler este arquivo. Ele precisa ser o .json baixado desta página.'); }
+    };
+    r.readAsText(f); e.target.value='';
+  });
+
+
+  /* ================= FOTO DA PEÇA ================= */
+  function comprimeFoto(file, cb){
+    var r=new FileReader();
+    r.onload=function(){
+      var img=new Image();
+      img.onload=function(){
+        var max=560, w=img.width, h=img.height;
+        if(w>h && w>max){ h=Math.round(h*max/w); w=max; }
+        else if(h>max){ w=Math.round(w*max/h); h=max; }
+        var c=document.createElement('canvas'); c.width=w; c.height=h;
+        c.getContext('2d').drawImage(img,0,0,w,h);
+        try{ cb(c.toDataURL('image/jpeg',0.72)); }catch(e){ cb(null); }
+      };
+      img.onerror=function(){ cb(null); };
+      img.src=r.result;
+    };
+    r.onerror=function(){ cb(null); };
+    r.readAsDataURL(file);
+  }
+  function pintaFoto(){
+    if(fotoAtual){
+      $('fotoMini').src=fotoAtual; $('fotoMini').hidden=false;
+      $('fotoVazia').hidden=true; $('btnFotoX').hidden=false;
+      $('btnFoto').textContent='Trocar foto';
+    } else {
+      $('fotoMini').hidden=true; $('fotoVazia').hidden=false;
+      $('btnFotoX').hidden=true; $('btnFoto').textContent='Escolher foto';
+    }
+  }
+  $('btnFoto').addEventListener('click',function(){ $('inpFoto').click(); });
+  $('btnFotoX').addEventListener('click',function(){ fotoAtual=null; pintaFoto(); calc(); });
+  $('inpFoto').addEventListener('change',function(e){
+    var f=e.target.files&&e.target.files[0]; if(!f) return;
+    comprimeFoto(f,function(d){
+      if(!d){ alert('Não consegui ler esta imagem. Tente outra foto.'); return; }
+      fotoAtual=d; pintaFoto(); calc();
+    });
+    e.target.value='';
+  });
+
+  /* ================= BAIXA DE ESTOQUE ================= */
+  function darBaixa(){
+    var faltou=[];
+    usados.forEach(function(u){
+      var m=materiais[u.id]; if(!m) return;
+      var q=parse(u.qtd); if(q<=0) return;
+      var atualEst=parse(m.estoque);
+      if(atualEst < q) faltou.push(m.nome);
+      m.estoque=String(Math.max(0, atualEst-q));
+    });
+    guardar(K_MAT,materiais);
+    renderMat(); renderUsados(); calc();
+    if(faltou.length) alert('Estoque zerado em: '+faltou.join(', ')+
+      '.\n\nO estoque cadastrado era menor que o usado. Confira na aba Materiais.');
+  }
+
+  /* ================= CONTATOS ================= */
+  function renderCon(){
+    var el=$('listaCon');
+    if(!contatos.length){
+      el.innerHTML='<div class="vazio"><span class="ic">&#128100;</span>'+
+        'Nenhum contato ainda.<br>Comece pelas pessoas que já compraram de você.</div>';
+      return;
+    }
+    el.innerHTML=contatos.map(function(c,i){
+      var d=String(c.tel||'').replace(/\D/g,'');
+      var wa = d.length>=10
+        ? '<a class="wa" href="https://wa.me/55'+d+'" target="_blank" rel="noopener">&#128172; Chamar no WhatsApp</a>' : '';
+      return '<div class="item"><div class="info"><div class="nome">'+esc(c.nome)+'</div>'+
+        '<div class="det">'+esc(c.tel||'')+(c.cidade?' &middot; '+esc(c.cidade):'')+'</div>'+
+        (c.obs?'<div class="det">'+esc(c.obs)+'</div>':'')+wa+'</div>'+
+        '<button class="mini" data-econ="'+i+'" aria-label="Editar">&#9998;</button>'+
+        '<button class="mini" data-dcon="'+i+'" aria-label="Remover">&times;</button></div>';
+    }).join('');
+    Array.prototype.forEach.call(el.querySelectorAll('[data-econ]'),function(b){
+      b.addEventListener('click',function(){
+        var i=parseInt(b.getAttribute('data-econ'),10), c=contatos[i];
+        editandoCon=i; $('formConTit').textContent='Editar contato';
+        $('oNome').value=c.nome||''; $('oTel').value=c.tel||'';
+        $('oCidade').value=c.cidade||''; $('oObs').value=c.obs||'';
+        $('formCon').hidden=false;
+        $('formCon').scrollIntoView({behavior:'smooth',block:'start'});
+      });
+    });
+    Array.prototype.forEach.call(el.querySelectorAll('[data-dcon]'),function(b){
+      b.addEventListener('click',function(){
+        var i=parseInt(b.getAttribute('data-dcon'),10);
+        if(confirm('Remover "'+contatos[i].nome+'" dos seus contatos?')){
+          contatos.splice(i,1); guardar(K_CON,contatos); renderCon();
+        }
+      });
+    });
+  }
+  $('addCon').addEventListener('click',function(){
+    editandoCon=null; $('formConTit').textContent='Novo contato';
+    $('oNome').value=''; $('oTel').value=''; $('oCidade').value=''; $('oObs').value='';
+    $('formCon').hidden=false;
+    $('formCon').scrollIntoView({behavior:'smooth',block:'start'});
+    $('oNome').focus();
+  });
+  $('oCancel').addEventListener('click',function(){ $('formCon').hidden=true; });
+  $('oTel').addEventListener('input',function(){
+    $('oTel').value=mascaraTel($('oTel').value);
+  });
+  $('oSalvar').addEventListener('click',function(){
+    var nome=$('oNome').value.trim();
+    if(!nome){ alert('Dê um nome ao contato.'); $('oNome').focus(); return; }
+    var c={nome:nome,tel:$('oTel').value,cidade:$('oCidade').value,obs:$('oObs').value};
+    if(editandoCon===null) contatos.push(c); else contatos[editandoCon]=c;
+    guardar(K_CON,contatos); $('formCon').hidden=true; renderCon();
+  });
+
+  /* ================= CADASTRO E RD ================= */
+  function soDigitos(t){ return String(t).replace(/\D/g,''); }
+  function mascaraTel(t){
+    var d=soDigitos(t).slice(0,11);
+    if(d.length<=2) return d.length?'('+d:'';
+    if(d.length<=6) return '('+d.slice(0,2)+') '+d.slice(2);
+    if(d.length<=10) return '('+d.slice(0,2)+') '+d.slice(2,6)+'-'+d.slice(6);
+    return '('+d.slice(0,2)+') '+d.slice(2,7)+'-'+d.slice(7);
+  }
+  $('cTel').addEventListener('input',function(){
+    var p=$('cTel').selectionStart, a=$('cTel').value.length;
+    $('cTel').value=mascaraTel($('cTel').value);
+    if(p<a) $('cTel').setSelectionRange(p,p);
+  });
+  function marca(id,campo,ruim){
+    $(id).classList.toggle('on',ruim);
+    if(campo) $(campo).classList.toggle('ruim',ruim);
     return !ruim;
   }
-
   function validar(){
-    var nome = $('cNome').value.trim();
-    var email = $('cEmail').value.trim();
-    var fone = soDigitos($('cTel').value);
-    var ok = $('cOk').checked;
-    var a = marca('eNome','cNome', nome.split(/\s+/).filter(Boolean).length < 2);
-    var b = marca('eEmail','cEmail', !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email));
-    var c = marca('eTel','cTel', fone.length < 10 || fone.length > 11);
-    var d = marca('eOk', null, !ok);
-    return (a && b && c && d) ? { nome:nome, email:email, fone:fone, ok:ok } : null;
+    var nome=$('cNome').value.trim(), email=$('cEmail').value.trim(),
+        fone=soDigitos($('cTel').value), ok=$('cOk').checked;
+    var a=marca('eNome','cNome',nome.split(/\s+/).filter(Boolean).length<2);
+    var b=marca('eEmail','cEmail',!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email));
+    var c=marca('eTel','cTel',fone.length<10||fone.length>11);
+    var d=marca('eOk',null,!ok);
+    return (a&&b&&c&&d)?{nome:nome,email:email,fone:fone,ok:ok}:null;
   }
-
+  function enviarRD(d){
+    try{
+      if(window.RdIntegration&&typeof window.RdIntegration.post==='function'){
+        window.RdIntegration.post({token_rdstation:window.RD_TOKEN||'',
+          identificador:'calculadora-preco-mrs',
+          name:d.nome,email:d.email,personal_phone:d.fone});
+        return true;
+      }
+    }catch(e){}
+    return false;
+  }
   function abrirApp(){
     $('porta').classList.add('off');
     document.body.classList.remove('gated');
-    document.body.style.overflow = '';
+    document.body.style.overflow='';
     window.scrollTo(0,0);
-    pintaCadastro();
-    setTimeout(mostrarConvite, 600);
+    pintaCadastro(); setTimeout(mostrarBotoes,600);
   }
-
-  /* Envia o lead ao RD Station.
-     Funciona de três formas, na ordem:
-     1. RDStationForms  — se você embutiu o formulário oficial do RD
-     2. RdIntegration   — se o código de monitoramento estiver instalado
-     3. Fila local      — guarda no aparelho e tenta de novo na próxima abertura */
-  function enviarRD(dados){
-    try {
-      if(window.RdIntegration && typeof window.RdIntegration.post === 'function'){
-        window.RdIntegration.post({
-          token_rdstation: window.RD_TOKEN || '',
-          identificador: 'calculadora-preco-mrs',
-          name: dados.nome, email: dados.email, personal_phone: dados.fone
-        });
-        return true;
-      }
-    } catch(e){}
-    return false;
-  }
-
-  $('cad').addEventListener('submit', function(e){
+  $('cad').addEventListener('submit',function(e){
     e.preventDefault();
-    var d = validar();
-    if(!d) {
-      var pri = document.querySelector('.erro.on');
-      if(pri) pri.scrollIntoView({ behavior:'smooth', block:'center' });
-      return;
-    }
-    d.quando = new Date().toISOString();
-    d.enviado = enviarRD(d);
-    guardar(CHAVE, d);
-    abrirApp();
+    var d=validar();
+    if(!d){ var p=document.querySelector('.erro.on'); if(p) p.scrollIntoView({behavior:'smooth',block:'center'}); return; }
+    d.quando=new Date().toISOString(); d.enviado=enviarRD(d);
+    guardar(K_CAD,d); abrirApp();
   });
 
-  /* já cadastrada neste aparelho? entra direto */
-  var cad = ler(CHAVE);
-  if(cad && cad.email){
-    abrirApp();
-    if(!cad.enviado){                    /* tenta reenviar o que ficou na fila */
-      setTimeout(function(){
-        if(enviarRD(cad)){ cad.enviado = true; guardar(CHAVE, cad); }
-      }, 1500);
-    }
-  } else {
-    document.body.classList.add('gated');
-    document.body.style.overflow = 'hidden';
-  }
-
-  /* ---------- service worker ---------- */
-  if('serviceWorker' in navigator){
-    window.addEventListener('load', function(){
-      navigator.serviceWorker.register('sw.js').catch(function(){});
-    });
-  }
-
-
-  /* ============================================================
-     STATUS E INSTALAÇÃO
-     ============================================================ */
-  /* --- selo de conexão --- */
+  /* ================= STATUS ================= */
   function pintaNet(){
-    var on = navigator.onLine !== false;
-    var el = $('sNet');
-    el.className = 'selo ' + (on ? 'on' : 'off');
-    el.innerHTML = '<span class="pt"></span>' + (on ? 'Online' : 'Sem internet');
+    var on=navigator.onLine!==false, el=$('sNet');
+    el.className='selo '+(on?'on':'off');
+    el.innerHTML='<span class="pt"></span>'+(on?'Online':'Sem internet');
   }
-  window.addEventListener('online', function(){ pintaNet(); tentarFila(); });
-  window.addEventListener('offline', pintaNet);
+  window.addEventListener('online',function(){ pintaNet(); tentarFila(); });
+  window.addEventListener('offline',pintaNet);
   pintaNet();
 
-  /* --- selo com o nome e o estado do cadastro --- */
   function pintaCadastro(){
-    var c = ler(CHAVE);
-    if(c && c.nome){
-      var primeiro = c.nome.split(/\s+/)[0];
-      var el = $('sNome');
-      el.hidden = false;
-      el.innerHTML = 'Olá, <b>' + primeiro + '</b>';
-      $('sFila').hidden = !!c.enviado;
-    } else {
-      $('sNome').hidden = true;
-      $('sFila').hidden = true;
-    }
+    var c=ler(K_CAD);
+    if(c&&c.nome){
+      $('sNome').hidden=false;
+      $('sNome').innerHTML='Olá, <b>'+esc(c.nome.split(/\s+/)[0])+'</b>';
+      $('sFila').hidden=!!c.enviado;
+    } else { $('sNome').hidden=true; $('sFila').hidden=true; }
   }
   function tentarFila(){
-    var c = ler(CHAVE);
-    if(c && c.email && !c.enviado && enviarRD(c)){
-      c.enviado = true; guardar(CHAVE, c); pintaCadastro();
-    }
+    var c=ler(K_CAD);
+    if(c&&c.email&&!c.enviado&&enviarRD(c)){ c.enviado=true; guardar(K_CAD,c); pintaCadastro(); }
   }
 
-  /* --- já está instalado? --- */
+  /* ================= INSTALAÇÃO ================= */
+  var evtInstalar=null;
   function instalado(){
-    return (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches)
-        || window.navigator.standalone === true;
+    return (window.matchMedia&&window.matchMedia('(display-mode: standalone)').matches)
+        || window.navigator.standalone===true;
   }
   function ehIOS(){
     return /iphone|ipad|ipod/i.test(navigator.userAgent)
         && !/crios|fxios|edgios/i.test(navigator.userAgent);
   }
-  function ehIOSoutroNavegador(){
+  function ehIOSoutro(){
     return /iphone|ipad|ipod/i.test(navigator.userAgent)
         && /crios|fxios|edgios/i.test(navigator.userAgent);
   }
+  function mostrarBotoes(){
+    var e=instalado();
+    $('btnTopo').hidden=e; $('btnPorta').hidden=e;
+  }
+  function esconderBotoes(){ $('btnTopo').hidden=true; $('btnPorta').hidden=true; }
+  window.addEventListener('beforeinstallprompt',function(e){
+    e.preventDefault(); evtInstalar=e; mostrarBotoes();
+  });
+  window.addEventListener('appinstalled',function(){ esconderBotoes(); guardar(K_INST,true); });
 
-  var evtInstalar = null;
-
-  function mostrarConvite(){
-    if(instalado()) return;
-    if(ler(CHAVE_INST)) return;
-    if(document.getElementById('porta') && !$('porta').classList.contains('off')) return;
-
-    if(evtInstalar){                       /* Android e Chrome no computador */
-      $('iIOS').hidden = true;
-      $('iAcao').hidden = false;
-      $('instala').classList.add('on');
-    } else if(ehIOS()){                    /* iPhone no Safari */
-      $('iIOS').hidden = false;
-      $('iAcao').hidden = true;
-      $('instala').classList.add('on');
-    } else if(ehIOSoutroNavegador()){      /* iPhone fora do Safari */
-      $('iTexto').textContent = 'No iPhone, a instalação só funciona pelo Safari. Abra este mesmo endereço no Safari para instalar.';
-      $('iIOS').hidden = true;
-      $('iAcao').hidden = true;
-      $('instala').classList.add('on');
+  function abrirFolha(){
+    var h='';
+    if(instalado()){
+      h='<h3>O app já está instalado</h3><p>Você já tem a calculadora na tela de início deste aparelho. Se não achar, procure por “Preço MRS”.</p>'+
+        '<button class="btn sec" data-fechar style="margin-top:16px">Entendi</button>';
+    } else if(evtInstalar){
+      h='<h3>Instalar no celular</h3><p>A calculadora vira um aplicativo na sua tela de início e passa a abrir mesmo sem internet. Não ocupa quase nada de espaço.</p>'+
+        '<button class="btn ok" data-instalar style="margin-top:16px">Instalar agora</button>'+
+        '<button class="btn sec" data-fechar style="margin-top:9px">Agora não</button>';
+    } else if(ehIOS()){
+      h='<h3>Instalar no iPhone</h3><p>No iPhone a instalação é feita pelo próprio Safari:</p><ol>'+
+        '<li>Toque em <b>Compartilhar</b>, o quadradinho com a seta para cima, na barra de baixo</li>'+
+        '<li>Role a lista e escolha <b>Adicionar à Tela de Início</b></li>'+
+        '<li>Toque em <b>Adicionar</b>, no canto superior direito</li></ol>'+
+        '<button class="btn sec" data-fechar style="margin-top:16px">Entendi</button>';
+    } else if(ehIOSoutro()){
+      h='<h3>Abra no Safari para instalar</h3><p>No iPhone, só o Safari consegue instalar o app. Copie este endereço, abra o Safari e cole lá.</p>'+
+        '<button class="btn sec" data-fechar style="margin-top:16px">Entendi</button>';
+    } else {
+      h='<h3>Instalar no seu aparelho</h3><p>Procure o ícone de instalar na barra de endereço do navegador, ou o item <b>Instalar aplicativo</b> no menu.</p>'+
+        '<button class="btn sec" data-fechar style="margin-top:16px">Entendi</button>';
     }
+    $('sheet').innerHTML=h; $('modal').classList.add('on');
+  }
+  $('irMat').addEventListener('click',function(){ abre('mat'); });
+  $('btnTopo').addEventListener('click',abrirFolha);
+  $('btnPorta').addEventListener('click',abrirFolha);
+
+  $('modal').addEventListener('click',function(e){
+    if(e.target===$('modal')){ $('modal').classList.remove('on'); return; }
+    if(e.target.closest('[data-fechar]')){ $('modal').classList.remove('on'); return; }
+    var pick=e.target.closest('[data-pick]');
+    if(pick){
+      usados.push({id:parseInt(pick.getAttribute('data-pick'),10),qtd:''});
+      $('modal').classList.remove('on'); renderUsados(); calc();
+      return;
+    }
+    if(e.target.closest('[data-instalar]')){
+      $('modal').classList.remove('on');
+      if(evtInstalar){
+        evtInstalar.prompt();
+        evtInstalar.userChoice.then(function(r){
+          if(r&&r.outcome==='accepted') esconderBotoes();
+          evtInstalar=null;
+        });
+      }
+    }
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='Escape') $('modal').classList.remove('on');
+  });
+
+  /* ================= INÍCIO ================= */
+  var cad=ler(K_CAD);
+  if(cad&&cad.email){
+    abrirApp();
+    if(!cad.enviado) setTimeout(tentarFila,1500);
+  } else {
+    document.body.classList.add('gated');
+    document.body.style.overflow='hidden';
   }
 
-  window.addEventListener('beforeinstallprompt', function(e){
-    e.preventDefault();
-    evtInstalar = e;
-    mostrarConvite();
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); });
+  }
+
+  document.addEventListener('input',function(e){
+    if(e.target.closest && e.target.closest('#pn-preco')) calc();
   });
 
-  $('iBtn').addEventListener('click', function(){
-    if(!evtInstalar) return;
-    evtInstalar.prompt();
-    evtInstalar.userChoice.then(function(r){
-      if(r && r.outcome === 'accepted'){ $('instala').classList.remove('on'); }
-      evtInstalar = null;
-    });
-  });
-
-  $('iX').addEventListener('click', function(){
-    $('instala').classList.remove('on');
-    guardar(CHAVE_INST, true);
-  });
-
-  window.addEventListener('appinstalled', function(){
-    $('instala').classList.remove('on');
-    guardar(CHAVE_INST, true);
-  });
-
-  document.addEventListener('input', calc);
-  mostra(0, true);
+  if(VIDEO_YOUTUBE){
+    $('video').src='https://www.youtube.com/embed/'+VIDEO_YOUTUBE;
+    $('video').hidden=false; $('videoVazio').hidden=true;
+  }
+  renderMat(); renderUsados(); renderPecas(); renderCon(); preencheCustos(); pintaFoto(); calc();
+  abre( (materiais.length && parse(custos.horas)>0) ? 'preco' : 'ajuda' );
 })();
 </script>
 </body>
