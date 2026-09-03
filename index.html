@@ -155,6 +155,10 @@ input:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid 
 .passo-t{font-weight:800;font-size:15.5px;color:var(--ink)}
 .passo-d{font-size:14px;color:var(--mut);margin-top:4px;line-height:1.5}
 .passo-d b{color:var(--ink)}
+.aj{border:none;background:var(--material-cl);color:var(--material);cursor:pointer;
+  width:19px;height:19px;border-radius:50%;font:800 12px var(--txt);line-height:1;
+  margin-left:5px;vertical-align:1px;padding:0}
+.aj:active{background:var(--material);color:#fff}
 .prog{text-align:center;margin:4px 0 16px}
 .prog-txt{font-size:13.5px;font-weight:700;color:var(--mut)}
 .prog-barras{display:flex;gap:7px;margin-top:9px}
@@ -184,6 +188,12 @@ input:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid 
   letter-spacing:.03em;text-transform:uppercase}
 .badge.aberto{background:var(--material-cl);color:var(--material)}
 .badge.fechado{background:var(--rosa-cl);color:var(--rosa-esc)}
+.status-sel{width:100%;margin-top:10px}
+.comp{display:flex;gap:10px;align-items:center;margin-top:10px}
+.comp img{width:56px;height:56px;border-radius:9px;object-fit:cover;border:1px solid var(--line)}
+.comp .ok{font-size:12.5px;font-weight:700;color:var(--material)}
+.filtro{display:flex;gap:9px;margin-bottom:13px}
+.filtro select{flex:1}
 .card-orc{border:1px solid var(--line);border-radius:11px;padding:14px;margin-top:11px}
 .card-orc .topo-o{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
 .card-orc .cli{font-weight:800;font-size:15px}
@@ -497,15 +507,19 @@ input.ruim{border-color:var(--alerta)}
 <!-- ============ PRECIFICAR ============ -->
 <section class="painel" id="pn-preco">
   <div id="alertaSetup"></div>
+  <div class="aviso info" id="avisoEdit" hidden style="margin-bottom:13px">
+    Você está <b>editando uma peça já salva</b>. Ao terminar, toque em Salvar alterações.
+    Se preferir criar outra, toque em Limpar.
+  </div>
 
   <div class="card">
     <h2>Qual peça você vai calcular</h2>
     <div class="campo">
-      <label for="pNome">Nome da peça</label>
+      <label for="pNome">Nome da peça<button class="aj" type="button" data-aj="pNome" aria-label="Ajuda">?</button></label>
       <input type="text" id="pNome" placeholder="PREENCHER" autocomplete="off">
     </div>
     <div class="campo">
-      <label for="pQtd">Quantas peças saem deste lote</label>
+      <label for="pQtd">Quantas peças saem deste lote<button class="aj" type="button" data-aj="pQtd" aria-label="Ajuda">?</button></label>
       <input type="text" inputmode="decimal" id="pQtd" placeholder="PREENCHER">
     </div>
     <div class="licao">
@@ -515,7 +529,7 @@ input.ruim{border-color:var(--alerta)}
   </div>
 
   <div class="card">
-    <h2>Materiais usados</h2>
+    <h2>Materiais usados<button class="aj" type="button" data-aj="matUso" aria-label="Ajuda">?</button></h2>
     <p class="hint">Escolha da sua lista e diga quanto gastou de cada um.</p>
     <div id="usados"></div>
     <button class="add" id="addUso" type="button">+ Adicionar material</button>
@@ -524,7 +538,7 @@ input.ruim{border-color:var(--alerta)}
   </div>
 
   <div class="card">
-    <h2>Quanto tempo levou</h2>
+    <h2>Quanto tempo levou<button class="aj" type="button" data-aj="tempo" aria-label="Ajuda">?</button></h2>
     <p class="hint">Todos os campos são <b>em minutos</b> e valem para o lote inteiro.</p>
     <div class="licao aten">
       <b>Conte a lixa.</b> É quase sempre a etapa mais longa e a que mais gente esquece.
@@ -549,7 +563,7 @@ input.ruim{border-color:var(--alerta)}
   </div>
 
   <div class="card">
-    <h2>Quanto você quer ganhar</h2>
+    <h2>Quanto você quer ganhar<button class="aj" type="button" data-aj="lucro" aria-label="Ajuda">?</button></h2>
     <p class="hint">De cada R$ 100 que o cliente pagar, quanto você quer que sobre para você?</p>
     <div class="licao">
       <b>O resto não some, ele tem dono.</b> Parte paga o material, parte paga o seu tempo e
@@ -649,6 +663,8 @@ input.ruim{border-color:var(--alerta)}
     <div class="licao">
       <b>Informe como você compra.</b> Se a resina vem em quilo, coloque o preço do quilo e
       quantos quilos vieram. O app calcula sozinho quanto custa cada grama.
+      <br><br><b>Resina: o peso do kit já inclui o endurecedor.</b> Um kit de 1 kg tem resina
+      mais endurecedor somados. Na hora de usar, pese os dois juntos e informe o total.
     </div>
   </div>
 
@@ -667,11 +683,11 @@ input.ruim{border-color:var(--alerta)}
   <div class="card" id="formMat" hidden>
     <h2 id="formMatTit">Novo material</h2>
     <div class="campo">
-      <label for="mNome">Nome do material</label>
+      <label for="mNome">Nome do material<button class="aj" type="button" data-aj="mNome" aria-label="Ajuda">?</button></label>
       <input type="text" id="mNome" placeholder="PREENCHER" autocomplete="off">
     </div>
     <div class="campo">
-      <label for="mUn">Como você compra</label>
+      <label for="mUn">Como você compra<button class="aj" type="button" data-aj="mUn" aria-label="Ajuda">?</button></label>
       <select id="mUn">
         <option value="kg">Por quilo — uso em gramas</option>
         <option value="un">Por unidade — uso em unidades</option>
@@ -682,7 +698,7 @@ input.ruim{border-color:var(--alerta)}
     <div class="campo">
       <div class="dupla">
         <div>
-          <label for="mPreco">Quanto você pagou</label>
+          <label for="mPreco">Quanto você pagou<button class="aj" type="button" data-aj="mPreco" aria-label="Ajuda">?</button></label>
           <div class="pre"><input type="text" inputmode="decimal" id="mPreco" placeholder="PREENCHER"></div>
         </div>
         <div>
@@ -722,9 +738,9 @@ input.ruim{border-color:var(--alerta)}
     </div>
     <div class="campo">
       <div class="dupla">
-        <div><label for="cMeta">Quanto quer ganhar por mês</label>
+        <div><label for="cMeta">Quanto quer ganhar por mês<button class="aj" type="button" data-aj="cMeta" aria-label="Ajuda">?</button></label>
           <div class="pre"><input type="text" inputmode="decimal" id="cMeta" placeholder="PREENCHER"></div></div>
-        <div><label for="cHoras">Horas que você trabalha por mês</label>
+        <div><label for="cHoras">Horas que você trabalha por mês<button class="aj" type="button" data-aj="cHoras" aria-label="Ajuda">?</button></label>
           <input type="text" inputmode="decimal" id="cHoras" placeholder="PREENCHER"></div>
       </div>
     </div>
@@ -732,8 +748,9 @@ input.ruim{border-color:var(--alerta)}
   </div>
 
   <div class="card">
-    <h2>As contas do mês</h2>
-    <p class="hint">O que você paga todo mês e não é material de nenhuma peça.</p>
+    <h2>As contas do mês<button class="aj" type="button" data-aj="contas" aria-label="Ajuda">?</button></h2>
+    <p class="hint">O que você paga todo mês e não é material de nenhuma peça.
+      <b>Preencha só o que fizer sentido para você</b> — deixar campos em branco não atrapalha em nada.</p>
     <div class="licao" style="border-color:var(--rosa)">
       <b style="color:var(--rosa-esc)">Estas contas entram na sua hora.</b> Assim, peça que dá mais
       trabalho paga mais dessas contas — que é o justo. E você não precisa adivinhar quantas
@@ -780,7 +797,7 @@ input.ruim{border-color:var(--alerta)}
   </div>
 
   <div class="card">
-    <h2>Impostos e taxa da maquininha</h2>
+    <h2>Impostos e taxa da maquininha<button class="aj" type="button" data-aj="taxas" aria-label="Ajuda">?</button></h2>
     <p class="hint">O que sai do seu bolso depois que o cliente paga.</p>
     <div class="licao aten">
       <b>A conta é sobre o que o cliente paga.</b> Se você cobra R$ 100 e o imposto é 12%,
@@ -818,7 +835,7 @@ input.ruim{border-color:var(--alerta)}
   <div class="card">
     <div id="listaPecas"></div>
   </div>
-  <button class="btn ok" id="catalogo" type="button">Baixar catálogo</button>
+  <button class="btn ok" id="catalogo" type="button">Baixar catálogo em PDF</button>
   <div class="linha-btn">
     <button class="btn sec" id="configCat" type="button">Configurar catálogo</button>
     <button class="btn sec" id="baixar" type="button">Cópia de segurança</button>
@@ -827,13 +844,14 @@ input.ruim{border-color:var(--alerta)}
     <button class="btn sec" id="carregar" type="button">Abrir arquivo salvo</button>
   </div>
   <input type="file" id="arquivo" accept="application/json" hidden>
+  <input type="file" id="inpComp" accept="image/*" hidden>
 
   <div class="card" id="painelCat" hidden>
     <h2>Como o seu catálogo vai ficar</h2>
     <p class="hint">Configure uma vez. Depois é só tocar em Baixar catálogo.</p>
 
     <div class="campo">
-      <label for="catNome">Nome do seu negócio</label>
+      <label for="catNome">Nome do seu negócio<button class="aj" type="button" data-aj="catNome" aria-label="Ajuda">?</button></label>
       <input type="text" id="catNome" placeholder="PREENCHER" autocomplete="off">
     </div>
     <div class="campo">
@@ -888,7 +906,7 @@ input.ruim{border-color:var(--alerta)}
     <div class="card" id="formOrc" hidden>
       <h2 id="formOrcTit">Novo orçamento</h2>
       <div class="campo">
-        <label for="oCli">Para quem é</label>
+        <label for="oCli">Para quem é<button class="aj" type="button" data-aj="orcCli" aria-label="Ajuda">?</button></label>
         <select id="oCli"></select>
       </div>
       <div class="campo">
@@ -909,8 +927,11 @@ input.ruim{border-color:var(--alerta)}
   </div>
 
   <div class="sub-painel" id="sp-ven">
+    <div class="filtro">
+      <select id="filtroMes"></select>
+    </div>
     <div class="mes">
-      <div class="lab" style="font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#CDE6E4;font-weight:700">Vendido neste mês</div>
+      <div class="lab" id="mesLab" style="font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#CDE6E4;font-weight:700">Vendido neste mês</div>
       <div class="n" id="vendMes">R$ 0,00</div>
       <p id="vendMesSub">Nenhuma venda registrada ainda</p>
     </div>
@@ -1039,6 +1060,7 @@ input.ruim{border-color:var(--alerta)}
   var orcamentos= ler(K_ORC) || [];
   var itensOrc  = [];
   var editandoOrc = null;
+  var compAlvo = null;
   var cfgCat = ler(K_CAT) || {nome:'',sub:'',cor:'#2A5FD0',logo:'',contato:''};
   var usados    = [];
   var fotoAtual = null;
@@ -1088,8 +1110,15 @@ input.ruim{border-color:var(--alerta)}
     { nome:'Resina MER-400 · 6,5 kg', unid:'kg', qtd:'6,5', preco:'',       grupo:'Alta espessura' },
     /* Cura UV */
     { nome:'Resina UV MUV-200 · 100 g', unid:'kg', qtd:'0,1', preco:'49,00', grupo:'Cura UV' },
-    /* Outros da loja */
-    { nome:'Sílica para secagem · 500 g', unid:'kg', qtd:'0,5', preco:'', grupo:'Outros' }
+    /* Pigmentos */
+    { nome:'Kit 5 pigmentos em pasta · 100 g cada', unid:'kg', qtd:'0,5',  preco:'89,00', grupo:'Pigmentos' },
+    { nome:'Kit pigmentos em pasta · 20 g cada, todas as cores', unid:'kg', qtd:'', preco:'79,00', grupo:'Pigmentos' },
+    { nome:'Kit 8 pigmentos em pasta Efeito Mar · 30 g cada', unid:'kg', qtd:'0,24', preco:'49,00', grupo:'Pigmentos' },
+    { nome:'Kit 8 pigmentos perolados em pó · 15 g cada', unid:'kg', qtd:'0,12', preco:'', grupo:'Pigmentos' },
+    { nome:'Pigmento perolado em pó', unid:'kg', qtd:'', preco:'19,90', grupo:'Pigmentos' },
+    /* Sílica */
+    { nome:'Sílica Dry Flower · 1 kg', unid:'kg', qtd:'1', preco:'', grupo:'Sílica' },
+    { nome:'Sílica para secagem · 500 g', unid:'kg', qtd:'0,5', preco:'', grupo:'Sílica' }
   ];
   function abre(t){
     ['preco','mat','custos','pecas','contatos','ajuda','vendas'].forEach(function(x){
@@ -1493,8 +1522,12 @@ input.ruim{border-color:var(--alerta)}
         '<div class="det">custo '+brl(p.custo)+' &middot; margem '+p.margem.toFixed(0)+'%'+
         (p.min?' &middot; '+vg(p.min)+' min':'')+'</div></div>'+
         '<div class="val">'+brl(p.preco)+'</div>'+
+        '<button class="mini" data-editp="'+i+'" aria-label="Editar">&#9998;</button>'+
         '<button class="mini" data-delp="'+i+'" aria-label="Remover">&times;</button></div>';
     }).join('');
+    Array.prototype.forEach.call(el.querySelectorAll('[data-editp]'),function(b){
+      b.addEventListener('click',function(){ editaPeca(parseInt(b.getAttribute('data-editp'),10)); });
+    });
     Array.prototype.forEach.call(el.querySelectorAll('[data-delp]'),function(b){
       b.addEventListener('click',function(){
         var i=parseInt(b.getAttribute('data-delp'),10);
@@ -1506,22 +1539,32 @@ input.ruim{border-color:var(--alerta)}
   }
   $('salvar').addEventListener('click',function(){
     if(!atual||!(atual.preco>0)){ alert('Preencha a peça antes de salvar.'); return; }
-    pecas.push(JSON.parse(JSON.stringify(atual)));
+    var copia = JSON.parse(JSON.stringify(atual));
+    var anterior = null;
+    if(editandoPeca!==null && pecas[editandoPeca]){
+      anterior = pecas[editandoPeca];
+      pecas[editandoPeca] = copia;
+    } else {
+      pecas.push(copia);
+    }
     if(!guardar(K_PEC,pecas)){
-      pecas.pop();
+      if(anterior) pecas[editandoPeca]=anterior; else pecas.pop();
       alert('Não consegui salvar: o espaço deste aparelho acabou.\n\nApague algumas peças antigas ou salve sem foto — as fotos ocupam quase todo o espaço.');
       return;
     }
     if($('baixaEst').checked) darBaixa();
-    var b=$('salvar'), t=b.textContent;
-    b.textContent='Peça salva!'; setTimeout(function(){ b.textContent=t; },1500);
-    renderPecas();
+    var editou = editandoPeca!==null;
+    saiEdicao();
+    var b=$('salvar');
+    b.textContent = editou ? 'Alterações salvas!' : 'Peça salva!';
+    setTimeout(function(){ b.textContent='Salvar esta peça'; },1600);
+    renderPecas(); pintaProgresso();
   });
   $('limpar').addEventListener('click',function(){
     if(!confirm('Limpar os campos desta peça? Os materiais e os seus custos continuam salvos.')) return;
     $('pNome').value=''; $('pQtd').value='';
     ['t1','t2','t3','t4','t5','t6'].forEach(function(id){ $(id).value=''; });
-    $('mk').value=3; usados=[]; fotoAtual=null; pintaFoto();
+    $('mk').value=30; usados=[]; fotoAtual=null; pintaFoto(); saiEdicao();
     $('baixaEst').checked=false; renderUsados(); calc();
     window.scrollTo({top:0,behavior:'smooth'});
   });
@@ -1718,9 +1761,25 @@ input.ruim{border-color:var(--alerta)}
       (o.obs?'<div class="itens"><b>Anotação:</b> '+esc(o.obs)+'</div>':'')+
       '<div class="tot">'+brl(totalOrcamento(o))+'</div>'+
       (fechado&&o.pagamento?'<div class="pg">Recebido em '+esc(o.pagamento)+'</div>':'');
+    if(fechado){
+      h+='<select class="status-sel" data-status="'+i+'">'+
+         ['Em aberto','Preparando','Enviado','Entregue'].map(function(st){
+           return '<option value="'+st+'"'+((o.entrega||'Em aberto')===st?' selected':'')+'>'+st+'</option>';
+         }).join('')+'</select>';
+      h+='<div class="comp">'+
+         (o.comprovante?'<img src="'+o.comprovante+'" alt=""><span class="ok">Comprovante anexado</span>'
+                       :'<span style="font-size:12.5px;color:var(--mut)">Sem comprovante</span>')+
+         '<button class="repor" data-comp="'+i+'" style="margin-top:0;margin-left:auto">'+
+         (o.comprovante?'Trocar':'Anexar comprovante')+'</button></div>';
+    }
     h+='<div class="linha-btn">';
-    if(!fechado) h+='<button class="btn ok" data-fechar-orc="'+i+'" style="font-size:13.5px;min-height:42px">Cliente vai fechar</button>';
-    h+='<button class="btn sec" data-del-orc="'+i+'" style="font-size:13.5px;min-height:42px;flex:0 0 38%">Apagar</button></div>';
+    if(!fechado){
+      h+='<button class="btn ok" data-fechar-orc="'+i+'" style="font-size:13.5px;min-height:42px">Cliente vai fechar</button>';
+      h+='<button class="btn sec" data-zap="'+i+'" style="font-size:13.5px;min-height:42px;flex:0 0 42%">Enviar no WhatsApp</button>';
+    } else {
+      h+='<button class="btn sec" data-zap="'+i+'" style="font-size:13.5px;min-height:42px">Reenviar no WhatsApp</button>';
+    }
+    h+='<button class="btn sec" data-del-orc="'+i+'" style="font-size:13.5px;min-height:42px;flex:0 0 30%">Apagar</button></div>';
     return h+'</div>';
   }
 
@@ -1737,30 +1796,98 @@ input.ruim{border-color:var(--alerta)}
     ligaAcoesOrc(el);
   }
 
+  var MESES=['janeiro','fevereiro','março','abril','maio','junho',
+             'julho','agosto','setembro','outubro','novembro','dezembro'];
+  function chaveMes(iso){
+    var d=new Date(iso);
+    return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2);
+  }
+  function nomeMes(ch){
+    if(ch==='todos') return 'todo o período';
+    var p=ch.split('-');
+    return MESES[parseInt(p[1],10)-1]+' de '+p[0];
+  }
+  function montaFiltro(){
+    var sel=$('filtroMes'), atualSel=sel.value;
+    var chaves={};
+    orcamentos.forEach(function(o){
+      if(o.status==='fechado') chaves[chaveMes(o.dataFechamento||o.data)]=1;
+    });
+    var lista=Object.keys(chaves).sort().reverse();
+    var agora=chaveMes(new Date().toISOString());
+    if(lista.indexOf(agora)<0) lista.unshift(agora);
+    sel.innerHTML=lista.map(function(k){
+      return '<option value="'+k+'">'+nomeMes(k)+'</option>';
+    }).join('')+'<option value="todos">Todo o período</option>';
+    if(atualSel && sel.querySelector('option[value="'+atualSel+'"]')) sel.value=atualSel;
+    else sel.value=agora;
+  }
   function renderVen(){
     var el=$('listaVen');
+    montaFiltro();
+    var alvo=$('filtroMes').value;
     var vendas=orcamentos.map(function(o,i){ return {o:o,i:i}; })
       .filter(function(x){ return x.o.status==='fechado'; });
-    var agora=new Date(), somaMes=0, qtdMes=0;
-    vendas.forEach(function(x){
-      var d=new Date(x.o.dataFechamento||x.o.data);
-      if(d.getMonth()===agora.getMonth() && d.getFullYear()===agora.getFullYear()){
-        somaMes+=totalOrcamento(x.o); qtdMes++;
-      }
+    var doPeriodo=vendas.filter(function(x){
+      return alvo==='todos' || chaveMes(x.o.dataFechamento||x.o.data)===alvo;
     });
-    $('vendMes').textContent=brl(somaMes);
-    $('vendMesSub').textContent = qtdMes
-      ? (qtdMes+(qtdMes===1?' venda':' vendas')+' neste mês · '+brl(somaMes/qtdMes)+' em média')
-      : 'Nenhuma venda registrada ainda';
-    if(!vendas.length){
-      el.innerHTML='<div class="vazio">Quando um orçamento for fechado, ele aparece aqui.</div>';
+    var soma=0;
+    doPeriodo.forEach(function(x){ soma+=totalOrcamento(x.o); });
+    $('mesLab').textContent = alvo==='todos' ? 'Vendido no total' : 'Vendido em '+nomeMes(alvo);
+    $('vendMes').textContent=brl(soma);
+    $('vendMesSub').textContent = doPeriodo.length
+      ? (doPeriodo.length+(doPeriodo.length===1?' venda':' vendas')+' · '+brl(soma/doPeriodo.length)+' em média')
+      : 'Nenhuma venda neste período';
+    if(!doPeriodo.length){
+      el.innerHTML='<div class="vazio">Nenhuma venda em '+esc(nomeMes(alvo))+'.</div>';
       return;
     }
-    el.innerHTML=vendas.reverse().map(function(x){ return cartaoOrc(x.o,x.i); }).join('');
+    el.innerHTML=doPeriodo.reverse().map(function(x){ return cartaoOrc(x.o,x.i); }).join('');
     ligaAcoesOrc(el);
+  }
+  $('filtroMes').addEventListener('change',renderVen);
+
+  function textoZap(o){
+    var L=[];
+    if(cfgCat.nome) L.push('*'+cfgCat.nome+'*');
+    L.push('Olá! Segue o orçamento:');
+    L.push('');
+    (o.itens||[]).forEach(function(i){
+      L.push('• '+parse(i.qtd)+'× '+i.nome+' — '+brl(parse(i.preco)*parse(i.qtd)));
+    });
+    L.push('');
+    L.push('*Total: '+brl(totalOrcamento(o))+'*');
+    if(o.obs) L.push('Obs.: '+o.obs);
+    L.push('');
+    L.push('Pode confirmar para eu já começar?');
+    if(cfgCat.contato) L.push(cfgCat.contato);
+    return L.join('\n');
+  }
+  function enviarZap(i){
+    var o=orcamentos[i];
+    var c=contatos[o.contatoId];
+    var d=c && c.tel ? String(c.tel).replace(/\D/g,'') : '';
+    var txt=encodeURIComponent(textoZap(o));
+    var url = d.length>=10 ? ('https://wa.me/55'+d+'?text='+txt) : ('https://wa.me/?text='+txt);
+    window.open(url,'_blank');
   }
 
   function ligaAcoesOrc(el){
+    Array.prototype.forEach.call(el.querySelectorAll('[data-zap]'),function(b){
+      b.addEventListener('click',function(){ enviarZap(parseInt(b.getAttribute('data-zap'),10)); });
+    });
+    Array.prototype.forEach.call(el.querySelectorAll('[data-status]'),function(sl){
+      sl.addEventListener('change',function(){
+        orcamentos[parseInt(sl.getAttribute('data-status'),10)].entrega=sl.value;
+        guardar(K_ORC,orcamentos);
+      });
+    });
+    Array.prototype.forEach.call(el.querySelectorAll('[data-comp]'),function(b){
+      b.addEventListener('click',function(){
+        compAlvo=parseInt(b.getAttribute('data-comp'),10);
+        $('inpComp').click();
+      });
+    });
     Array.prototype.forEach.call(el.querySelectorAll('[data-fechar-orc]'),function(b){
       b.addEventListener('click',function(){ abrirFecharOrc(parseInt(b.getAttribute('data-fechar-orc'),10)); });
     });
@@ -1853,6 +1980,85 @@ input.ruim{border-color:var(--alerta)}
     $('formOrc').hidden=true; renderOrc(); renderVen(); renderCon();
   });
 
+
+  /* ================= COMPROVANTE ================= */
+  $('inpComp').addEventListener('change',function(e){
+    var f=e.target.files&&e.target.files[0];
+    e.target.value='';
+    if(!f||compAlvo===null) return;
+    comprimeFoto(f,function(d){
+      if(!d){ alert('Não consegui ler esta imagem.'); return; }
+      orcamentos[compAlvo].comprovante=d;
+      if(!guardar(K_ORC,orcamentos)){
+        delete orcamentos[compAlvo].comprovante;
+        alert('Não consegui salvar: o espaço do aparelho acabou. Apague comprovantes antigos.');
+        return;
+      }
+      renderOrc(); renderVen();
+    });
+  });
+
+  /* ================= EDITAR PEÇA ================= */
+  var editandoPeca = null;
+  function editaPeca(i){
+    var p = pecas[i];
+    editandoPeca = i;
+    $('pNome').value = p.nome==='Peça sem nome' ? '' : p.nome;
+    $('pQtd').value  = p.qtd || '';
+    var t = p.tempos || {};
+    ['t1','t2','t3','t4','t5','t6'].forEach(function(k){ $(k).value = t[k] || ''; });
+    $('mk').value = p.lucroPct || 30;
+    usados = [];
+    (p.itens||[]).forEach(function(u){
+      var idx = -1;
+      materiais.forEach(function(m,k){ if(m.nome===u.nome) idx=k; });
+      if(idx<0 && typeof u.id==='number' && materiais[u.id]) idx=u.id;
+      if(idx>=0) usados.push({id:idx, qtd:u.qtd});
+    });
+    fotoAtual = p.foto || null;
+    $('baixaEst').checked = false;
+    renderUsados(); pintaFoto(); calc();
+    abre('preco');
+    $('salvar').textContent = 'Salvar alterações';
+    $('avisoEdit').hidden = false;
+  }
+  function saiEdicao(){
+    editandoPeca = null;
+    $('salvar').textContent = 'Salvar esta peça';
+    var a=$('avisoEdit'); if(a) a.hidden = true;
+  }
+
+  /* ================= AJUDA DE CAMPO ================= */
+  var AJUDA = {
+    pNome:['Nome da peça','Escreva um nome que você reconheça depois, como “Chaveiro de letra” ou “Bandeja oval com flor”. É esse nome que vai aparecer na sua tabela de preços e no catálogo.'],
+    pQtd:['Quantas peças saem do lote','Se você despeja resina uma vez e saem 10 chaveiros, o lote é 10. Informe o material e o tempo do lote inteiro — o app divide por peça sozinho.'],
+    matUso:['Quanto você usou','A quantidade que foi para este lote inteiro, não para uma peça. Se você pesou 100 g de resina para fazer 10 chaveiros, escreva 100.'],
+    tempo:['Tempo de cada etapa','Sempre em minutos e para o lote inteiro. Não precisa cronometrar: um número aproximado já ajuda muito. O que não vale é deixar em branco a etapa que existe.'],
+    lucro:['Quanto quer que sobre','De cada R$ 100 que o cliente pagar, quanto fica com você depois de pagar material, seu tempo e as taxas. Se você está começando, 15% é um bom ponto de partida.'],
+    mNome:['Nome do material','Como você chama esse material no dia a dia. Se comprar o mesmo material em tamanhos diferentes, cadastre cada tamanho separado.'],
+    mUn:['Como você compra','Escolha do jeito que vem na embalagem. Resina vem em quilo e você usa em gramas. Argola vem em unidade. Fita vem em metro e você usa em centímetros.'],
+    mPreco:['Quanto você pagou','O valor total que saiu do seu bolso naquela compra, sem o frete. Se você tem cupom de aluna, use o valor com desconto — é o que você realmente pagou.'],
+    mQtd:['Quanto veio','O tamanho da embalagem. Um kit de 300 g é 0,3 kg. Um pacote de 50 argolas é 50 unidades.'],
+    mEst:['Quanto tem guardado','Quanto desse material ainda existe na sua bancada hoje. Serve para você saber quando precisa comprar de novo. Pode deixar em branco se não quiser controlar.'],
+    cMeta:['Quanto quer ganhar','O quanto você quer tirar por mês para você, como se fosse um salário. Não é o faturamento — é o que sobra no seu bolso.'],
+    cHoras:['Horas por mês','Quantas horas você realmente consegue trabalhar. Cinco dias por semana, cinco horas por dia dá perto de 100. Chutar alto faz sua hora ficar barata.'],
+    contas:['As contas do mês','Preencha só o que fizer sentido para você. Se você não paga aluguel, deixe em branco. Estes valores entram na sua hora, então peça que dá mais trabalho paga mais dessas contas.'],
+    ferias:['Férias e 13º','Quem trabalha por conta não recebe isso de ninguém: precisa guardar por mês. Divida o seu salário por 12 e é esse o valor. O botão abaixo calcula para você.'],
+    taxas:['Impostos e taxas','Só preencha se você paga. Se vende no Pix ou em dinheiro e não recolhe imposto, deixe tudo em branco. Estas taxas entram por fora, aumentando o preço final.'],
+    orcCli:['Para quem é','Escolha um contato já salvo. Assim o orçamento aparece na ficha dessa pessoa e você vê depois tudo que ela pediu e comprou.'],
+    catNome:['Nome do negócio','É o título que aparece no topo do catálogo que você manda para o cliente.'],
+    catLogo:['Sua logo','Aparece acima do nome. Use uma imagem quadrada ou redonda, com fundo claro. É opcional.']
+  };
+  function abrirAjuda(k){
+    var a=AJUDA[k]; if(!a) return;
+    $('sheet').innerHTML='<h3>'+esc(a[0])+'</h3><p style="font-size:15px;color:var(--ink);margin-top:10px">'+
+      esc(a[1])+'</p><button class="btn sec" data-fechar style="margin-top:18px">Entendi</button>';
+    $('modal').classList.add('on');
+  }
+  document.addEventListener('click',function(e){
+    var b=e.target.closest && e.target.closest('[data-aj]');
+    if(b){ e.preventDefault(); abrirAjuda(b.getAttribute('data-aj')); }
+  });
 
   /* ================= PROGRESSO DO TUTORIAL ================= */
   var PASSOS=[
@@ -1983,7 +2189,8 @@ input.ruim{border-color:var(--alerta)}
     L.push('<\/div>');
     if(cfgCat.contato) L.push('<div class="rod">'+esc(cfgCat.contato)+'<\/div>');
     L.push('<div class="data">Preços de '+quando+'<\/div>');
-    L.push('<div class="dica">Para salvar em PDF, use Compartilhar ou Imprimir e escolha Salvar como PDF.<\/div>');
+    L.push('<div class="dica">Se a janela de impressão não abrir sozinha, use o menu do navegador e escolha Imprimir ou Salvar como PDF.<\/div>');
+    L.push('<script>window.onload=function(){setTimeout(function(){window.print();},500);};<\/script>');
     L.push('<\/body><\/html>');
 
     var w = window.open('', '_blank');
@@ -2140,6 +2347,7 @@ input.ruim{border-color:var(--alerta)}
       orcamentos[oi].status='fechado';
       orcamentos[oi].pagamento=pg.getAttribute('data-pgto');
       orcamentos[oi].dataFechamento=new Date().toISOString();
+      if(!orcamentos[oi].entrega) orcamentos[oi].entrega='Em aberto';
       guardar(K_ORC,orcamentos);
       $('modal').classList.remove('on');
       renderOrc(); renderVen(); renderCon();
