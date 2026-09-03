@@ -57,10 +57,10 @@ header{background:linear-gradient(120deg,#14306B 0%,#2A5FD0 100%);color:#fff;pad
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--surface);
   border-top:1px solid var(--line);display:flex;
   padding-bottom:env(safe-area-inset-bottom)}
-.tabbar button{flex:1;border:none;background:none;cursor:pointer;padding:8px 1px 7px;min-width:0;
+.tabbar button{flex:1;border:none;background:none;cursor:pointer;padding:7px 0 6px;min-width:0;
   display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--mut);
-  font:600 9.5px var(--txt);min-height:62px;justify-content:center;text-align:center;line-height:1.15}
-.tabbar button .ic{font-size:19px;line-height:1}
+  font:600 8.5px var(--txt);min-height:60px;justify-content:center;text-align:center;line-height:1.1}
+.tabbar button .ic{font-size:17px;line-height:1}
 .tabbar button.on{color:var(--rosa)}
 .tabbar button.on .ic{transform:scale(1.06)}
 
@@ -149,16 +149,62 @@ input:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid 
 .video-vazio .ic{font-size:34px;opacity:.5}
 .passo{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line2)}
 .passo:last-child{border-bottom:none}
-.passo-n{flex:none;width:30px;height:30px;border-radius:50%;background:var(--rosa);
-  color:#fff;font:800 14px var(--tit);display:flex;align-items:center;justify-content:center}
+.passo-n{flex:none;min-width:34px;height:30px;padding:0 7px;border-radius:99px;background:var(--rosa);
+  color:#fff;font:800 13px var(--tit);display:flex;align-items:center;justify-content:center}
 .passo-c{flex:1;min-width:0}
 .passo-t{font-weight:800;font-size:15.5px;color:var(--ink)}
 .passo-d{font-size:14px;color:var(--mut);margin-top:4px;line-height:1.5}
 .passo-d b{color:var(--ink)}
+.prog{text-align:center;margin:4px 0 16px}
+.prog-txt{font-size:13.5px;font-weight:700;color:var(--mut)}
+.prog-barras{display:flex;gap:7px;margin-top:9px}
+.prog-b{flex:1;height:9px;border-radius:99px;border:1.5px solid var(--rosa);background:transparent}
+.prog-b.on{background:var(--rosa)}
+.leva{width:100%;min-height:46px;margin-top:12px;border-radius:9px;cursor:pointer;
+  border:1.5px solid var(--rosa);background:transparent;color:var(--rosa-esc);
+  font:800 14.5px var(--txt)}
+.leva:active{background:var(--rosa-cl)}
+.leva.feito{border-color:var(--material);color:var(--material);background:var(--material-cl)}
+.passo.ok .passo-n{background:var(--material)}
 .faq{border-bottom:1px solid var(--line2);padding:14px 0}
 .faq:last-child{border-bottom:none}
 .faq-p{font-weight:700;font-size:14.5px}
 .faq-r{font-size:13.5px;color:var(--mut);margin-top:5px;line-height:1.5}
+
+/* sub-abas */
+.subtab{display:flex;gap:8px;margin-bottom:13px}
+.subtab button{flex:1;min-height:42px;border-radius:9px;border:1.5px solid var(--line);
+  background:var(--surface);color:var(--mut);font:700 14px var(--txt);cursor:pointer}
+.subtab button.on{background:var(--material);border-color:var(--material);color:#fff}
+.sub-painel{display:none}
+.sub-painel.on{display:block}
+
+/* selos de status */
+.badge{display:inline-block;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:99px;
+  letter-spacing:.03em;text-transform:uppercase}
+.badge.aberto{background:var(--material-cl);color:var(--material)}
+.badge.fechado{background:var(--rosa-cl);color:var(--rosa-esc)}
+.card-orc{border:1px solid var(--line);border-radius:11px;padding:14px;margin-top:11px}
+.card-orc .topo-o{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.card-orc .cli{font-weight:800;font-size:15px}
+.card-orc .quando{font-size:12px;color:var(--mut);margin-top:2px}
+.card-orc .itens{font-size:13px;color:var(--mut);margin-top:9px;line-height:1.5}
+.card-orc .tot{font-family:var(--tit);font-weight:800;font-size:19px;margin-top:9px}
+.card-orc .pg{font-size:12.5px;color:var(--material);font-weight:700;margin-top:4px}
+.mes{background:var(--material);color:#fff;border-radius:var(--r);padding:16px;margin-bottom:13px}
+.mes .n{font-family:var(--tit);font-weight:800;font-size:30px;line-height:1.1}
+.mes p{font-size:13px;color:#CDE6E4;margin-top:4px}
+
+/* catálogo */
+.cores{display:flex;flex-wrap:wrap;gap:9px;margin-top:9px}
+.cor{width:42px;height:42px;border-radius:10px;border:3px solid transparent;cursor:pointer}
+.cor.on{border-color:var(--ink);box-shadow:0 0 0 2px #fff inset}
+.logo-area{display:flex;gap:13px;align-items:center;margin-top:12px}
+.logo-mini{width:70px;height:70px;flex:none;border-radius:10px;object-fit:contain;
+  background:var(--paper);border:1px solid var(--line);padding:5px}
+.logo-vazia{width:70px;height:70px;flex:none;border-radius:10px;background:var(--paper);
+  border:1.5px dashed var(--line);display:flex;align-items:center;justify-content:center;
+  font-size:24px;color:var(--mut)}
 
 .add{width:100%;min-height:48px;margin-top:12px;border:1.5px dashed var(--line);
   background:none;color:var(--ink2);font:700 14.5px var(--txt);border-radius:9px;cursor:pointer}
@@ -361,40 +407,63 @@ input.ruim{border-color:var(--alerta)}
   </div>
 
   <div class="card">
-    <h2>Antes de calcular a primeira peça</h2>
-    <p class="hint">Isso você faz uma vez só. Depois é só usar.</p>
-    <div class="passo"><div class="passo-n">1</div><div class="passo-c">
-      <div class="passo-t">Cadastre os seus materiais</div>
-      <div class="passo-d">Vá em <b>Materiais</b> e coloque tudo que você compra: resina,
-        pigmento, argola, embalagem. Informe <b>quanto pagou</b> e <b>quanto veio</b> — o
-        app descobre sozinho quanto custa cada grama ou cada unidade.</div></div></div>
-    <div class="passo"><div class="passo-n">2</div><div class="passo-c">
-      <div class="passo-t">Diga quanto você quer ganhar</div>
-      <div class="passo-d">Em <b>Custos</b>, coloque quanto quer tirar por mês e quantas
-        horas consegue trabalhar. Some também as contas do mês: luz, água, internet. O app
-        calcula quanto vale a sua hora.</div></div></div>
-    <div class="passo"><div class="passo-n">3</div><div class="passo-c">
-      <div class="passo-t">Informe seus impostos, se tiver</div>
-      <div class="passo-d">Ainda em <b>Custos</b>. Se você não paga imposto e só recebe no
-        Pix ou em dinheiro, deixe tudo em branco — não tem problema nenhum.</div></div></div>
+    <h2>Introdução à calculadora</h2>
+    <div class="prog">
+      <div class="prog-txt" id="progTxt">Passos concluídos: 0 de 4</div>
+      <div class="prog-barras" id="progBarras"></div>
+    </div>
+
+    <div class="passo" id="ps1"><div class="passo-n">1º</div><div class="passo-c">
+      <div class="passo-t">1º passo: Custos</div>
+      <div class="passo-d">Para chegar ao preço certo das suas peças, você precisa registrar
+        seus custos. Vamos descobrir quanto vale a sua hora, de acordo com o quanto você quer
+        ganhar, quantas horas trabalha e as contas do mês como energia e água.</div>
+      <button class="leva" data-leva="custos" id="lv1">Leve-me até lá!</button></div></div>
+
+    <div class="passo" id="ps2"><div class="passo-n">2º</div><div class="passo-c">
+      <div class="passo-t">2º passo: Materiais</div>
+      <div class="passo-d">Cadastre tudo que você compra: resina, pigmento, argola, embalagem.
+        Informe quanto pagou e quanto veio, que o app descobre sozinho quanto custa cada grama
+        ou cada unidade. As resinas da MRS entram com um toque.</div>
+      <button class="leva" data-leva="mat" id="lv2">Leve-me até lá!</button></div></div>
+
+    <div class="passo" id="ps3"><div class="passo-n">3º</div><div class="passo-c">
+      <div class="passo-t">3º passo: Precificar</div>
+      <div class="passo-d">Agora chegou a vez de calcular quanto vai cobrar na peça. Escolha
+        os materiais que usou, diga o tempo de cada etapa em minutos e escolha quanto quer que
+        sobre para você. O preço aparece na hora.</div>
+      <button class="leva" data-leva="preco" id="lv3">Leve-me até lá!</button></div></div>
+
+    <div class="passo" id="ps4"><div class="passo-n">4º</div><div class="passo-c">
+      <div class="passo-t">4º passo: Orçamentos e vendas</div>
+      <div class="passo-d">Monte o orçamento com as peças que você já precificou e mande para
+        o cliente. Quando ele fechar, toque em “Cliente vai fechar”, escolha a forma de
+        pagamento e a venda entra no seu total do mês.</div>
+      <button class="leva" data-leva="vendas" id="lv4">Leve-me até lá!</button></div></div>
   </div>
 
   <div class="card">
-    <h2>Toda vez que for calcular uma peça</h2>
-    <div class="passo"><div class="passo-n">4</div><div class="passo-c">
-      <div class="passo-t">Escolha os materiais e diga o tempo</div>
-      <div class="passo-d">Em <b>Precificar</b>, dê um nome à peça e diga quantas saem de uma
-        vez. Escolha os materiais da sua lista e informe quanto usou. Depois, o tempo de cada
-        etapa em minutos — <b>inclusive o de lixar</b>, que é o que mais gente esquece.</div></div></div>
-    <div class="passo"><div class="passo-n">5</div><div class="passo-c">
-      <div class="passo-t">Escolha quanto quer que sobre</div>
-      <div class="passo-d">Arraste a barrinha. Ela responde: de cada R$ 100 que o cliente
-        pagar, quanto fica com você depois de pagar material, seu tempo e as taxas. O preço
-        aparece na hora.</div></div></div>
-    <div class="passo"><div class="passo-n">6</div><div class="passo-c">
-      <div class="passo-t">Salve a peça</div>
-      <div class="passo-d">Ela vai para <b>Peças</b> e vira a sua tabela de preços. Da
-        próxima vez que alguém perguntar quanto custa, a resposta já está pronta.</div></div></div>
+    <h2>Guarde os seus clientes</h2>
+    <p class="hint">É aqui que o app deixa de ser calculadora e vira ajuda para vender.</p>
+    <div class="passo"><div class="passo-n">7º</div><div class="passo-c">
+      <div class="passo-t">Anote quem fala com você</div>
+      <div class="passo-d">Na aba <b>Contatos</b>, salve o nome, o WhatsApp e a cidade de
+        quem já comprou ou pediu orçamento. Anote também o que a pessoa gostou — na próxima
+        data comemorativa, você já sabe para quem oferecer.</div></div></div>
+    <div class="passo"><div class="passo-n">8º</div><div class="passo-c">
+      <div class="passo-t">Faça o orçamento pelo app</div>
+      <div class="passo-d">Na aba <b>Vendas</b>, crie um orçamento: escolha o cliente, as
+        peças e a quantidade. O total sai pronto, com os preços que você já calculou.</div></div></div>
+    <div class="passo"><div class="passo-n">9º</div><div class="passo-c">
+      <div class="passo-t">Quando o cliente fechar</div>
+      <div class="passo-d">Abra o orçamento e toque em <b>Cliente vai fechar</b>. Escolha a
+        forma de pagamento e pronto: vira venda, o orçamento ganha o selo de concluído e o
+        valor entra no seu total do mês.</div></div></div>
+    <div class="passo"><div class="passo-n">10º</div><div class="passo-c">
+      <div class="passo-t">Veja tudo pelo cliente</div>
+      <div class="passo-d">Voltando em <b>Contatos</b>, cada pessoa mostra os orçamentos que
+        você fez e as compras que ela já fez. Assim você sabe quem comprou o quê, sem
+        depender da memória.</div></div></div>
   </div>
 
   <div class="card">
@@ -586,6 +655,13 @@ input.ruim{border-color:var(--alerta)}
   <div class="card">
     <div id="listaMat"></div>
     <button class="add" id="addMat" type="button">+ Novo material</button>
+    <button class="add" id="addMRS" type="button" style="border-style:solid;border-color:var(--rosa);color:var(--rosa-esc)">
+      Adicionar resinas da MRS</button>
+    <div class="licao aten" id="avisoMRS" hidden>
+      <b>Agora coloque o que você pagou.</b> Toque no lápis de cada resina e informe o valor
+      da sua compra. Onde deixei um preço, é o do site — com o seu cupom de aluna você paga
+      menos, e usar o preço cheio faz a sua peça sair mais cara do que precisa.
+    </div>
   </div>
 
   <div class="card" id="formMat" hidden>
@@ -736,17 +812,114 @@ input.ruim{border-color:var(--alerta)}
 <section class="painel" id="pn-pecas">
   <div class="card">
     <h2>Minhas peças</h2>
-    <p class="hint">A sua tabela de preços. Fica guardada neste aparelho — baixe o arquivo
-      de vez em quando como cópia de segurança.</p>
+    <p class="hint">A sua tabela de preços. Baixe o catálogo para mandar ao cliente, e faça uma cópia de
+      segurança de vez em quando — tudo fica guardado só neste aparelho.</p>
   </div>
   <div class="card">
     <div id="listaPecas"></div>
   </div>
+  <button class="btn ok" id="catalogo" type="button">Baixar catálogo</button>
   <div class="linha-btn">
-    <button class="btn sec" id="baixar" type="button">Baixar cópia</button>
-    <button class="btn sec" id="carregar" type="button">Abrir arquivo</button>
+    <button class="btn sec" id="configCat" type="button">Configurar catálogo</button>
+    <button class="btn sec" id="baixar" type="button">Cópia de segurança</button>
+  </div>
+  <div class="linha-btn">
+    <button class="btn sec" id="carregar" type="button">Abrir arquivo salvo</button>
   </div>
   <input type="file" id="arquivo" accept="application/json" hidden>
+
+  <div class="card" id="painelCat" hidden>
+    <h2>Como o seu catálogo vai ficar</h2>
+    <p class="hint">Configure uma vez. Depois é só tocar em Baixar catálogo.</p>
+
+    <div class="campo">
+      <label for="catNome">Nome do seu negócio</label>
+      <input type="text" id="catNome" placeholder="PREENCHER" autocomplete="off">
+    </div>
+    <div class="campo">
+      <label for="catSub">Frase abaixo do nome <span class="sub">Ex.: peças em resina feitas à mão</span></label>
+      <input type="text" id="catSub" placeholder="PREENCHER" autocomplete="off">
+    </div>
+    <div class="campo">
+      <label>Sua logo <span class="sub">Opcional. Aparece no topo do catálogo</span></label>
+      <div class="logo-area">
+        <div class="logo-vazia" id="logoVazia">&#127912;</div>
+        <img class="logo-mini" id="logoMini" alt="Sua logo" hidden>
+        <div style="flex:1">
+          <button class="add" id="btnLogo" type="button" style="margin-top:0">Escolher logo</button>
+          <button class="repor" id="btnLogoX" type="button" hidden>Remover</button>
+        </div>
+      </div>
+      <input type="file" id="inpLogo" accept="image/*" hidden>
+    </div>
+    <div class="campo">
+      <label>Cor do título</label>
+      <div class="cores" id="cores"></div>
+    </div>
+    <div class="campo">
+      <label for="catCont">Como falar com você <span class="sub">WhatsApp, Instagram, cidade</span></label>
+      <input type="text" id="catCont" placeholder="PREENCHER" autocomplete="off">
+    </div>
+    <div class="linha-btn">
+      <button class="btn sec" id="catFechar" type="button">Fechar</button>
+      <button class="btn ok" id="catSalvar" type="button">Salvar configuração</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VENDAS ============ -->
+<section class="painel" id="pn-vendas">
+  <div class="subtab">
+    <button type="button" data-sub="orc" class="on">Orçamentos</button>
+    <button type="button" data-sub="ven">Vendas</button>
+  </div>
+
+  <div class="sub-painel on" id="sp-orc">
+    <div class="card">
+      <h2>Orçamentos</h2>
+      <p class="hint">Monte o orçamento com as peças que você já precificou. Quando o
+        cliente fechar, ele vira venda com um toque.</p>
+    </div>
+    <div class="card">
+      <div id="listaOrc"></div>
+      <button class="add" id="addOrc" type="button">+ Novo orçamento</button>
+    </div>
+
+    <div class="card" id="formOrc" hidden>
+      <h2 id="formOrcTit">Novo orçamento</h2>
+      <div class="campo">
+        <label for="oCli">Para quem é</label>
+        <select id="oCli"></select>
+      </div>
+      <div class="campo">
+        <label>Peças do orçamento</label>
+        <div id="itensOrc"></div>
+        <button class="add" id="addItemOrc" type="button">+ Adicionar peça</button>
+      </div>
+      <div class="campo">
+        <label for="oObsOrc">Anotações <span class="sub">Prazo combinado, cor, personalização</span></label>
+        <input type="text" id="oObsOrc" placeholder="PREENCHER" autocomplete="off">
+      </div>
+      <div class="saida" id="totalOrc"></div>
+      <div class="linha-btn">
+        <button class="btn sec" id="orcCancel" type="button">Cancelar</button>
+        <button class="btn ok" id="orcSalvar" type="button">Salvar orçamento</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="sub-painel" id="sp-ven">
+    <div class="mes">
+      <div class="lab" style="font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:#CDE6E4;font-weight:700">Vendido neste mês</div>
+      <div class="n" id="vendMes">R$ 0,00</div>
+      <p id="vendMesSub">Nenhuma venda registrada ainda</p>
+    </div>
+    <div class="card">
+      <h2>Vendas concluídas</h2>
+      <p class="hint">Toda venda nasce de um orçamento fechado.</p>
+      <div id="listaVen"></div>
+    </div>
+  </div>
 </section>
 
 <!-- ============ CONTATOS ============ -->
@@ -803,6 +976,7 @@ input.ruim{border-color:var(--alerta)}
   <button type="button" data-tab="mat"><span class="ic">&#129517;</span>Materiais</button>
   <button type="button" data-tab="custos"><span class="ic">&#9201;</span>Custos</button>
   <button type="button" data-tab="pecas"><span class="ic">&#128278;</span>Peças</button>
+  <button type="button" data-tab="vendas"><span class="ic">&#128179;</span>Vendas</button>
   <button type="button" data-tab="contatos"><span class="ic">&#128100;</span>Contatos</button>
 </nav>
 
@@ -814,7 +988,7 @@ input.ruim{border-color:var(--alerta)}
   var $ = function(id){ return document.getElementById(id); };
 
   var K_CAD='mrs_cadastro_v1', K_MAT='mrs_materiais_v1',
-      K_CUS='mrs_custos_v1', K_PEC='mrs_pecas_v2', K_CON='mrs_contatos_v1',
+      K_CUS='mrs_custos_v1', K_PEC='mrs_pecas_v2', K_CON='mrs_contatos_v1', K_ORC='mrs_orcamentos_v1', K_CAT='mrs_catalogo_v1',
       K_INST='mrs_instala_dispensado';
 
   function guardar(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); return true; }catch(e){ return false; } }
@@ -862,6 +1036,10 @@ input.ruim{border-color:var(--alerta)}
   var custos    = ler(K_CUS) || {};
   var pecas     = ler(K_PEC) || [];
   var contatos  = ler(K_CON) || [];
+  var orcamentos= ler(K_ORC) || [];
+  var itensOrc  = [];
+  var editandoOrc = null;
+  var cfgCat = ler(K_CAT) || {nome:'',sub:'',cor:'#2A5FD0',logo:'',contato:''};
   var usados    = [];
   var fotoAtual = null;
   var editandoCon = null;
@@ -869,7 +1047,7 @@ input.ruim{border-color:var(--alerta)}
 
   /* ================= ABAS ================= */
   var NOMES={preco:'Precificar',mat:'Materiais',custos:'Meus custos',pecas:'Minhas peças',
-             contatos:'Contatos',ajuda:'Como usar'};
+             contatos:'Contatos',ajuda:'Como usar',vendas:'Vendas'};
 
   /* ---------------------------------------------------------------
      VÍDEO DE INSTRUÇÕES
@@ -878,20 +1056,60 @@ input.ruim{border-color:var(--alerta)}
      youtube.com/watch?v=ABCDEFGHIJK  ->  'ABCDEFGHIJK'
      --------------------------------------------------------------- */
   var VIDEO_YOUTUBE = '';
+
+  /* ---------------------------------------------------------------
+     CATÁLOGO MRS
+     Produtos que a aluna adiciona com um toque, na aba Materiais.
+     Para incluir ou mudar algo, edite a lista abaixo.
+       nome  = como aparece para a aluna
+       unid  = 'kg' (usa em gramas) · 'un' · 'm' · 'L'
+       qtd   = quanto vem na embalagem, na unidade de compra
+               300 g = 0,3 kg   ·   100 g = 0,1 kg   ·   500 g = 0,5 kg
+       preco = preço de tabela do site, só como ponto de partida
+     --------------------------------------------------------------- */
+  var CATALOGO_MRS = [
+    /* Baixa espessura · endurecedor MHD-110 */
+    { nome:'Resina MER-100 · 300 g',  unid:'kg', qtd:'0,3', preco:'',       grupo:'Baixa espessura' },
+    { nome:'Resina MER-100 · 1 kg',   unid:'kg', qtd:'1',   preco:'119,00', grupo:'Baixa espessura' },
+    { nome:'Resina MER-100 · 7,5 kg', unid:'kg', qtd:'7,5', preco:'',       grupo:'Baixa espessura' },
+    { nome:'Resina MER-200 · 300 g',  unid:'kg', qtd:'0,3', preco:'',       grupo:'Baixa espessura' },
+    { nome:'Resina MER-200 · 1 kg',   unid:'kg', qtd:'1',   preco:'',       grupo:'Baixa espessura' },
+    { nome:'Resina MER-200 · 1,5 kg', unid:'kg', qtd:'1,5', preco:'',       grupo:'Baixa espessura' },
+    { nome:'Resina MER-200 · 7,5 kg', unid:'kg', qtd:'7,5', preco:'',       grupo:'Baixa espessura' },
+    { nome:'Resina MER-300 · 300 g',  unid:'kg', qtd:'0,3', preco:'',       grupo:'Baixa espessura' },
+    { nome:'Resina MER-300 · 1 kg',   unid:'kg', qtd:'1',   preco:'',       grupo:'Baixa espessura' },
+    { nome:'Resina MER-300 · 7,5 kg', unid:'kg', qtd:'7,5', preco:'',       grupo:'Baixa espessura' },
+    { nome:'Resina MER-500 · 300 g',  unid:'kg', qtd:'0,3', preco:'',       grupo:'Baixa espessura' },
+    { nome:'Resina MER-500 · 1 kg',   unid:'kg', qtd:'1',   preco:'',       grupo:'Baixa espessura' },
+    { nome:'Resina MER-500 · 1,5 kg', unid:'kg', qtd:'1,5', preco:'',       grupo:'Baixa espessura' },
+    { nome:'Resina MER-500 · 7,5 kg', unid:'kg', qtd:'7,5', preco:'',       grupo:'Baixa espessura' },
+    /* Alta espessura · endurecedor MHD-120 */
+    { nome:'Resina MER-400 · 1,3 kg', unid:'kg', qtd:'1,3', preco:'',       grupo:'Alta espessura' },
+    { nome:'Resina MER-400 · 6,5 kg', unid:'kg', qtd:'6,5', preco:'',       grupo:'Alta espessura' },
+    /* Cura UV */
+    { nome:'Resina UV MUV-200 · 100 g', unid:'kg', qtd:'0,1', preco:'49,00', grupo:'Cura UV' },
+    /* Outros da loja */
+    { nome:'Sílica para secagem · 500 g', unid:'kg', qtd:'0,5', preco:'', grupo:'Outros' }
+  ];
   function abre(t){
-    ['preco','mat','custos','pecas','contatos','ajuda'].forEach(function(x){
+    ['preco','mat','custos','pecas','contatos','ajuda','vendas'].forEach(function(x){
       $('pn-'+x).classList.toggle('on', x===t);
     });
     Array.prototype.forEach.call(document.querySelectorAll('.tabbar button'),function(b){
       b.classList.toggle('on', b.getAttribute('data-tab')===t);
     });
     $('telaNome').textContent = NOMES[t];
+    ['formMat','formCon','formOrc','painelCat'].forEach(function(f){
+      var e=$(f); if(e) e.hidden=true;
+    });
     $('resumo').hidden = (t!=='preco');
     window.scrollTo({top:0,behavior:'smooth'});
     if(t==='mat') renderMat();
     if(t==='pecas') renderPecas();
     if(t==='custos') preencheCustos();
     if(t==='contatos') renderCon();
+    if(t==='vendas'){ renderOrc(); renderVen(); }
+    if(t==='ajuda') pintaProgresso();
     calc();
   }
   Array.prototype.forEach.call(document.querySelectorAll('.tabbar button'),function(b){
@@ -973,6 +1191,29 @@ input.ruim{border-color:var(--alerta)}
     $('formMat').hidden=false;
     $('formMat').scrollIntoView({behavior:'smooth',block:'start'});
   }
+  $('addMRS').addEventListener('click',function(){
+    var nomes={}; materiais.forEach(function(m){ nomes[m.nome]=1; });
+    var h='<h3>Resinas da MRS</h3><p>Marque só as que você usa. Dá para adicionar outras depois.</p>';
+    var grupo='';
+    h+='<div style="margin-top:14px">';
+    CATALOGO_MRS.forEach(function(p,i){
+      if(p.grupo!==grupo){
+        grupo=p.grupo;
+        h+='<div style="font:700 11.5px var(--tit);letter-spacing:.08em;text-transform:uppercase;'+
+           'color:var(--rosa-esc);margin:16px 0 6px">'+esc(grupo)+'</div>';
+      }
+      var ja=!!nomes[p.nome];
+      h+='<label class="chk" style="margin-top:6px;'+(ja?'opacity:.5':'')+'">'+
+         '<input type="checkbox" data-cat="'+i+'"'+(ja?' disabled':'')+'>'+
+         '<span style="font-size:13.5px;line-height:1.4">'+esc(p.nome)+
+         (ja?' <b style="color:var(--material)">— já está na sua lista</b>':'')+'</span></label>';
+    });
+    h+='</div>';
+    h+='<button class="btn ok" data-addcat style="margin-top:16px">Adicionar as escolhidas</button>';
+    h+='<button class="btn sec" data-fechar style="margin-top:9px">Cancelar</button>';
+    $('sheet').innerHTML=h; $('modal').classList.add('on');
+  });
+
   $('addMat').addEventListener('click',function(){
     editandoMat=null; $('formMatTit').textContent='Novo material';
     $('mNome').value=''; $('mUn').value='kg'; $('mPreco').value=''; $('mQtd').value=''; $('mEst').value='';
@@ -1287,7 +1528,7 @@ input.ruim{border-color:var(--alerta)}
   $('imprimir').addEventListener('click',function(){ window.print(); });
 
   $('baixar').addEventListener('click',function(){
-    var d={materiais:materiais,custos:custos,pecas:pecas,contatos:contatos};
+    var d={materiais:materiais,custos:custos,pecas:pecas,contatos:contatos,orcamentos:orcamentos,catalogo:cfgCat};
     var bl=new Blob([JSON.stringify(d,null,2)],{type:'application/json'});
     var a=document.createElement('a');
     a.href=URL.createObjectURL(bl); a.download='minha-calculadora-mrs.json'; a.click();
@@ -1305,6 +1546,8 @@ input.ruim{border-color:var(--alerta)}
           if(d.custos){ custos=d.custos; guardar(K_CUS,custos); }
           if(d.pecas){ pecas=d.pecas; guardar(K_PEC,pecas); }
           if(d.contatos){ contatos=d.contatos; guardar(K_CON,contatos); }
+          if(d.orcamentos){ orcamentos=d.orcamentos; guardar(K_ORC,orcamentos); }
+          if(d.catalogo){ cfgCat=d.catalogo; guardar(K_CAT,cfgCat); }
           renderMat(); renderPecas(); renderCon(); preencheCustos(); renderUsados(); calc();
           alert('Tudo certo! Seus materiais e peças foram restaurados.');
         } else alert('Este arquivo não parece ser uma cópia feita aqui.');
@@ -1382,9 +1625,19 @@ input.ruim{border-color:var(--alerta)}
       var d=String(c.tel||'').replace(/\D/g,'');
       var wa = d.length>=10
         ? '<a class="wa" href="https://wa.me/55'+d+'" target="_blank" rel="noopener">&#128172; Chamar no WhatsApp</a>' : '';
+      var meus=orcamentos.filter(function(o){ return o.contatoId===i; });
+      var vend=meus.filter(function(o){ return o.status==='fechado'; });
+      var gasto=0; vend.forEach(function(o){ gasto+=totalOrcamento(o); });
+      var hist='';
+      if(meus.length){
+        hist='<div class="det" style="margin-top:5px"><b style="color:var(--material)">'+
+          meus.length+(meus.length===1?' orçamento':' orçamentos')+'</b>'+
+          (vend.length?' · <b style="color:var(--rosa-esc)">'+vend.length+
+            (vend.length===1?' venda':' vendas')+' · '+brl(gasto)+'</b>':'')+'</div>';
+      }
       return '<div class="item"><div class="info"><div class="nome">'+esc(c.nome)+'</div>'+
         '<div class="det">'+esc(c.tel||'')+(c.cidade?' &middot; '+esc(c.cidade):'')+'</div>'+
-        (c.obs?'<div class="det">'+esc(c.obs)+'</div>':'')+wa+'</div>'+
+        (c.obs?'<div class="det">'+esc(c.obs)+'</div>':'')+hist+wa+'</div>'+
         '<button class="mini" data-econ="'+i+'" aria-label="Editar">&#9998;</button>'+
         '<button class="mini" data-dcon="'+i+'" aria-label="Remover">&times;</button></div>';
     }).join('');
@@ -1424,6 +1677,323 @@ input.ruim{border-color:var(--alerta)}
     var c={nome:nome,tel:$('oTel').value,cidade:$('oCidade').value,obs:$('oObs').value};
     if(editandoCon===null) contatos.push(c); else contatos[editandoCon]=c;
     guardar(K_CON,contatos); $('formCon').hidden=true; renderCon();
+  });
+
+
+  /* ================= ORÇAMENTOS E VENDAS ================= */
+  function subAba(q){
+    ['orc','ven'].forEach(function(x){ $('sp-'+x).classList.toggle('on', x===q); });
+    Array.prototype.forEach.call(document.querySelectorAll('.subtab button'),function(b){
+      b.classList.toggle('on', b.getAttribute('data-sub')===q);
+    });
+    if(q==='orc') renderOrc(); else renderVen();
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('.subtab button'),function(b){
+    b.addEventListener('click',function(){ subAba(b.getAttribute('data-sub')); });
+  });
+
+  function nomeCli(id){
+    var c=contatos[id];
+    return c ? c.nome : 'Cliente não informado';
+  }
+  function totalOrcamento(o){
+    var t=0;
+    (o.itens||[]).forEach(function(i){ t += parse(i.preco)*parse(i.qtd); });
+    return t;
+  }
+  function dataBR(iso){
+    try{ var d=new Date(iso);
+      return ('0'+d.getDate()).slice(-2)+'/'+('0'+(d.getMonth()+1)).slice(-2)+'/'+d.getFullYear();
+    }catch(e){ return ''; }
+  }
+
+  function cartaoOrc(o,i){
+    var fechado = o.status==='fechado';
+    var itens=(o.itens||[]).map(function(x){ return parse(x.qtd)+'× '+esc(x.nome); }).join(' · ');
+    var h='<div class="card-orc"><div class="topo-o"><div>'+
+      '<div class="cli">'+esc(nomeCli(o.contatoId))+'</div>'+
+      '<div class="quando">'+dataBR(o.data)+(fechado&&o.dataFechamento?' · fechado em '+dataBR(o.dataFechamento):'')+'</div></div>'+
+      '<span class="badge '+(fechado?'fechado':'aberto')+'">'+(fechado?'Venda concluída':'Em aberto')+'</span></div>'+
+      '<div class="itens">'+(itens||'Sem peças')+'</div>'+
+      (o.obs?'<div class="itens"><b>Anotação:</b> '+esc(o.obs)+'</div>':'')+
+      '<div class="tot">'+brl(totalOrcamento(o))+'</div>'+
+      (fechado&&o.pagamento?'<div class="pg">Recebido em '+esc(o.pagamento)+'</div>':'');
+    h+='<div class="linha-btn">';
+    if(!fechado) h+='<button class="btn ok" data-fechar-orc="'+i+'" style="font-size:13.5px;min-height:42px">Cliente vai fechar</button>';
+    h+='<button class="btn sec" data-del-orc="'+i+'" style="font-size:13.5px;min-height:42px;flex:0 0 38%">Apagar</button></div>';
+    return h+'</div>';
+  }
+
+  function renderOrc(){
+    var el=$('listaOrc');
+    if(!orcamentos.length){
+      el.innerHTML='<div class="vazio"><span class="ic">&#128179;</span>'+
+        'Nenhum orçamento ainda.<br>Crie um e mande para o seu cliente.</div>';
+      return;
+    }
+    var ord=orcamentos.map(function(o,i){ return {o:o,i:i}; })
+      .sort(function(a,b){ return (a.o.status==='fechado'?1:0)-(b.o.status==='fechado'?1:0); });
+    el.innerHTML=ord.map(function(x){ return cartaoOrc(x.o,x.i); }).join('');
+    ligaAcoesOrc(el);
+  }
+
+  function renderVen(){
+    var el=$('listaVen');
+    var vendas=orcamentos.map(function(o,i){ return {o:o,i:i}; })
+      .filter(function(x){ return x.o.status==='fechado'; });
+    var agora=new Date(), somaMes=0, qtdMes=0;
+    vendas.forEach(function(x){
+      var d=new Date(x.o.dataFechamento||x.o.data);
+      if(d.getMonth()===agora.getMonth() && d.getFullYear()===agora.getFullYear()){
+        somaMes+=totalOrcamento(x.o); qtdMes++;
+      }
+    });
+    $('vendMes').textContent=brl(somaMes);
+    $('vendMesSub').textContent = qtdMes
+      ? (qtdMes+(qtdMes===1?' venda':' vendas')+' neste mês · '+brl(somaMes/qtdMes)+' em média')
+      : 'Nenhuma venda registrada ainda';
+    if(!vendas.length){
+      el.innerHTML='<div class="vazio">Quando um orçamento for fechado, ele aparece aqui.</div>';
+      return;
+    }
+    el.innerHTML=vendas.reverse().map(function(x){ return cartaoOrc(x.o,x.i); }).join('');
+    ligaAcoesOrc(el);
+  }
+
+  function ligaAcoesOrc(el){
+    Array.prototype.forEach.call(el.querySelectorAll('[data-fechar-orc]'),function(b){
+      b.addEventListener('click',function(){ abrirFecharOrc(parseInt(b.getAttribute('data-fechar-orc'),10)); });
+    });
+    Array.prototype.forEach.call(el.querySelectorAll('[data-del-orc]'),function(b){
+      b.addEventListener('click',function(){
+        var i=parseInt(b.getAttribute('data-del-orc'),10);
+        if(confirm('Apagar este orçamento de '+nomeCli(orcamentos[i].contatoId)+'?')){
+          orcamentos.splice(i,1); guardar(K_ORC,orcamentos); renderOrc(); renderVen(); renderCon();
+        }
+      });
+    });
+  }
+
+  var PAGAMENTOS=['Pix','Dinheiro','Cartão de débito','Cartão de crédito','Transferência','Outro'];
+  function abrirFecharOrc(i){
+    var o=orcamentos[i];
+    var h='<h3>Fechar a venda</h3><p>Orçamento de <b>'+esc(nomeCli(o.contatoId))+'</b> no valor de <b>'+
+      brl(totalOrcamento(o))+'</b>.</p><p>Como o cliente vai pagar?</p><div style="margin-top:14px">';
+    PAGAMENTOS.forEach(function(p){
+      h+='<button class="btn sec" data-pgto="'+esc(p)+'" data-orc="'+i+'" '+
+         'style="margin-top:8px;min-height:46px;font-size:14.5px">'+esc(p)+'</button>';
+    });
+    h+='</div><button class="btn sec" data-fechar style="margin-top:14px;border:none;color:var(--mut)">Cancelar</button>';
+    $('sheet').innerHTML=h; $('modal').classList.add('on');
+  }
+
+  /* ---------- formulário de orçamento ---------- */
+  function preencheClientes(){
+    var sel=$('oCli');
+    sel.innerHTML='<option value="-1">Cliente não informado</option>'+
+      contatos.map(function(c,i){ return '<option value="'+i+'">'+esc(c.nome)+'</option>'; }).join('');
+  }
+  function renderItensOrc(){
+    var el=$('itensOrc');
+    if(!pecas.length){
+      el.innerHTML='<div class="vazio">Você ainda não salvou nenhuma peça.<br>Calcule uma na aba <b>Precificar</b> primeiro.</div>';
+      $('addItemOrc').hidden=true; return;
+    }
+    $('addItemOrc').hidden=false;
+    if(!itensOrc.length){ el.innerHTML='<div class="vazio">Nenhuma peça adicionada.</div>'; attTotalOrc(); return; }
+    el.innerHTML=itensOrc.map(function(it,k){
+      return '<div class="item"><div class="info"><div class="nome">'+esc(it.nome)+'</div>'+
+        '<div class="det">'+brl(parse(it.preco))+' cada</div>'+
+        '<div class="suf" data-un="un" style="margin-top:7px">'+
+        '<input type="text" inputmode="decimal" data-qorc="'+k+'" value="'+esc(it.qtd)+'" placeholder="PREENCHER"></div></div>'+
+        '<div style="text-align:right"><div class="val">'+brl(parse(it.preco)*parse(it.qtd))+'</div>'+
+        '<button class="mini" data-rmorc="'+k+'" aria-label="Remover">&times;</button></div></div>';
+    }).join('');
+    Array.prototype.forEach.call(el.querySelectorAll('[data-qorc]'),function(inp){
+      inp.addEventListener('input',function(){
+        itensOrc[parseInt(inp.getAttribute('data-qorc'),10)].qtd=inp.value; renderItensOrc();
+      });
+    });
+    Array.prototype.forEach.call(el.querySelectorAll('[data-rmorc]'),function(b){
+      b.addEventListener('click',function(){
+        itensOrc.splice(parseInt(b.getAttribute('data-rmorc'),10),1); renderItensOrc();
+      });
+    });
+    attTotalOrc();
+  }
+  function attTotalOrc(){
+    var t=0; itensOrc.forEach(function(i){ t+=parse(i.preco)*parse(i.qtd); });
+    $('totalOrc').innerHTML = t>0 ? 'Total do orçamento: <b style="font-size:17px">'+brl(t)+'</b>' : '';
+  }
+  $('addItemOrc').addEventListener('click',function(){
+    if(!pecas.length) return;
+    var h='<h3>Qual peça?</h3><p>Escolha da sua tabela de preços.</p><div style="margin-top:14px">';
+    h+=pecas.map(function(p,i){
+      var th=p.foto?'<img class="thumb" src="'+p.foto+'" alt="">':'';
+      return '<div class="item">'+th+'<div class="info"><div class="nome">'+esc(p.nome)+'</div>'+
+        '<div class="det">'+brl(p.preco)+'</div></div>'+
+        '<button class="btn ok" data-pickp="'+i+'" style="width:auto;padding:0 16px;min-height:42px;font-size:14px">Usar</button></div>';
+    }).join('');
+    h+='</div><button class="btn sec" data-fechar style="margin-top:14px">Fechar</button>';
+    $('sheet').innerHTML=h; $('modal').classList.add('on');
+  });
+
+  $('addOrc').addEventListener('click',function(){
+    editandoOrc=null; itensOrc=[]; $('oObsOrc').value='';
+    preencheClientes(); renderItensOrc();
+    $('formOrc').hidden=false;
+    $('formOrc').scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  $('orcCancel').addEventListener('click',function(){ $('formOrc').hidden=true; });
+  $('orcSalvar').addEventListener('click',function(){
+    if(!itensOrc.length){ alert('Adicione pelo menos uma peça ao orçamento.'); return; }
+    var o={contatoId:parseInt($('oCli').value,10), itens:JSON.parse(JSON.stringify(itensOrc)),
+           obs:$('oObsOrc').value, data:new Date().toISOString(), status:'aberto', pagamento:''};
+    orcamentos.push(o); guardar(K_ORC,orcamentos);
+    $('formOrc').hidden=true; renderOrc(); renderVen(); renderCon();
+  });
+
+
+  /* ================= PROGRESSO DO TUTORIAL ================= */
+  var PASSOS=[
+    {id:'ps1',btn:'lv1',ok:function(){ return parse(custos.horas)>0 && parse(custos.meta)>0; }},
+    {id:'ps2',btn:'lv2',ok:function(){ return materiais.length>0; }},
+    {id:'ps3',btn:'lv3',ok:function(){ return pecas.length>0; }},
+    {id:'ps4',btn:'lv4',ok:function(){ return orcamentos.length>0; }}
+  ];
+  function pintaProgresso(){
+    var feitos=0, barras='';
+    PASSOS.forEach(function(p){
+      var f=false;
+      try{ f=p.ok(); }catch(e){}
+      if(f) feitos++;
+      barras+='<div class="prog-b'+(f?' on':'')+'"></div>';
+      var el=$(p.id); if(el) el.classList.toggle('ok',f);
+      var b=$(p.btn);
+      if(b){
+        b.classList.toggle('feito',f);
+        b.textContent = f ? 'Concluído · rever' : 'Leve-me até lá!';
+      }
+    });
+    $('progBarras').innerHTML=barras;
+    $('progTxt').textContent='Passos concluídos: '+feitos+' de '+PASSOS.length;
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('[data-leva]'),function(b){
+    b.addEventListener('click',function(){ abre(b.getAttribute('data-leva')); });
+  });
+
+  /* ================= CATÁLOGO ================= */
+  var CORES_CAT = ['#2A5FD0','#14306B','#E24E93','#B93571','#1F7A5A','#C08A2E','#7A5C8A','#20303F'];
+
+  function pintaCores(){
+    $('cores').innerHTML = CORES_CAT.map(function(c){
+      return '<button type="button" class="cor'+(c===cfgCat.cor?' on':'')+
+             '" data-cor="'+c+'" style="background:'+c+'" aria-label="Cor '+c+'"></button>';
+    }).join('');
+    Array.prototype.forEach.call($('cores').querySelectorAll('[data-cor]'),function(b){
+      b.addEventListener('click',function(){
+        cfgCat.cor=b.getAttribute('data-cor'); pintaCores();
+      });
+    });
+  }
+  function pintaLogo(){
+    if(cfgCat.logo){
+      $('logoMini').src=cfgCat.logo; $('logoMini').hidden=false;
+      $('logoVazia').hidden=true; $('btnLogoX').hidden=false;
+      $('btnLogo').textContent='Trocar logo';
+    } else {
+      $('logoMini').hidden=true; $('logoVazia').hidden=false;
+      $('btnLogoX').hidden=true; $('btnLogo').textContent='Escolher logo';
+    }
+  }
+  function preencheCat(){
+    $('catNome').value=cfgCat.nome||''; $('catSub').value=cfgCat.sub||'';
+    $('catCont').value=cfgCat.contato||'';
+    pintaCores(); pintaLogo();
+  }
+  $('configCat').addEventListener('click',function(){
+    var p=$('painelCat');
+    p.hidden=!p.hidden;
+    if(!p.hidden){ preencheCat(); p.scrollIntoView({behavior:'smooth',block:'start'}); }
+  });
+  $('catFechar').addEventListener('click',function(){ $('painelCat').hidden=true; });
+  $('btnLogo').addEventListener('click',function(){ $('inpLogo').click(); });
+  $('btnLogoX').addEventListener('click',function(){ cfgCat.logo=''; pintaLogo(); });
+  $('inpLogo').addEventListener('change',function(e){
+    var f=e.target.files&&e.target.files[0]; if(!f) return;
+    comprimeFoto(f,function(d){
+      if(!d){ alert('Não consegui ler esta imagem.'); return; }
+      cfgCat.logo=d; pintaLogo();
+    });
+    e.target.value='';
+  });
+  $('catSalvar').addEventListener('click',function(){
+    cfgCat.nome=$('catNome').value; cfgCat.sub=$('catSub').value;
+    cfgCat.contato=$('catCont').value;
+    if(!guardar(K_CAT,cfgCat)){ alert('Não consegui salvar: o espaço do aparelho acabou. Tente uma logo menor.'); return; }
+    var b=$('catSalvar'), t=b.textContent;
+    b.textContent='Salvo!'; setTimeout(function(){ b.textContent=t; },1400);
+  });
+
+  $('catalogo').addEventListener('click',function(){
+    if(!pecas.length){
+      alert('Você ainda não salvou nenhuma peça. Calcule uma na aba Precificar e toque em Salvar.');
+      return;
+    }
+    var cor  = cfgCat.cor || '#2A5FD0';
+    var nome = esc(cfgCat.nome || 'Minha tabela de preços');
+    var hoje = new Date();
+    var quando = ('0'+hoje.getDate()).slice(-2)+'/'+('0'+(hoje.getMonth()+1)).slice(-2)+'/'+hoje.getFullYear();
+
+    var L = [];
+    L.push('<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8">');
+    L.push('<meta name="viewport" content="width=device-width,initial-scale=1">');
+    L.push('<title>'+nome+'<\/title><style>');
+    L.push('*{box-sizing:border-box;margin:0;padding:0}');
+    L.push('body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;');
+    L.push('background:#fff;color:#1A2430;padding:26px 20px 40px;max-width:760px;margin:0 auto}');
+    L.push('header{text-align:center;border-bottom:3px solid '+cor+';padding-bottom:18px;margin-bottom:22px}');
+    L.push('.logo{max-width:130px;max-height:100px;object-fit:contain;margin-bottom:12px}');
+    L.push('h1{color:'+cor+';font-size:29px;letter-spacing:-.02em;line-height:1.15}');
+    L.push('.sub{color:#6B7787;font-size:15px;margin-top:6px}');
+    L.push('.grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:14px}');
+    L.push('.peca{border:1px solid #E2E7EC;border-radius:11px;overflow:hidden}');
+    L.push('.peca img{width:100%;aspect-ratio:1;object-fit:cover;display:block}');
+    L.push('.semfoto{width:100%;aspect-ratio:1;background:#F4F6FA;display:flex;');
+    L.push('align-items:center;justify-content:center;color:#9AA8BC;font-size:13px}');
+    L.push('.txt{padding:11px 12px 13px}');
+    L.push('.nm{font-weight:700;font-size:14px;line-height:1.3}');
+    L.push('.pr{color:'+cor+';font-weight:800;font-size:18px;margin-top:5px}');
+    L.push('.rod{margin-top:28px;padding-top:16px;border-top:1px solid #E2E7EC;');
+    L.push('text-align:center;color:#6B7787;font-size:13.5px;line-height:1.6}');
+    L.push('.data{text-align:center;color:#9AA8BC;font-size:12px;margin-top:8px}');
+    L.push('.dica{margin-top:22px;text-align:center;color:#9AA8BC;font-size:12px}');
+    L.push('@media print{body{padding:0}.dica{display:none}}');
+    L.push('<\/style><\/head><body><header>');
+    if(cfgCat.logo) L.push('<img class="logo" src="'+cfgCat.logo+'" alt="">');
+    L.push('<h1>'+nome+'<\/h1>');
+    if(cfgCat.sub) L.push('<p class="sub">'+esc(cfgCat.sub)+'<\/p>');
+    L.push('<\/header><div class="grade">');
+    pecas.forEach(function(p){
+      L.push('<div class="peca">');
+      L.push(p.foto ? ('<img src="'+p.foto+'" alt="">') : '<div class="semfoto">Sem foto<\/div>');
+      L.push('<div class="txt"><div class="nm">'+esc(p.nome)+'<\/div>');
+      L.push('<div class="pr">'+brl(p.preco)+'<\/div><\/div><\/div>');
+    });
+    L.push('<\/div>');
+    if(cfgCat.contato) L.push('<div class="rod">'+esc(cfgCat.contato)+'<\/div>');
+    L.push('<div class="data">Preços de '+quando+'<\/div>');
+    L.push('<div class="dica">Para salvar em PDF, use Compartilhar ou Imprimir e escolha Salvar como PDF.<\/div>');
+    L.push('<\/body><\/html>');
+
+    var w = window.open('', '_blank');
+    if(!w){
+      alert('O navegador bloqueou a janela do catálogo. Libere as janelas para este site e tente de novo.');
+      return;
+    }
+    w.document.open();
+    w.document.write(L.join(''));
+    w.document.close();
   });
 
   /* ================= CADASTRO E RD ================= */
@@ -1564,6 +2134,38 @@ input.ruim{border-color:var(--alerta)}
       $('modal').classList.remove('on'); renderUsados(); calc();
       return;
     }
+    var pg=e.target.closest('[data-pgto]');
+    if(pg){
+      var oi=parseInt(pg.getAttribute('data-orc'),10);
+      orcamentos[oi].status='fechado';
+      orcamentos[oi].pagamento=pg.getAttribute('data-pgto');
+      orcamentos[oi].dataFechamento=new Date().toISOString();
+      guardar(K_ORC,orcamentos);
+      $('modal').classList.remove('on');
+      renderOrc(); renderVen(); renderCon();
+      subAba('ven');
+      return;
+    }
+    var pp=e.target.closest('[data-pickp]');
+    if(pp){
+      var p=pecas[parseInt(pp.getAttribute('data-pickp'),10)];
+      itensOrc.push({nome:p.nome,preco:p.preco,qtd:'1'});
+      $('modal').classList.remove('on'); renderItensOrc();
+      return;
+    }
+    if(e.target.closest('[data-addcat]')){
+      var marcados=$('sheet').querySelectorAll('[data-cat]:checked');
+      if(!marcados.length){ alert('Marque pelo menos uma resina.'); return; }
+      Array.prototype.forEach.call(marcados,function(c){
+        var p=CATALOGO_MRS[parseInt(c.getAttribute('data-cat'),10)];
+        materiais.push({nome:p.nome,unid:p.unid,precoCompra:p.preco,qtdCompra:p.qtd,estoque:''});
+      });
+      guardar(K_MAT,materiais);
+      $('modal').classList.remove('on');
+      renderMat(); renderUsados(); calc();
+      $('avisoMRS').hidden=false;
+      return;
+    }
     if(e.target.closest('[data-instalar]')){
       $('modal').classList.remove('on');
       if(evtInstalar){
@@ -1601,7 +2203,8 @@ input.ruim{border-color:var(--alerta)}
     $('video').src='https://www.youtube.com/embed/'+VIDEO_YOUTUBE;
     $('video').hidden=false; $('videoVazio').hidden=true;
   }
-  renderMat(); renderUsados(); renderPecas(); renderCon(); preencheCustos(); pintaFoto(); calc();
+  renderMat(); renderUsados(); renderPecas(); renderCon(); renderOrc(); renderVen();
+  preencheCustos(); pintaFoto(); calc(); pintaProgresso();
   abre( (materiais.length && parse(custos.horas)>0) ? 'preco' : 'ajuda' );
 })();
 </script>

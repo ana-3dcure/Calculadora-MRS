@@ -1,7 +1,7 @@
 /* Service worker da Calculadora MRS.
    Guarda o app no aparelho para funcionar sem internet.
    Ao publicar uma versão nova, troque o número do CACHE abaixo. */
-const CACHE = 'mrs-calc-v8';
+const CACHE = 'mrs-calc-v11';
 const ARQUIVOS = [
   './',
   './index.html',
