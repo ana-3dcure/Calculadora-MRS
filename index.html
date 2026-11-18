@@ -616,8 +616,8 @@ input.ruim{border-color:var(--alerta)}
 
   <div class="card">
     <h2>Outros preços que você pode usar</h2>
-    <div class="linha"><span>Para loja revender <small>quando alguém compra para vender de novo</small></span><b id="v-rev"></b></div>
-    <div class="linha"><span>Encomenda com nome ou data <small>dá mais trabalho, cobre 30% a mais</small></span><b id="v-enc"></b></div>
+    <div class="linha"><span>Para loja revender <small>a loja precisa de margem: fica com metade do seu lucro</small></span><b id="v-rev"></b></div>
+    <div class="linha"><span>Encomenda com nome ou data <small>dá mais trabalho: conta 30% a mais de tempo</small></span><b id="v-enc"></b></div>
     <div class="linha"><span>Nunca cobre menos que <small>abaixo disso você está pagando para trabalhar</small></span><b id="v-min"></b></div>
   </div>
 
@@ -1347,9 +1347,9 @@ input.ruim{border-color:var(--alerta)}
     var tx=n('cImp')+n('cCartao')+n('cComis');
     $('taxaOut').innerHTML = tx>0
       ? 'De cada R$ 100 vendidos saem <b>'+brl(tx)+'</b> em taxas' : '';
-    $('avisoTaxa').innerHTML = tx>=40
-      ? av('warn','Suas taxas somam <b>'+vg(tx)+'%</b> do preço. Confira: acima de 40% é bem incomum e costuma ser erro de digitação.')
-      : (tx>=95 ? av('warn','Taxas de 95% ou mais deixam o preço impossível de calcular.') : '');
+    $('avisoTaxa').innerHTML = tx>=95
+      ? av('warn','Taxas de 95% ou mais deixam o preço impossível de calcular.')
+      : (tx>=40 ? av('warn','Suas taxas somam <b>'+vg(tx)+'%</b> do preço. Confira: acima de 40% é bem incomum e costuma ser erro de digitação.') : '');
     $('avisoHoras').innerHTML = n('cHoras')>160
       ? av('warn','Mais de 160 horas por mês são cerca de 8 horas por dia, todo dia útil, só produzindo. Se for otimista demais, sua hora fica barata e o preço todo desce junto.') : '';
   }
@@ -1455,8 +1455,11 @@ input.ruim{border-color:var(--alerta)}
     $('v-taxpct').textContent = pctTax>0 ? (vg(pctTax*100)+'% do preço de venda') : 'nenhuma taxa informada';
     $('v-lucro').textContent=brl(preco);
 
-    $('v-rev').textContent=brl(custo*2);
-    $('v-enc').textContent=brl(preco*1.3);
+    /* revenda: a loja precisa de margem, então fica com metade do seu lucro */
+    var divRev=Math.max(0.05,1-pctTax-pctLucro/2);
+    $('v-rev').textContent=brl(custo/divRev);
+    /* encomenda personalizada: 30% a mais de tempo de trabalho, mesmo divisor */
+    $('v-enc').textContent=brl((mat+tra*1.3)/div);
     $('v-min').textContent=brl(custo);
 
     [['c-mat','l-mat',mat],['c-tra','l-tra',traSal],['c-fix','l-fix',traCus],

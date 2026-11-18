@@ -116,8 +116,12 @@ Depois disso vira um ícone na tela de início e abre em tela cheia, sem barra d
 ## Quando você mudar alguma coisa
 
 O app fica guardado no aparelho da aluna. Para ela receber a versão nova, **abra o `sw.js`
-e troque `mrs-calc-v1` por `mrs-calc-v2`**, depois publique. Sem isso, ela continua vendo
-a versão antiga por muito tempo.
+e suba em um o número de `CACHE`** (por exemplo, `mrs-calc-v12` vira `mrs-calc-v13`) toda
+vez que mudar o `index.html`, depois publique. Sem isso, ela continua vendo a versão antiga
+por muito tempo.
+
+A publicação é por `git push` na `main`: a Vercel republica sozinha em
+`calculadora-mrs-9elf.vercel.app`.
 
 ---
 
