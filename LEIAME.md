@@ -113,6 +113,32 @@ Depois disso vira um ícone na tela de início e abre em tela cheia, sem barra d
 
 ---
 
+## Códigos de acesso (Black 2026)
+
+O app só abre para quem digita um **código de acesso** válido, junto com o cadastro.
+
+- **Os 50 códigos** estão em `codigos-black-2026.csv`, nesta pasta. Esse arquivo **não vai
+  para o GitHub** (o repositório é público). Guarde uma cópia em lugar seguro e anote na
+  coluna `comprador` para quem mandou cada código.
+- **Validade:** até 01/12/2027, fim do dia. Depois disso o app pede um código novo.
+- **Aparelhos:** cada código ativa no máximo **3 aparelhos**. No iPhone, o Safari e o app
+  instalado contam como 2, porque guardam os dados separados.
+- **Internet:** só é preciso na ativação. Depois o app funciona offline até a validade e,
+  quando abre com internet, confere em silêncio se o código continua valendo.
+- **Cancelar um código** (por exemplo, se vazou): abra `api/_codigos.js`, coloque o número
+  dele em `REVOGADOS` (ex.: `REVOGADOS: [7]`) e publique. Quem usa esse código é bloqueado
+  na próxima vez que abrir o app com internet.
+- **Liberar mais aparelhos para um código:** no painel do Upstash (Vercel → Storage),
+  apague a chave `atv:NÚMERO` (ex.: `atv:7`). Os aparelhos ativam de novo do zero.
+- **Gerar códigos novos:** peça para o Claude; os hashes vão em `api/_codigos.js` e os
+  códigos num CSV novo, fora do git.
+
+A conferência roda em `api/ativar.js`, uma função da Vercel que guarda as ativações num
+banco Upstash Redis ligado ao projeto (variáveis `KV_REST_API_URL` e `KV_REST_API_TOKEN`).
+Sem esse banco, ninguém consegue ativar.
+
+---
+
 ## Quando você mudar alguma coisa
 
 O app fica guardado no aparelho da aluna. Para ela receber a versão nova, **abra o `sw.js`

@@ -346,10 +346,16 @@ input.ruim{border-color:var(--alerta)}
   </div>
   <div class="wrap">
     <div class="pform">
-      <h2>Criar meu acesso</h2>
-      <p class="hint">É rápido e só precisa ser feito uma vez neste aparelho.</p>
+      <h2>Ativar meu acesso</h2>
+      <p class="hint">Digite o código que você recebeu na compra. Só precisa ser feito uma vez neste aparelho.</p>
+      <div id="pAviso"></div>
       <!-- RD STATION: cole o código de monitoramento antes de </body>. Ver LEIAME.md -->
       <form id="cad" novalidate>
+        <div class="campo">
+          <label for="cCod">Código de acesso</label>
+          <input type="text" id="cCod" name="codigo" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="MRS-XXXXX-XXXXX" maxlength="20">
+          <div class="erro" id="eCod">Digite o código que veio com a sua compra.</div>
+        </div>
         <div class="campo">
           <label for="cNome">Seu nome completo</label>
           <input type="text" id="cNome" name="name" autocomplete="name" placeholder="PREENCHER">
@@ -371,7 +377,7 @@ input.ruim{border-color:var(--alerta)}
             ofertas sobre resina epóxi. Posso pedir para sair a qualquer momento.</label>
         </div>
         <div class="erro" id="eOk">Precisamos da sua autorização para continuar.</div>
-        <button class="btn" type="submit" style="margin-top:16px">Começar</button>
+        <button class="btn" type="submit" id="btnCad" style="margin-top:16px">Ativar e começar</button>
       </form>
     </div>
     <p class="ppe">Seus dados ficam com a MRS Resinas e não são vendidos a ninguém.</p>
@@ -1010,7 +1016,7 @@ input.ruim{border-color:var(--alerta)}
 
   var K_CAD='mrs_cadastro_v1', K_MAT='mrs_materiais_v1',
       K_CUS='mrs_custos_v1', K_PEC='mrs_pecas_v2', K_CON='mrs_contatos_v1', K_ORC='mrs_orcamentos_v1', K_CAT='mrs_catalogo_v1',
-      K_INST='mrs_instala_dispensado';
+      K_INST='mrs_instala_dispensado', K_ACE='mrs_acesso_v1', K_APA='mrs_aparelho_v1';
 
   function guardar(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); return true; }catch(e){ return false; } }
   function ler(k){ try{ var v=localStorage.getItem(k); return v?JSON.parse(v):null; }catch(e){ return null; } }
@@ -2252,12 +2258,97 @@ input.ruim{border-color:var(--alerta)}
     window.scrollTo(0,0);
     pintaCadastro(); setTimeout(mostrarBotoes,600);
   }
+  /* ================= CÓDIGO DE ACESSO =================
+     O código é conferido em /api/ativar (servidor na Vercel). Depois de ativado,
+     o app funciona sem internet até a validade. Ao abrir com internet, ele confere
+     de novo em silêncio para pegar código cancelado. */
+  var MSG_ACESSO={
+    invalido:'Código não encontrado. Confira as letras e os números.',
+    cancelado:'Este código foi cancelado. Fale com a MRS Resinas.',
+    expirado:'Este código já venceu.',
+    limite:'Este código já foi ativado no número máximo de aparelhos. Fale com a MRS Resinas.',
+    tentativas:'Muitas tentativas seguidas. Espere uma hora e tente de novo.',
+    nao_ativado:'Este aparelho precisa ativar o código de novo.',
+    servidor:'Não conseguimos conferir o código agora. Tente de novo em alguns minutos.',
+    rede:'Para ativar o código é preciso estar com internet.'
+  };
+  function idAparelho(){
+    var id=ler(K_APA);
+    if(!id){
+      id=(window.crypto&&crypto.randomUUID)?crypto.randomUUID()
+        :('a'+Date.now().toString(36)+Math.random().toString(36).slice(2,12));
+      guardar(K_APA,id);
+    }
+    return id;
+  }
+  function hojeISO(){ var d=new Date(); d.setMinutes(d.getMinutes()-d.getTimezoneOffset()); return d.toISOString().slice(0,10); }
+  function acessoValido(){
+    var a=ler(K_ACE);
+    return !!(a&&a.validade&&hojeISO()<=a.validade);
+  }
+  function chamaAtivar(codigo,acao,cb){
+    var x=new XMLHttpRequest();
+    x.open('POST','/api/ativar'); x.setRequestHeader('Content-Type','application/json');
+    x.timeout=15000;
+    x.onload=function(){
+      var r=null; try{ r=JSON.parse(x.responseText); }catch(e){}
+      cb(r||{ok:false,erro:'servidor'});
+    };
+    x.onerror=x.ontimeout=function(){ cb({ok:false,erro:'rede'}); };
+    x.send(JSON.stringify({codigo:codigo,aparelho:idAparelho(),acao:acao}));
+  }
+  function mostraPorta(aviso){
+    $('porta').classList.remove('off');
+    document.body.classList.add('gated');
+    document.body.style.overflow='hidden';
+    $('pAviso').innerHTML = aviso ? av('warn',aviso) : '';
+    var c=ler(K_CAD);
+    if(c){
+      if(c.nome&&!$('cNome').value) $('cNome').value=c.nome;
+      if(c.email&&!$('cEmail').value) $('cEmail').value=c.email;
+      if(c.fone&&!$('cTel').value) $('cTel').value=mascaraTel(c.fone);
+      if(c.ok) $('cOk').checked=true;
+    }
+  }
+  function confereEmSilencio(){
+    var a=ler(K_ACE);
+    if(!a||!a.codigo||navigator.onLine===false) return;
+    chamaAtivar(a.codigo,'conferir',function(r){
+      if(r.ok){ a.conferido=new Date().toISOString(); guardar(K_ACE,a); return; }
+      /* só bloqueia quando o servidor responde que o código não vale mais */
+      if(r.erro==='cancelado'||r.erro==='expirado'||r.erro==='invalido'||r.erro==='nao_ativado'){
+        try{ localStorage.removeItem(K_ACE); }catch(e){}
+        mostraPorta(MSG_ACESSO[r.erro]);
+      }
+    });
+  }
+
+  $('cCod').addEventListener('input',function(){
+    var v=$('cCod').value.toUpperCase().replace(/[^0-9A-Z-]/g,'');
+    if(v!==$('cCod').value) $('cCod').value=v;
+  });
   $('cad').addEventListener('submit',function(e){
     e.preventDefault();
+    var codigo=$('cCod').value.trim();
+    var okCod=marca('eCod','cCod',codigo.replace(/[^0-9A-Z]/gi,'').length<10);
     var d=validar();
-    if(!d){ var p=document.querySelector('.erro.on'); if(p) p.scrollIntoView({behavior:'smooth',block:'center'}); return; }
-    d.quando=new Date().toISOString(); d.enviado=enviarRD(d);
-    guardar(K_CAD,d); abrirApp();
+    if(!d||!okCod){ var p=document.querySelector('.erro.on'); if(p) p.scrollIntoView({behavior:'smooth',block:'center'}); return; }
+    if(navigator.onLine===false){ $('pAviso').innerHTML=av('warn',MSG_ACESSO.rede); return; }
+    var b=$('btnCad'); b.disabled=true; b.textContent='Conferindo o código…';
+    $('pAviso').innerHTML='';
+    chamaAtivar(codigo,'ativar',function(r){
+      b.disabled=false; b.textContent='Ativar e começar';
+      if(!r.ok){
+        $('pAviso').innerHTML=av('warn',MSG_ACESSO[r.erro]||MSG_ACESSO.servidor);
+        $('pAviso').scrollIntoView({behavior:'smooth',block:'center'});
+        return;
+      }
+      guardar(K_ACE,{codigo:codigo,validade:r.validade,ativado:new Date().toISOString()});
+      var antes=ler(K_CAD);
+      d.quando=new Date().toISOString();
+      d.enviado=(antes&&antes.enviado&&antes.email===d.email)?true:enviarRD(d);
+      guardar(K_CAD,d); abrirApp();
+    });
   });
 
   /* ================= STATUS ================= */
@@ -2393,13 +2484,17 @@ input.ruim{border-color:var(--alerta)}
   });
 
   /* ================= INÍCIO ================= */
-  var cad=ler(K_CAD);
-  if(cad&&cad.email){
+  var cad=ler(K_CAD), ace=ler(K_ACE);
+  if(cad&&cad.email&&acessoValido()){
     abrirApp();
     if(!cad.enviado) setTimeout(tentarFila,1500);
+    setTimeout(confereEmSilencio,2500);
+  } else if(ace&&ace.validade){
+    mostraPorta('Seu acesso venceu em '+ace.validade.split('-').reverse().join('/')+'. Para continuar, digite um código novo.');
+  } else if(cad&&cad.email){
+    mostraPorta('A calculadora agora é exclusiva para quem tem código de acesso. Seus materiais e peças continuam salvos neste aparelho.');
   } else {
-    document.body.classList.add('gated');
-    document.body.style.overflow='hidden';
+    mostraPorta('');
   }
 
   if('serviceWorker' in navigator){
