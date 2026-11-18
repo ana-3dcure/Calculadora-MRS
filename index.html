@@ -142,7 +142,7 @@ input:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid 
 .chk label{font-size:13px;font-weight:400;line-height:1.45;margin:0}
 
 /* ajuda */
-.video{width:100%;aspect-ratio:16/9;border:0;border-radius:10px;display:block;background:var(--paper)}
+.video{width:100%;max-width:300px;aspect-ratio:9/16;margin:0 auto;border:0;border-radius:14px;display:block;background:#14306B}
 .video-vazio{width:100%;aspect-ratio:16/9;border-radius:10px;background:var(--paper);
   border:1.5px dashed var(--line);display:flex;flex-direction:column;align-items:center;
   justify-content:center;gap:8px;color:var(--mut);font-size:13.5px;text-align:center;padding:16px}
@@ -412,13 +412,11 @@ input.ruim{border-color:var(--alerta)}
     <h2>Como usar, em 5 minutos</h2>
     <p class="hint">Assista ao vídeo ou siga o passo a passo abaixo. Dá para fazer tudo pelo celular.</p>
     <div style="margin-top:14px">
-      <iframe class="video" id="video" hidden allowfullscreen
-        title="Vídeo ensinando a usar a calculadora"
-        allow="accelerometer; clipboard-write; encrypted-media; picture-in-picture"></iframe>
-      <div class="video-vazio" id="videoVazio">
-        <span class="ic">&#127909;</span>
-        <span>O vídeo de instruções entra aqui em breve.<br>Por enquanto, siga o passo a passo abaixo.</span>
-      </div>
+      <video class="video" id="video" controls playsinline preload="none"
+        poster="tutorial-capa.jpg" title="Vídeo ensinando a usar a calculadora">
+        <source src="tutorial.mp4" type="video/mp4">
+        Seu aparelho não conseguiu abrir o vídeo. Siga o passo a passo abaixo.
+      </video>
     </div>
   </div>
 
@@ -1077,13 +1075,8 @@ input.ruim{border-color:var(--alerta)}
   var NOMES={preco:'Precificar',mat:'Materiais',custos:'Meus custos',pecas:'Minhas peças',
              contatos:'Contatos',ajuda:'Como usar',vendas:'Vendas'};
 
-  /* ---------------------------------------------------------------
-     VÍDEO DE INSTRUÇÕES
-     Cole aqui o código do vídeo do YouTube e ele aparece na aba
-     "Como usar". O código é o que vem depois de v= no endereço:
-     youtube.com/watch?v=ABCDEFGHIJK  ->  'ABCDEFGHIJK'
-     --------------------------------------------------------------- */
-  var VIDEO_YOUTUBE = '';
+  /* VÍDEO DE INSTRUÇÕES: o arquivo tutorial.mp4 (com a capa tutorial-capa.jpg)
+     aparece na aba "Como usar". Para trocar o vídeo, substitua os dois arquivos. */
 
   /* ---------------------------------------------------------------
      CATÁLOGO MRS
@@ -2505,10 +2498,6 @@ input.ruim{border-color:var(--alerta)}
     if(e.target.closest && e.target.closest('#pn-preco')) calc();
   });
 
-  if(VIDEO_YOUTUBE){
-    $('video').src='https://www.youtube.com/embed/'+VIDEO_YOUTUBE;
-    $('video').hidden=false; $('videoVazio').hidden=true;
-  }
   renderMat(); renderUsados(); renderPecas(); renderCon(); renderOrc(); renderVen();
   preencheCustos(); pintaFoto(); calc(); pintaProgresso();
   abre( (materiais.length && parse(custos.horas)>0) ? 'preco' : 'ajuda' );
