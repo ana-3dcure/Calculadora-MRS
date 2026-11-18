@@ -1,4 +1,4 @@
-# Calculadora de Preço · MRS Resinas
+# Preço Certo MRS · calculadora de preço da MRS Resinas
 
 App instalável (PWA) com tela de cadastro e integração com o RD Station.
 

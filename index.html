@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#14306B">
-<title>Calculadora de Preço · MRS Resinas</title>
+<title>Preço Certo MRS</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="icon" href="favicon.png" type="image/png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Preço MRS">
+<meta name="apple-mobile-web-app-title" content="Preço Certo">
 <meta name="description" content="Descubra quanto realmente custa a sua peça de resina epóxi e a que preço vender.">
 <style>
 :root{
@@ -341,7 +341,7 @@ input.ruim{border-color:var(--alerta)}
   <div class="pcapa">
     <div class="wrap">
       <div class="topo">
-        <div class="eyebrow">MRS RESINAS</div>
+        <div class="eyebrow">PREÇO CERTO · MRS RESINAS</div>
         <button class="btn-baixar" id="btnPorta" type="button" hidden>
           <span>&#8681;</span> Baixar app
         </button>
@@ -401,7 +401,7 @@ input.ruim{border-color:var(--alerta)}
   <div class="wrap">
     <div class="topo">
       <div>
-        <div class="eyebrow">MRS Resinas</div>
+        <div class="eyebrow">Preço Certo MRS</div>
         <div class="tela-nome" id="telaNome">Como usar</div>
       </div>
       <button class="btn-baixar" id="btnTopo" type="button" hidden>
@@ -2498,10 +2498,10 @@ input.ruim{border-color:var(--alerta)}
   function abrirFolha(){
     var h='';
     if(instalado()){
-      h='<h3>O app já está instalado</h3><p>Você já tem a calculadora na tela de início deste aparelho. Se não achar, procure por “Preço MRS”.</p>'+
+      h='<h3>O app já está instalado</h3><p>Você já tem o Preço Certo MRS na tela de início deste aparelho. Se não achar, procure por “Preço Certo”.</p>'+
         '<button class="btn sec" data-fechar style="margin-top:16px">Entendi</button>';
     } else if(evtInstalar){
-      h='<h3>Instalar no celular</h3><p>A calculadora vira um aplicativo na sua tela de início e passa a abrir mesmo sem internet. Não ocupa quase nada de espaço.</p>'+
+      h='<h3>Instalar no celular</h3><p>O Preço Certo MRS vira um aplicativo na sua tela de início e passa a abrir mesmo sem internet. Não ocupa quase nada de espaço.</p>'+
         '<button class="btn ok" data-instalar style="margin-top:16px">Instalar agora</button>'+
         '<button class="btn sec" data-fechar style="margin-top:9px">Agora não</button>';
     } else if(ehIOS()){
@@ -2589,7 +2589,7 @@ input.ruim{border-color:var(--alerta)}
   } else if(ace&&ace.validade){
     mostraPorta('Seu acesso venceu em '+ace.validade.split('-').reverse().join('/')+'. Para continuar, digite um código novo.');
   } else if(cad&&cad.email){
-    mostraPorta('A calculadora agora é exclusiva para quem tem código de acesso. Seus materiais e peças continuam salvos neste aparelho.');
+    mostraPorta('O Preço Certo MRS agora é exclusivo para quem tem código de acesso. Seus materiais e peças continuam salvos neste aparelho.');
   } else {
     mostraPorta('');
   }
