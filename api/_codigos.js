@@ -7,6 +7,8 @@ module.exports = {
   VALIDADE: '2027-12-01',
   /* Para cancelar um código, coloque o número dele aqui (ex.: [7, 23]) e publique. */
   REVOGADOS: [],
+  /* Códigos de administração: não vencem e valem em mais aparelhos. */
+  ADMIN: [71],
   CODIGOS: [
     'fa033987673f92934b5efc2f02f0fa8ba4763f0de8b39841dc6ab03673a9fcf1', // 1
     '2c0ec53d9638e5606d3f04dff4ae3a8be17127fb0fefb2484e4352487353224f', // 2
@@ -78,6 +80,8 @@ module.exports = {
     'fbf410c85c9ac50dd4f9a0f1db765ef7ba622ebf278ca541d8438b4b9eebc6b2', // 67
     '4b0f050aa57844cdcbd20787713b66ac0ecc42abdb73c6771ed90c8893ba74ef', // 68
     '5e614f8e0379c331e4e6e5ab1d9021139ac3443ae6d0e01877f55e4c8190b996', // 69
-    '2849fee53ec960d18c57dfd1165f9da3ea412a3933637dd03c1747e67550e311' // 70
+    '2849fee53ec960d18c57dfd1165f9da3ea412a3933637dd03c1747e67550e311', // 70
+    /* Administração (sem vencimento, até 10 aparelhos): código 71, em codigos-admin.csv */
+    '71ded6344b470d4dbf31304ea956e833a27267b6d04080c3670554a101eed4a6' // 71
   ]
 };

@@ -5,9 +5,11 @@
    - Cada código vale em até LIMITE aparelhos (guardado no Redis da Vercel/Upstash).
    - 'conferir' é a checagem silenciosa que o app faz ao abrir: não ocupa aparelho novo. */
 const crypto = require('crypto');
-const { SAL, VALIDADE, REVOGADOS, CODIGOS } = require('./_codigos');
+const { SAL, VALIDADE, REVOGADOS, CODIGOS, ADMIN = [] } = require('./_codigos');
 
 const LIMITE = 3;              // iPhone conta 2: Safari e app instalado guardam dados separados
+const LIMITE_ADMIN = 10;       // códigos de administração: mais aparelhos e sem vencimento
+const VALIDADE_ADMIN = '2099-12-31';
 const TENTATIVAS_HORA = 30;    // por IP, para impedir adivinhação
 /* vale até o fim do dia 01/12/2027, horário de Brasília */
 const FIM = new Date(VALIDADE + 'T23:59:59-03:00').getTime();
@@ -62,18 +64,21 @@ module.exports = async function handler(req, res){
     const n = numeroDoCodigo(normaliza(body.codigo));
     if (!n) return res.status(404).json({ ok: false, erro: 'invalido' });
     if (REVOGADOS.indexOf(n) > -1) return res.status(403).json({ ok: false, erro: 'cancelado' });
-    if (Date.now() > FIM) return res.status(410).json({ ok: false, erro: 'expirado' });
+    const admin = ADMIN.indexOf(n) > -1;
+    const limite = admin ? LIMITE_ADMIN : LIMITE;
+    const validade = admin ? VALIDADE_ADMIN : VALIDADE;
+    if (!admin && Date.now() > FIM) return res.status(410).json({ ok: false, erro: 'expirado' });
 
     const chave = 'atv:' + n;
     const [jaTem, total] = await redis(cfg, [['SISMEMBER', chave, aparelho], ['SCARD', chave]]);
     if (!jaTem) {
       if (acao === 'conferir') return res.status(403).json({ ok: false, erro: 'nao_ativado' });
-      if (total >= LIMITE) return res.status(409).json({ ok: false, erro: 'limite', limite: LIMITE });
+      if (total >= limite) return res.status(409).json({ ok: false, erro: 'limite', limite: limite });
       await redis(cfg, [['SADD', chave, aparelho], ['HSETNX', 'info:' + n, 'primeira', new Date().toISOString()]]);
     }
     /* depois de um acerto, zera o contador de tentativas deste IP */
     await redis(cfg, [['DEL', 'tent:' + ip]]);
-    return res.status(200).json({ ok: true, validade: VALIDADE });
+    return res.status(200).json({ ok: true, validade: validade });
   } catch (e) {
     console.error('ativar:', e.message);
     return res.status(500).json({ ok: false, erro: 'servidor' });

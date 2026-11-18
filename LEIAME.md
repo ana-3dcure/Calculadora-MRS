@@ -122,6 +122,8 @@ O app só abre para quem digita um **código de acesso** válido, junto com o ca
   coluna `comprador` para quem mandou cada código.
 - **Parceiros:** os códigos 51 a 70 são para parceiros testarem o app e darem feedback.
   Estão em `codigos-parceiros-2026.csv`, também fora do GitHub.
+- **Administração:** o código 71 é da administradora do app. Não vence e vale em até
+  10 aparelhos. Está em `codigos-admin.csv`, fora do GitHub.
 - **Validade:** até 01/12/2027, fim do dia. Depois disso o app pede um código novo.
 - **Aparelhos:** cada código ativa no máximo **3 aparelhos**. No iPhone, o Safari e o app
   instalado contam como 2, porque guardam os dados separados.
