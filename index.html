@@ -288,6 +288,18 @@ input[type=range]{width:100%;accent-color:var(--material);height:36px}
 .sheet ol li{margin-bottom:9px;font-size:14px;line-height:1.5}
 .sheet ol li b{color:var(--material)}
 
+/* guia: quantidade de resina */
+.ajuda-resina{display:flex;gap:10px;align-items:center;width:100%;margin-top:12px;padding:11px 13px;
+  border:1.5px solid var(--rosa);background:var(--rosa-cl);color:var(--rosa-esc);border-radius:10px;
+  font:700 13.5px/1.35 var(--txt);text-align:left;cursor:pointer}
+.ajuda-resina .ic{font-size:21px;flex:none}
+.guia-calc{margin-top:16px;padding:14px;background:var(--paper);border-radius:12px}
+.guia-calc h4{font:800 14.5px var(--tit);margin-bottom:2px}
+.guia-saida{margin-top:14px;padding:12px 14px;border-radius:10px;background:var(--surface);
+  border-left:3px solid var(--material);font-size:14px;line-height:1.5}
+.guia-saida b{color:var(--material)}
+.guia-saida small{display:block;margin-top:6px;color:var(--mut);font-size:12.5px}
+
 /* ---------- porta de entrada ---------- */
 #porta{position:fixed;inset:0;background:var(--paper);z-index:200;overflow-y:auto}
 #porta.off{display:none}
@@ -489,6 +501,10 @@ input.ruim{border-color:var(--alerta)}
       <div class="faq-r">É quanto você faz de uma vez. Se despeja 10 chaveiros numa tacada,
         o lote é 10. Aí você informa o material e o tempo do lote inteiro, e o app divide
         por peça sozinho.</div></div>
+    <div class="faq"><div class="faq-p">Como sei quanto de resina vai na peça?</div>
+      <div class="faq-r">Encha o molde com água e pese: a resina pesa uns 10% a mais. Em
+        Precificar, toque em "Precisa de ajuda para achar a quantidade de resina" — o app faz
+        a conta do lote e já separa resina e endurecedor.</div></div>
     <div class="faq"><div class="faq-p">Por que ele pede o tempo de lixar?</div>
       <div class="faq-r">Porque é quase sempre a etapa mais longa. Quem não conta o
         acabamento cobra menos da metade do que deveria — e trabalha de graça sem perceber.</div></div>
@@ -536,6 +552,8 @@ input.ruim{border-color:var(--alerta)}
     <h2>Materiais usados<button class="aj" type="button" data-aj="matUso" aria-label="Ajuda">?</button></h2>
     <p class="hint">Escolha da sua lista e diga quanto gastou de cada um.</p>
     <div id="usados"></div>
+    <button class="ajuda-resina" id="btnResina" type="button"><span class="ic">&#9878;&#65039;</span>
+      <span>Precisa de ajuda para achar a quantidade de resina e endurecedor da sua peça?</span></button>
     <button class="add" id="addUso" type="button">+ Adicionar material</button>
     <div class="saida" id="usoTotal"></div>
     <div id="avisoPig"></div>
@@ -1307,6 +1325,83 @@ input.ruim{border-color:var(--alerta)}
     }).join('');
     h+='</div><button class="btn sec" data-fechar style="margin-top:14px">Fechar</button>';
     $('sheet').innerHTML=h; $('modal').classList.add('on');
+  });
+
+  /* ================= GUIA: QUANTO DE RESINA VAI NA PEÇA =================
+     Pese a água que cabe no molde: a resina pesa uns 10% a mais (FATOR_AGUA).
+     Proporção de mistura em peso (resina : endurecedor), segundo a MRS.
+     Nos kits MRS do catálogo (ex.: MER-100 · 1 kg = 670 g resina + 330 g endurecedor)
+     o material é o kit inteiro, então a quantidade usada é o total da mistura. */
+  var FATOR_AGUA = 1.10;
+  var RESINAS_MRS = [
+    { cod:'MER-100', nome:'MER-100 · baixa viscosidade', end:'MHD-110', r:2,   e:1 },
+    { cod:'MER-200', nome:'MER-200 · média viscosidade', end:'MHD-110', r:2,   e:1 },
+    { cod:'MER-300', nome:'MER-300 · alta viscosidade',  end:'MHD-110', r:2,   e:1 },
+    { cod:'MER-400', nome:'MER-400 · alta espessura',    end:'MHD-120', r:100, e:30 },
+    { cod:'MER-500', nome:'MER-500 · flexível',          end:'MHD-110', r:2,   e:1 },
+    { cod:'MUV-200', nome:'MUV-200 · cura UV',           end:'',        r:1,   e:0 }
+  ];
+  function codResina(nome){
+    var n=String(nome||'').toUpperCase();
+    for(var i=0;i<RESINAS_MRS.length;i++){ if(n.indexOf(RESINAS_MRS[i].cod)>-1) return RESINAS_MRS[i].cod; }
+    return '';
+  }
+  function resinaDaPeca(){
+    for(var i=0;i<usados.length;i++){ var m=materiais[usados[i].id]; if(m&&codResina(m.nome)) return codResina(m.nome); }
+    for(var j=0;j<materiais.length;j++){ if(codResina(materiais[j].nome)) return codResina(materiais[j].nome); }
+    return 'MER-100';
+  }
+  function contaResina(){
+    var agua=n('guiaAgua'), lote=Math.max(1,n('guiaLote'));
+    var r=RESINAS_MRS.filter(function(x){ return x.cod===$('guiaResina').value; })[0]||RESINAS_MRS[0];
+    var out=$('guiaSaida'), b=$('guiaUsar');
+    if(agua<=0){ out.innerHTML='Digite o peso da água para ver a conta.'; b.hidden=true; return null; }
+    var total=Math.ceil(agua*FATOR_AGUA*lote);
+    var resina=Math.round(total*r.r/(r.r+r.e)), end=total-resina;
+    var porPeca=agua*FATOR_AGUA;
+    out.innerHTML='Prepare cerca de <b>'+total+' g</b> para o lote'+(lote>1?' ('+vg(porPeca)+' g por peça)':'')+':<br>'+
+      (r.e ? '<b>'+resina+' g</b> de resina '+r.cod+' + <b>'+end+' g</b> de endurecedor '+r.end+'.'
+           : '<b>'+total+' g</b> de resina '+r.cod+'. Ela não usa endurecedor.')+
+      '<small>Já somei 10% ao peso da água, porque a resina pesa um pouco mais. Proporção '+
+      (r.e ? (r.r===2&&r.e===1?'2 : 1':r.r+' : '+r.e)+' em peso.' : 'não se aplica.')+'</small>';
+    var idx=-1;
+    materiais.forEach(function(m,i){ if(idx<0&&codResina(m.nome)===r.cod) idx=i; });
+    b.hidden=false;
+    b.textContent = idx>-1 ? ('Usar '+total+' g de '+r.cod+' nesta peça') : ('Cadastrar a '+r.cod+' em Materiais');
+    return {total:total, idx:idx};
+  }
+  $('btnResina').addEventListener('click',function(){
+    var cod=resinaDaPeca();
+    var h='<h3>Quanto de resina vai na sua peça?</h3>'+
+      '<p>Use água para medir o molde antes de gastar resina.</p><ol>'+
+      '<li><b>Coloque o molde vazio na balança e zere</b> (botão “tara”).</li>'+
+      '<li><b>Encha o molde com água</b> até a altura que a resina vai ocupar.</li>'+
+      '<li><b>Anote o peso da água, em gramas.</b> É quase o peso de resina + endurecedor de uma peça.</li>'+
+      '<li><b>Jogue a água fora e seque muito bem o molde.</b> Qualquer gota de água atrapalha a cura da resina.</li></ol>'+
+      '<div class="guia-calc"><h4>Calculadora</h4>'+
+      '<div class="dupla" style="margin-top:10px">'+
+        '<div><label for="guiaAgua">Água em 1 molde</label><div class="suf" data-un="g">'+
+          '<input type="text" inputmode="decimal" id="guiaAgua" placeholder="PREENCHER"></div></div>'+
+        '<div><label for="guiaLote">Peças no lote</label>'+
+          '<input type="text" inputmode="decimal" id="guiaLote" value="'+Math.max(1,n('pQtd'))+'"></div></div>'+
+      '<div class="campo" style="margin-top:11px"><label for="guiaResina">Qual resina</label><select id="guiaResina">'+
+        RESINAS_MRS.map(function(r){ return '<option value="'+r.cod+'"'+(r.cod===cod?' selected':'')+'>'+esc(r.nome)+'</option>'; }).join('')+
+      '</select></div>'+
+      '<div class="guia-saida" id="guiaSaida">Digite o peso da água para ver a conta.</div></div>'+
+      '<button class="btn ok" id="guiaUsar" type="button" style="margin-top:14px" hidden></button>'+
+      '<button class="btn sec" data-fechar style="margin-top:9px">Fechar</button>';
+    $('sheet').innerHTML=h; $('modal').classList.add('on');
+    ['guiaAgua','guiaLote'].forEach(function(id){ $(id).addEventListener('input',contaResina); });
+    $('guiaResina').addEventListener('change',contaResina);
+    $('guiaUsar').addEventListener('click',function(){
+      var c=contaResina(); if(!c) return;
+      $('modal').classList.remove('on');
+      if(c.idx<0){ abre('mat'); return; }
+      var u=usados.filter(function(x){ return x.id===c.idx; })[0];
+      if(u) u.qtd=String(c.total); else usados.push({id:c.idx,qtd:String(c.total)});
+      renderUsados(); calc();
+    });
+    $('guiaAgua').focus();
   });
 
   /* ================= MEUS CUSTOS ================= */
