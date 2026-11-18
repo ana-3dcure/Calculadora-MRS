@@ -120,6 +120,8 @@ O app só abre para quem digita um **código de acesso** válido, junto com o ca
 - **Os 50 códigos** estão em `codigos-black-2026.csv`, nesta pasta. Esse arquivo **não vai
   para o GitHub** (o repositório é público). Guarde uma cópia em lugar seguro e anote na
   coluna `comprador` para quem mandou cada código.
+- **Parceiros:** os códigos 51 a 70 são para parceiros testarem o app e darem feedback.
+  Estão em `codigos-parceiros-2026.csv`, também fora do GitHub.
 - **Validade:** até 01/12/2027, fim do dia. Depois disso o app pede um código novo.
 - **Aparelhos:** cada código ativa no máximo **3 aparelhos**. No iPhone, o Safari e o app
   instalado contam como 2, porque guardam os dados separados.
