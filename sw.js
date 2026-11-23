@@ -1,7 +1,7 @@
 /* Service worker da Calculadora MRS.
    Guarda o app no aparelho para funcionar sem internet.
    Ao publicar uma versão nova, troque o número do CACHE abaixo. */
-const CACHE = 'mrs-calc-v18';
+const CACHE = 'mrs-calc-v19';
 const ARQUIVOS = [
   './',
   './index.html',
@@ -29,6 +29,20 @@ self.addEventListener('fetch', e => {
   if (req.url.indexOf('rdstation') > -1 || req.url.indexOf('rd.services') > -1) return;
   /* o vídeo é grande e é tocado em pedaços: vai sempre direto para a internet */
   if (req.url.indexOf('.mp4') > -1) return;
+  /* a página do app vem sempre da internet quando há conexão, para ninguém ficar
+     preso numa versão antiga; sem internet, usa a cópia guardada */
+  if (req.mode === 'navigate') {
+    e.respondWith(
+      fetch(req).then(resp => {
+        if (resp && resp.status === 200) {
+          const copia = resp.clone();
+          caches.open(CACHE).then(c => c.put('./index.html', copia));
+        }
+        return resp;
+      }).catch(() => caches.match('./index.html').then(hit => hit || caches.match('./')))
+    );
+    return;
+  }
   e.respondWith(
     caches.match(req).then(hit => hit || fetch(req).then(resp => {
       if (resp && resp.status === 200 && resp.type === 'basic') {

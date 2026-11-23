@@ -2595,7 +2595,15 @@ input.ruim{border-color:var(--alerta)}
   }
 
   if('serviceWorker' in navigator){
-    window.addEventListener('load',function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); });
+    window.addEventListener('load',function(){
+      navigator.serviceWorker.register('sw.js').then(function(reg){ reg.update(); }).catch(function(){});
+    });
+    /* quando chega uma versão nova do app, recarrega a página uma vez para mostrá-la */
+    var tinhaControle = !!navigator.serviceWorker.controller, recarregou = false;
+    navigator.serviceWorker.addEventListener('controllerchange',function(){
+      if(!tinhaControle || recarregou) return;
+      recarregou = true; window.location.reload();
+    });
   }
 
   document.addEventListener('input',function(e){
